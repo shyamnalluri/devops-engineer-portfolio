@@ -63,7 +63,7 @@ const Contact = () => {
           className="max-w-4xl mx-auto text-center"
         >
           <h2 className="text-3xl font-bold text-white mb-8">Contact</h2>
-          <p className="text-gray-400 mb-12">Let's discuss your next project</p>
+          <p className="text-gray-400 mb-12">Let&apos;s discuss your next project</p>
 
           <div className="flex justify-center space-x-6 mb-12">
             {socialLinks.map((link, index) => (

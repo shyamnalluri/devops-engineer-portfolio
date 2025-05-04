@@ -2,15 +2,25 @@
 
 import { motion } from 'framer-motion';
 
+interface TimelineData {
+  title: string;
+  company?: string;
+  institution?: string;
+  period: string;
+  description: string;
+}
+
+interface TimelineItemProps {
+  data: TimelineData;
+  index: number;
+  isLeft: boolean;
+}
+
 const TimelineItem = ({ 
   data, 
   index, 
   isLeft 
-}: { 
-  data: any; 
-  index: number; 
-  isLeft: boolean;
-}) => (
+}: TimelineItemProps) => (
   <motion.div 
     initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
     whileInView={{ opacity: 1, x: 0 }}
