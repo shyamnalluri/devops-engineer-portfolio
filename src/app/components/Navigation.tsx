@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FaBars } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
-type MenuIconKey = 'Home' | 'About' | 'Expertise' | 'Portfolio' | 'Resume' | 'Contact' | 'Certifications';
+type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Resume' | 'Contact' | 'Certifications';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,11 +24,11 @@ const Navigation = () => {
   const navItems: Array<{ name: MenuIconKey; href: string }> = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
-    { name: 'Expertise', href: '#expertise' },
+    { name: 'Skills', href: '#skills' },
     { name: 'Portfolio', href: '#portfolio' },
     { name: 'Certifications', href: '#certifications' },
     { name: 'Resume', href: '#resume' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Contact', href: '#contact' }
   ];
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

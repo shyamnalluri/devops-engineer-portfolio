@@ -2,7 +2,7 @@
 
 import Hero from "./sections/Hero";
 import About from "./sections/About";
-import Expertise from "./sections/Expertise";
+import Skills from "./sections/Skills";
 import Portfolio from "./sections/Portfolio";
 import Achievements from "./sections/Achievements";
 import Contact from "./sections/Contact";
@@ -17,7 +17,7 @@ export default function Home() {
         <div id="content">
           <Hero />
           <About />
-          <Expertise />
+          <Skills />
           <Resume />
           <Portfolio />
           <Certifications />
