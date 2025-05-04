@@ -31,23 +31,32 @@ const Navigation = () => {
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     
-    // Small delay to ensure DOM is ready and any animations have completed
-    setTimeout(() => {
-      const element = document.querySelector(href);
-      if (element) {
-        const navHeight = 80;
-        const elementRect = element.getBoundingClientRect();
-        const absoluteElementTop = elementRect.top + window.pageYOffset;
-        const middle = absoluteElementTop - (navHeight);
-        
+    // Calculate scroll position first
+    const element = document.querySelector(href);
+    if (element) {
+      const navHeight = 80;
+      const elementRect = element.getBoundingClientRect();
+      const absoluteElementTop = elementRect.top + window.pageYOffset;
+      const middle = absoluteElementTop - navHeight;
+      
+      // Set flag that we're navigating to prevent scroll restoration
+      document.body.dataset.navigating = 'true';
+      
+      // Close mobile menu first (if open)
+      setIsMobileMenuOpen(false);
+      
+      // Then scroll after a brief delay to ensure menu closing animation is complete
+      setTimeout(() => {
         window.scrollTo({
           top: middle,
           behavior: 'smooth'
         });
-      }
-    }, 100);
-    
-    setIsMobileMenuOpen(false);
+        // Clear the navigating flag after scrolling
+        setTimeout(() => {
+          delete document.body.dataset.navigating;
+        }, 100);
+      }, 50);
+    }
   };
 
   return (

@@ -14,17 +14,30 @@ interface MobileMenuProps {
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
   useEffect(() => {
     if (isOpen) {
+      // Save current scroll position and lock scrolling
+      const scrollY = window.scrollY;
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
-      document.body.style.top = `-${window.scrollY}px`;
+      document.body.style.top = `-${scrollY}px`;
+      
+      // Store the scroll position as a data attribute
+      document.body.dataset.scrollPosition = String(scrollY);
     } else {
-      const scrollY = document.body.style.top;
+      // Restore scrolling
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.width = '';
       document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      
+      // Get stored scroll position
+      const scrollY = Number(document.body.dataset.scrollPosition || '0');
+      delete document.body.dataset.scrollPosition;
+      
+      // Only restore scroll if we're not navigating to a section
+      if (document.body.dataset.navigating !== 'true') {
+        window.scrollTo(0, scrollY);
+      }
     }
 
     return () => {
@@ -32,6 +45,8 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
       document.body.style.position = '';
       document.body.style.width = '';
       document.body.style.top = '';
+      delete document.body.dataset.scrollPosition;
+      delete document.body.dataset.navigating;
     };
   }, [isOpen]);
 
