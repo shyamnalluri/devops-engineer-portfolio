@@ -20,24 +20,25 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
       document.body.style.top = `-${scrollY}px`;
-      
-      // Store the scroll position as a data attribute
       document.body.dataset.scrollPosition = String(scrollY);
     } else {
-      // Restore scrolling
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      
-      // Get stored scroll position
-      const scrollY = Number(document.body.dataset.scrollPosition || '0');
-      delete document.body.dataset.scrollPosition;
-      
-      // Only restore scroll if we're not navigating to a section
-      if (document.body.dataset.navigating !== 'true') {
-        window.scrollTo(0, scrollY);
-      }
+      // Wait a brief moment to restore scroll to ensure transitions complete
+      setTimeout(() => {
+        // Restore scrolling styles
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.top = '';
+        
+        // Get stored scroll position
+        const scrollY = Number(document.body.dataset.scrollPosition || '0');
+        delete document.body.dataset.scrollPosition;
+        
+        // Only restore scroll if we're not navigating to a section
+        if (document.body.dataset.navigating !== 'true') {
+          window.scrollTo(0, scrollY);
+        }
+      }, 50);
     }
 
     return () => {
