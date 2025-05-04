@@ -64,7 +64,7 @@ const Expertise = () => {
           <h2 className="text-3xl font-bold text-white mb-4">Expertise</h2>
           <p className="text-gray-400">Specialized in modern DevOps practices and tools</p>
         </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {skills.map((skill, index) => (
             <motion.div
               key={index}
@@ -72,31 +72,36 @@ const Expertise = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-gray-900 p-6 rounded-lg"
+              className="bg-gray-900 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
             >
-              <div className="text-blue-500 mb-4">
-                <Tooltip label={skill.tooltipDetails}>
-                  <div className="cursor-help inline-block">
-                    {skill.icon}
-                  </div>
-                </Tooltip>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="text-blue-500">
+                  <Tooltip label={skill.tooltipDetails}>
+                    <div className="cursor-help">
+                      {skill.icon}
+                    </div>
+                  </Tooltip>
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold text-white">{skill.title}</h3>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">{skill.title}</h3>
-              <p className="text-gray-400 mb-4">{skill.description}</p>
+              <p className="text-gray-400 text-sm sm:text-base mb-4 min-h-[40px]">{skill.description}</p>
               <Tooltip label={`Proficiency: ${skill.proficiency}%`}>
-                <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden cursor-help">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.proficiency}%` }}
-                    transition={{ duration: 1, delay: 0.2 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="absolute h-full bg-blue-500 rounded-full"
-                  />
+                <div className="space-y-2">
+                  <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden cursor-help">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.proficiency}%` }}
+                      transition={{ duration: 1, delay: 0.2 + index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="absolute h-full bg-blue-500 rounded-full"
+                    />
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-400">Proficiency</span>
+                    <span className="text-blue-400">{skill.proficiency}%</span>
+                  </div>
                 </div>
               </Tooltip>
-              <div className="mt-2 text-right">
-                <span className="text-sm text-blue-400">{skill.proficiency}%</span>
-              </div>
             </motion.div>
           ))}
         </div>

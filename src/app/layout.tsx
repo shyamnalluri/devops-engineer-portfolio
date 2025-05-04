@@ -59,6 +59,14 @@ export const metadata: Metadata = {
   other: {
     "theme-color": "#1e293b",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    minimumScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
+  },
 };
 
 export default function RootLayout({
@@ -67,14 +75,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
+    <html lang="en" className="scroll-smooth overscroll-none">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="MobileOptimized" content="width" />
+      </head>
+      <body className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}>
         <ClientWrapper>
-          <ScrollProgressBar />
-          <ParticleBackground />
-          <Navigation />
-          <main className="relative z-10">{children}</main>
-          <BackToTop />
+          <div className="overflow-x-hidden w-full">
+            <ScrollProgressBar />
+            <ParticleBackground />
+            <Navigation />
+            <main className="relative z-10">
+              {children}
+            </main>
+            <BackToTop />
+          </div>
         </ClientWrapper>
       </body>
     </html>

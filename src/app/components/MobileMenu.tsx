@@ -2,59 +2,158 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useEffect, useState, ReactElement } from 'react';
+import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  navItems: Array<{ name: string; href: string }>;
+  navItems: Array<{ name: MenuIconKey; href: string }>;
+  scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }
 
-const MobileMenu = ({ isOpen, onClose, navItems }: MobileMenuProps) => {
+type Section = {
+  id: string;
+  top: number;
+  bottom: number;
+  height: number;
+};
+
+type MenuIconKey = 'Home' | 'About' | 'Expertise' | 'Portfolio' | 'Certifications' | 'Resume' | 'Contact';
+
+const menuIcons: Record<MenuIconKey, ReactElement> = {
+  'Home': <FaHome className="w-5 h-5" />,
+  'About': <FaUser className="w-5 h-5" />,
+  'Expertise': <FaCode className="w-5 h-5" />,
+  'Portfolio': <FaFolder className="w-5 h-5" />,
+  'Certifications': <FaCertificate className="w-5 h-5" />,
+  'Resume': <FaFileAlt className="w-5 h-5" />,
+  'Contact': <FaEnvelope className="w-5 h-5" />
+};
+
+const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
+  const [activeSection, setActiveSection] = useState<string>('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navItems.reduce<Section[]>((acc, item) => {
+        const element = document.querySelector(item.href);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          acc.push({
+            id: item.href.substring(1),
+            top: rect.top,
+            bottom: rect.bottom,
+            height: rect.height
+          });
+        }
+        return acc;
+      }, []);
+
+      // Find which section is currently most visible in the viewport
+      const viewportHeight = window.innerHeight;
+      let currentSection: Section | null = null;
+      let maxVisibleArea = 0;
+
+      for (const section of sections) {
+        // Calculate how much of the section is visible
+        const visibleTop = Math.max(0, Math.min(viewportHeight, section.top));
+        const visibleBottom = Math.max(0, Math.min(viewportHeight, section.bottom));
+        const visibleArea = visibleBottom - visibleTop;
+
+        // If this section has more visible area, it becomes the active one
+        if (visibleArea > maxVisibleArea) {
+          maxVisibleArea = visibleArea;
+          currentSection = section;
+        }
+
+        // Special case: if we're at the top of a section
+        if (section.top <= 100 && section.bottom >= viewportHeight / 2) {
+          currentSection = section;
+          maxVisibleArea = Infinity; // Ensure this takes precedence
+        }
+      }
+
+      if (currentSection) {
+        setActiveSection(currentSection.id);
+      }
+    };
+
+    // Initial check
+    handleScroll();
+
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      if (!isOpen) {
+        document.body.style.overflow = '';
+      }
+    };
+  }, [isOpen, navItems]);
+
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
             onClick={onClose}
           />
           <motion.div
-            initial={{ x: "100%" }}
+            initial={{ x: '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30 }}
-            className="fixed right-0 top-0 h-full w-64 bg-gray-900 shadow-lg z-50"
+            exit={{ x: '100%' }}
+            transition={{ 
+              type: "spring",
+              stiffness: 300,
+              damping: 30
+            }}
+            className="fixed top-0 right-0 h-full w-[300px] bg-gray-900 shadow-lg z-50 flex flex-col"
           >
-            <div className="flex flex-col p-6">
+            <div className="relative p-6">
               <button
                 onClick={onClose}
-                className="self-end text-gray-400 hover:text-white mb-8"
+                className="absolute top-6 right-6 text-gray-400 hover:text-white"
+                aria-label="Close menu"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M6 18L18 6M6 6l12 12"></path>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={onClose}
-                  className="text-gray-300 hover:text-white py-3 text-lg transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ))}
+              
+              <div className="mt-16 flex flex-col space-y-6">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={(e) => {
+                      scrollToSection(e, item.href);
+                      onClose();
+                    }}
+                    className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 ${
+                      activeSection === item.href.substring(1)
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                    }`}
+                  >
+                    {menuIcons[item.name]}
+                    <span className="text-base font-medium">{item.name}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
           </motion.div>
         </>
