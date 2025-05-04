@@ -8,6 +8,31 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 17, 24, 39;
   --background-end-rgb: 31, 41, 55;
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+  --safe-area-inset-right: env(safe-area-inset-right);
+}
+
+/* Apply base styles */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+  height: 100%;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
+/* Hide scrollbar but keep functionality */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -18,57 +43,75 @@ body {
     rgb(var(--background-end-rgb))
   );
   min-height: 100vh;
-  touch-action: manipulation;
-  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
 }
 
-html {
-  scroll-behavior: smooth;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  touch-action: manipulation;
-  -webkit-text-size-adjust: 100%;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-html::-webkit-scrollbar {
-  display: none;
-}
-
-/* Container padding adjustments */
+/* Base container styles */
 .container {
   width: 100%;
-  margin-right: auto;
   margin-left: auto;
-  padding-right: 1rem;
-  padding-left: 1rem;
+  margin-right: auto;
+  padding-left: max(16px, var(--safe-area-inset-left));
+  padding-right: max(16px, var(--safe-area-inset-right));
 }
 
+/* Mobile first responsive container padding */
 @media (min-width: 640px) {
   .container {
-    padding-right: 1.5rem;
-    padding-left: 1.5rem;
+    max-width: 640px;
+    padding-left: max(24px, var(--safe-area-inset-left));
+    padding-right: max(24px, var(--safe-area-inset-right));
   }
 }
 
 @media (min-width: 768px) {
   .container {
-    padding-right: 2rem;
-    padding-left: 2rem;
+    max-width: 768px;
+    padding-left: max(32px, var(--safe-area-inset-left));
+    padding-right: max(32px, var(--safe-area-inset-right));
   }
 }
 
 @media (min-width: 1024px) {
   .container {
-    padding-right: 2.5rem;
-    padding-left: 2.5rem;
+    max-width: 1024px;
+    padding-left: max(40px, var(--safe-area-inset-left));
+    padding-right: max(40px, var(--safe-area-inset-right));
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
     max-width: 1280px;
   }
 }
 
-/* Smooth transitions for hover effects */
+/* Fix for input zoom on iOS */
+@supports (-webkit-touch-callout: none) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* Prevent pull-to-refresh and overscroll effects */
+body {
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth transitions */
 a, button {
   transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fix mobile tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* 3D Flip Card Styles */
