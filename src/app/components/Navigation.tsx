@@ -50,7 +50,7 @@ const Navigation = () => {
           isScrolled ? 'bg-gray-900/95 shadow-lg backdrop-blur-sm py-4' : 'bg-transparent py-6'
         }`}
       >
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <Link 
               href="#home"
@@ -74,9 +74,9 @@ const Navigation = () => {
               ))}
             </div>
 
-            {/* Mobile Menu Button - Only visible on mobile */}
+            {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-gray-300 hover:text-white p-2"
+              className="block md:hidden text-gray-300 hover:text-white p-2 -mr-2"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
             >
@@ -91,6 +91,7 @@ const Navigation = () => {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         navItems={navItems}
+        scrollToSection={scrollToSection}
       />
     </>
   );
