@@ -14,13 +14,11 @@ interface MobileMenuProps {
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
   useEffect(() => {
     if (isOpen) {
-      // Lock scroll when menu is open
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
       document.body.style.top = `-${window.scrollY}px`;
     } else {
-      // Unlock scroll when menu is closed
       const scrollY = document.body.style.top;
       document.body.style.overflow = '';
       document.body.style.position = '';
@@ -30,7 +28,6 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
     }
 
     return () => {
-      // Cleanup when component unmounts
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.width = '';
@@ -39,14 +36,14 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
   }, [isOpen]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
             onClick={onClose}
           />
@@ -54,7 +51,12 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 400,
+              damping: 40,
+              mass: 0.8
+            }}
             className="fixed right-0 top-0 h-full w-[280px] bg-gray-900 shadow-xl z-50 overflow-y-auto"
           >
             <div className="flex flex-col p-6">
@@ -81,8 +83,8 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                     key={item.name}
                     href={item.href}
                     onClick={(e) => {
-                      scrollToSection(e, item.href);
                       onClose();
+                      scrollToSection(e, item.href);
                     }}
                     className="text-gray-300 hover:text-white py-3 text-lg font-medium transition-colors border-b border-gray-800"
                   >
