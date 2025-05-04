@@ -38,6 +38,27 @@ const AnimatedBackground = () => {
 };
 
 const Hero = () => {
+  const scrollToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string
+  ) => {
+    e.preventDefault();
+    setTimeout(() => {
+      const element = document.querySelector(sectionId);
+      if (element) {
+        const navHeight = 80;
+        const elementRect = element.getBoundingClientRect();
+        const absoluteElementTop = elementRect.top + window.pageYOffset;
+        const middle = absoluteElementTop - navHeight;
+
+        window.scrollTo({
+          top: middle,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
+  };
+
   return (
     <section
       id="home"
@@ -84,12 +105,14 @@ const Hero = () => {
         >
           <a
             href="#portfolio"
+            onClick={(e) => scrollToSection(e, "#portfolio")}
             className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-medium transition duration-300"
           >
             View My Work
           </a>
           <a
             href="#contact"
+            onClick={(e) => scrollToSection(e, "#contact")}
             className="border border-blue-600 text-blue-400 hover:bg-blue-600/10 px-8 py-3 rounded-full font-medium transition duration-300"
           >
             Contact Me

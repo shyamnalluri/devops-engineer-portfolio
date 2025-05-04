@@ -30,19 +30,23 @@ const Navigation = () => {
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      // Get the navigation bar height
-      const navHeight = 80; // This should match your nav height
-      // Use window.scrollY instead of pageYOffset (deprecated)
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = elementPosition - navHeight;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
+    
+    // Small delay to ensure DOM is ready and any animations have completed
+    setTimeout(() => {
+      const element = document.querySelector(href);
+      if (element) {
+        const navHeight = 80;
+        const elementRect = element.getBoundingClientRect();
+        const absoluteElementTop = elementRect.top + window.pageYOffset;
+        const middle = absoluteElementTop - (navHeight);
+        
+        window.scrollTo({
+          top: middle,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+    
     setIsMobileMenuOpen(false);
   };
 
