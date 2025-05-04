@@ -30,49 +30,30 @@ const Navigation = () => {
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    
-    // If menu is open, get the stored scroll position
-    const storedScrollY = Number(document.body.dataset.scrollPosition || '0');
-    const currentScrollY = isMobileMenuOpen ? storedScrollY : window.scrollY;
-    
-    // Find the target element
     const element = document.querySelector(href);
     if (!element) return;
-    
-    // Get element position relative to the entire document
+
     const navHeight = 80;
     const elementRect = element.getBoundingClientRect();
-    const docScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const absoluteElementTop = elementRect.top + docScrollTop;
-    
-    // If we're already very close to the target position (within 100px), don't scroll
-    const currentPosition = currentScrollY;
+    const absoluteElementTop = elementRect.top + window.pageYOffset;
     const targetPosition = absoluteElementTop - navHeight;
-    if (Math.abs(currentPosition - targetPosition) < 100) {
-      if (isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
-      }
+
+    // If we're already very close to the target, just close menu
+    if (Math.abs(window.scrollY - targetPosition) < 100) {
+      setIsMobileMenuOpen(false);
       return;
     }
 
-    // Set flag that we're navigating to prevent scroll restoration
-    document.body.dataset.navigating = 'true';
-    
-    // Close mobile menu first (if open)
+    // Close mobile menu and scroll
     setIsMobileMenuOpen(false);
     
-    // Then scroll after a brief delay to ensure menu closing animation is complete
+    // Add a small delay for menu close animation
     setTimeout(() => {
       window.scrollTo({
         top: targetPosition,
         behavior: 'smooth'
       });
-      
-      // Clear the navigating flag after scrolling
-      setTimeout(() => {
-        delete document.body.dataset.navigating;
-      }, 100);
-    }, isMobileMenuOpen ? 300 : 0); // Longer delay if closing mobile menu
+    }, 100);
   };
 
   return (
