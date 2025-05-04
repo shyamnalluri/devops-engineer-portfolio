@@ -7,6 +7,7 @@ import Portfolio from "./sections/Portfolio";
 import Achievements from "./sections/Achievements";
 import Contact from "./sections/Contact";
 import Resume from "./sections/Resume";
+import Certifications from "./sections/Certifications";
 import ClientWrapper from "./components/ClientWrapper";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
           <Expertise />
           <Resume />
           <Portfolio />
+          <Certifications />
           <Achievements />
           <Contact />
         </div>

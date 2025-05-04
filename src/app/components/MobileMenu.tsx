@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState, ReactElement } from 'react';
-import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope } from 'react-icons/fa';
+import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -19,13 +19,14 @@ type Section = {
   height: number;
 };
 
-type MenuIconKey = 'Home' | 'About' | 'Expertise' | 'Portfolio' | 'Resume' | 'Contact';
+type MenuIconKey = 'Home' | 'About' | 'Expertise' | 'Portfolio' | 'Certifications' | 'Resume' | 'Contact';
 
 const menuIcons: Record<MenuIconKey, ReactElement> = {
   'Home': <FaHome className="w-5 h-5" />,
   'About': <FaUser className="w-5 h-5" />,
   'Expertise': <FaCode className="w-5 h-5" />,
   'Portfolio': <FaFolder className="w-5 h-5" />,
+  'Certifications': <FaCertificate className="w-5 h-5" />,
   'Resume': <FaFileAlt className="w-5 h-5" />,
   'Contact': <FaEnvelope className="w-5 h-5" />
 };
