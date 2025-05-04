@@ -59,6 +59,13 @@ export const metadata: Metadata = {
   other: {
     "theme-color": "#1e293b",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
+  },
 };
 
 export default function RootLayout({
@@ -68,7 +75,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+        />
+      </head>
+      <body className={`${inter.className} overscroll-none`}>
         <ClientWrapper>
           <ScrollProgressBar />
           <ParticleBackground />
