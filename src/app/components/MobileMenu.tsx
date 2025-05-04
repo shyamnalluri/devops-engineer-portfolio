@@ -2,17 +2,26 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactElement } from 'react';
 import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope } from 'react-icons/fa';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  navItems: Array<{ name: string; href: string }>;
+  navItems: Array<{ name: MenuIconKey; href: string }>;
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }
 
-const menuIcons: { [key: string]: React.ReactElement } = {
+type Section = {
+  id: string;
+  top: number;
+  bottom: number;
+  height: number;
+};
+
+type MenuIconKey = 'Home' | 'About' | 'Expertise' | 'Portfolio' | 'Resume' | 'Contact';
+
+const menuIcons: Record<MenuIconKey, ReactElement> = {
   'Home': <FaHome className="w-5 h-5" />,
   'About': <FaUser className="w-5 h-5" />,
   'Expertise': <FaCode className="w-5 h-5" />,
@@ -22,33 +31,68 @@ const menuIcons: { [key: string]: React.ReactElement } = {
 };
 
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection, setActiveSection] = useState<string>('');
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map(item => ({
-        id: item.href.substring(1),
-        top: document.querySelector(item.href)?.getBoundingClientRect().top ?? 0
-      }));
-      
-      const current = sections.find(section => section.top <= 100);
-      if (current) {
-        setActiveSection(current.id);
+      const sections = navItems.reduce<Section[]>((acc, item) => {
+        const element = document.querySelector(item.href);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          acc.push({
+            id: item.href.substring(1),
+            top: rect.top,
+            bottom: rect.bottom,
+            height: rect.height
+          });
+        }
+        return acc;
+      }, []);
+
+      // Find which section is currently most visible in the viewport
+      const viewportHeight = window.innerHeight;
+      let currentSection: Section | null = null;
+      let maxVisibleArea = 0;
+
+      for (const section of sections) {
+        // Calculate how much of the section is visible
+        const visibleTop = Math.max(0, Math.min(viewportHeight, section.top));
+        const visibleBottom = Math.max(0, Math.min(viewportHeight, section.bottom));
+        const visibleArea = visibleBottom - visibleTop;
+
+        // If this section has more visible area, it becomes the active one
+        if (visibleArea > maxVisibleArea) {
+          maxVisibleArea = visibleArea;
+          currentSection = section;
+        }
+
+        // Special case: if we're at the top of a section
+        if (section.top <= 100 && section.bottom >= viewportHeight / 2) {
+          currentSection = section;
+          maxVisibleArea = Infinity; // Ensure this takes precedence
+        }
+      }
+
+      if (currentSection) {
+        setActiveSection(currentSection.id);
       }
     };
 
+    // Initial check
+    handleScroll();
+
     if (isOpen) {
-      // Only block scrolling while menu is open
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    window.addEventListener('resize', handleScroll);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
       if (!isOpen) {
         document.body.style.overflow = '';
       }
@@ -68,20 +112,28 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
             onClick={onClose}
           />
           <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
             transition={{ 
               type: "spring",
               stiffness: 300,
               damping: 30
             }}
-            className="fixed bottom-0 left-0 right-0 bg-gray-900 rounded-t-3xl shadow-lg z-50"
+            className="fixed top-0 right-0 h-full w-[300px] bg-gray-900 shadow-lg z-50 flex flex-col"
           >
-            <div className="relative px-6 py-8">
-              <div className="absolute left-1/2 top-3 w-12 h-1 bg-gray-600 rounded-full transform -translate-x-1/2" />
+            <div className="relative p-6">
+              <button
+                onClick={onClose}
+                className="absolute top-6 right-6 text-gray-400 hover:text-white"
+                aria-label="Close menu"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
               
-              <div className="grid grid-cols-3 gap-6 mt-4">
+              <div className="mt-16 flex flex-col space-y-6">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
@@ -90,14 +142,14 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                       scrollToSection(e, item.href);
                       onClose();
                     }}
-                    className={`flex flex-col items-center p-4 rounded-xl transition-all duration-200 ${
+                    className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 ${
                       activeSection === item.href.substring(1)
                         ? 'bg-blue-600 text-white'
                         : 'text-gray-400 hover:bg-gray-800 hover:text-white'
                     }`}
                   >
                     {menuIcons[item.name]}
-                    <span className="mt-2 text-sm font-medium">{item.name}</span>
+                    <span className="text-base font-medium">{item.name}</span>
                   </Link>
                 ))}
               </div>
