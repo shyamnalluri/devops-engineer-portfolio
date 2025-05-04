@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope } from 'react-icons/fa';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -11,45 +12,48 @@ interface MobileMenuProps {
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }
 
+const menuIcons: { [key: string]: React.ReactElement } = {
+  'Home': <FaHome className="w-5 h-5" />,
+  'About': <FaUser className="w-5 h-5" />,
+  'Expertise': <FaCode className="w-5 h-5" />,
+  'Portfolio': <FaFolder className="w-5 h-5" />,
+  'Resume': <FaFileAlt className="w-5 h-5" />,
+  'Contact': <FaEnvelope className="w-5 h-5" />
+};
+
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
+  const [activeSection, setActiveSection] = useState('');
+
   useEffect(() => {
+    const handleScroll = () => {
+      const sections = navItems.map(item => ({
+        id: item.href.substring(1),
+        top: document.querySelector(item.href)?.getBoundingClientRect().top ?? 0
+      }));
+      
+      const current = sections.find(section => section.top <= 100);
+      if (current) {
+        setActiveSection(current.id);
+      }
+    };
+
     if (isOpen) {
-      // Save current scroll position and lock scrolling
-      const scrollY = window.scrollY;
+      // Only block scrolling while menu is open
       document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.dataset.scrollPosition = String(scrollY);
     } else {
-      // Wait a brief moment to restore scroll to ensure transitions complete
-      setTimeout(() => {
-        // Restore scrolling styles
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
-        document.body.style.top = '';
-        
-        // Get stored scroll position
-        const scrollY = Number(document.body.dataset.scrollPosition || '0');
-        delete document.body.dataset.scrollPosition;
-        
-        // Only restore scroll if we're not navigating to a section
-        if (document.body.dataset.navigating !== 'true') {
-          window.scrollTo(0, scrollY);
-        }
-      }, 50);
+      document.body.style.overflow = '';
     }
 
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+
     return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      delete document.body.dataset.scrollPosition;
-      delete document.body.dataset.navigating;
+      window.removeEventListener('scroll', handleScroll);
+      if (!isOpen) {
+        document.body.style.overflow = '';
+      }
     };
-  }, [isOpen]);
+  }, [isOpen, navItems]);
 
   return (
     <AnimatePresence mode="wait">
@@ -59,52 +63,41 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
             onClick={onClose}
           />
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
             transition={{ 
               type: "spring",
-              stiffness: 400,
-              damping: 40,
-              mass: 0.8
+              stiffness: 300,
+              damping: 30
             }}
-            className="fixed right-0 top-0 h-full w-[280px] bg-gray-900 shadow-xl z-50 overflow-y-auto"
+            className="fixed bottom-0 left-0 right-0 bg-gray-900 rounded-t-3xl shadow-lg z-50"
           >
-            <div className="flex flex-col p-6">
-              <button
-                onClick={onClose}
-                className="self-end text-gray-400 hover:text-white mb-8 p-2"
-                aria-label="Close menu"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-              <div className="flex flex-col space-y-4">
+            <div className="relative px-6 py-8">
+              <div className="absolute left-1/2 top-3 w-12 h-1 bg-gray-600 rounded-full transform -translate-x-1/2" />
+              
+              <div className="grid grid-cols-3 gap-6 mt-4">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={(e) => {
-                      onClose();
                       scrollToSection(e, item.href);
+                      onClose();
                     }}
-                    className="text-gray-300 hover:text-white py-3 text-lg font-medium transition-colors border-b border-gray-800"
+                    className={`flex flex-col items-center p-4 rounded-xl transition-all duration-200 ${
+                      activeSection === item.href.substring(1)
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                    }`}
                   >
-                    {item.name}
+                    {menuIcons[item.name]}
+                    <span className="mt-2 text-sm font-medium">{item.name}</span>
                   </Link>
                 ))}
               </div>
