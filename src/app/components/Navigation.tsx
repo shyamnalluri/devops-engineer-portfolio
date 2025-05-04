@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { FaBars } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
+type MenuIconKey = 'Home' | 'About' | 'Expertise' | 'Portfolio' | 'Resume' | 'Contact';
+
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,7 +21,7 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const navItems: Array<{ name: MenuIconKey; href: string }> = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
     { name: 'Expertise', href: '#expertise' },
