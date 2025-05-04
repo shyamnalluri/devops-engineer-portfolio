@@ -67,6 +67,7 @@ const Contact = () => {
             <p className="text-gray-400">Let&apos;s discuss your next project</p>
           </div>
 
+          {/* Social Links */}
           <div className="flex flex-wrap justify-center gap-6 mb-12">
             {socialLinks.map((link, index) => (
               <motion.a
@@ -86,6 +87,7 @@ const Contact = () => {
             ))}
           </div>
 
+          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -104,7 +106,8 @@ const Contact = () => {
                     id="user_name"
                     name="user_name"
                     required
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow font-[16px]"
+                    style={{ fontSize: '16px' }}
                   />
                 </div>
                 <div>
@@ -116,7 +119,8 @@ const Contact = () => {
                     id="user_email"
                     name="user_email"
                     required
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow font-[16px]"
+                    style={{ fontSize: '16px' }}
                   />
                 </div>
               </div>
@@ -129,7 +133,8 @@ const Contact = () => {
                   name="message"
                   required
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow resize-y min-h-[120px]"
+                  className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow resize-y min-h-[120px] font-[16px]"
+                  style={{ fontSize: '16px' }}
                 ></textarea>
               </div>
               <div className="flex justify-center sm:justify-start">
