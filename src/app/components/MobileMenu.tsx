@@ -19,12 +19,12 @@ type Section = {
   height: number;
 };
 
-type MenuIconKey = 'Home' | 'About' | 'Expertise' | 'Portfolio' | 'Certifications' | 'Resume' | 'Contact';
+type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Certifications' | 'Resume' | 'Contact';
 
 const menuIcons: Record<MenuIconKey, ReactElement> = {
   'Home': <FaHome className="w-5 h-5" />,
   'About': <FaUser className="w-5 h-5" />,
-  'Expertise': <FaCode className="w-5 h-5" />,
+  'Skills': <FaCode className="w-5 h-5" />,
   'Portfolio': <FaFolder className="w-5 h-5" />,
   'Certifications': <FaCertificate className="w-5 h-5" />,
   'Resume': <FaFileAlt className="w-5 h-5" />,

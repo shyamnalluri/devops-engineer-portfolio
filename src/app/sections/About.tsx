@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import OptimizedImage from '../components/OptimizedImage';
+import Image from 'next/image';
 
 const About = () => {
   return (
@@ -23,7 +23,7 @@ const About = () => {
               viewport={{ once: true }}
               className="max-w-sm mx-auto md:max-w-none"
             >
-              <OptimizedImage
+              <Image
                 src="/profile.jpg"
                 alt="Profile picture"
                 width={400}
@@ -44,27 +44,15 @@ const About = () => {
               <p className="text-gray-300">
                 With over 5 years of experience, I&apos;ve helped organizations streamline their development workflows and optimize their cloud infrastructure. I&apos;m particularly passionate about Kubernetes, Infrastructure as Code, and CI/CD pipelines.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-white font-semibold mb-3">Skills</h3>
-                  <ul className="text-gray-300 space-y-2">
-                    <li>AWS & Cloud Platforms</li>
-                    <li>Kubernetes</li>
-                    <li>Docker</li>
-                    <li>Terraform</li>
-                    <li>CI/CD</li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold mb-3">Focus Areas</h3>
-                  <ul className="text-gray-300 space-y-2">
-                    <li>Cloud Architecture</li>
-                    <li>Infrastructure as Code</li>
-                    <li>Automation</li>
-                    <li>Monitoring</li>
-                    <li>Security</li>
-                  </ul>
-                </div>
+              <div className="bg-gray-800 p-8 rounded-lg shadow-xl">
+                <h3 className="text-white font-semibold mb-3">Focus Areas</h3>
+                <ul className="text-gray-300 space-y-2">
+                  <li>Cloud Architecture</li>
+                  <li>Infrastructure as Code</li>
+                  <li>Automation</li>
+                  <li>Monitoring</li>
+                  <li>Security</li>
+                </ul>
               </div>
             </motion.div>
           </div>
