@@ -32,9 +32,14 @@ const Navigation = () => {
     e.preventDefault();
     const element = document.querySelector(href);
     if (element) {
-      const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+      // Get the navigation bar height
+      const navHeight = 80; // This should match your nav height
+      // Use window.scrollY instead of pageYOffset (deprecated)
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - navHeight;
+
       window.scrollTo({
-        top: offsetTop,
+        top: offsetPosition,
         behavior: 'smooth'
       });
     }
