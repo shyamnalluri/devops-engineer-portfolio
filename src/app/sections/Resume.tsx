@@ -26,18 +26,25 @@ const TimelineItem = ({
     whileInView={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
     viewport={{ once: true }}
-    className={`flex ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'} items-center md:gap-8 relative`}
+    className="relative md:flex items-center md:gap-8"
   >
+    {/* Timeline line and dot - Only visible on desktop */}
     <div className="hidden md:block absolute left-1/2 top-0 -translate-x-1/2 h-full w-0.5 bg-blue-500/20" />
     <div className="hidden md:block absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 rounded-full bg-blue-500" />
-    <div className={`w-full md:w-1/2 ${isLeft ? 'md:text-right' : ''} mb-8 md:mb-16`}>
-      <div className="bg-gray-900 p-6 rounded-lg">
+    
+    {/* Mobile timeline indicator */}
+    <div className="md:hidden absolute left-0 top-0 bottom-0 w-0.5 bg-blue-500/20">
+      <div className="absolute top-8 -left-1.5 w-3 h-3 rounded-full bg-blue-500" />
+    </div>
+
+    <div className={`w-full md:w-1/2 ${isLeft ? 'md:text-right' : ''} pl-8 md:pl-0 mb-8`}>
+      <div className="bg-gray-900 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
         <h4 className="text-xl font-semibold text-white mb-2">{data.title}</h4>
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-blue-400">{data.company || data.institution}</span>
-          <span className="text-gray-400">{data.period}</span>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+          <span className="text-blue-400 text-sm sm:text-base">{data.company || data.institution}</span>
+          <span className="text-gray-400 text-sm">{data.period}</span>
         </div>
-        <p className="text-gray-300">{data.description}</p>
+        <p className="text-gray-300 text-sm sm:text-base">{data.description}</p>
       </div>
     </div>
     <div className="hidden md:block w-1/2" />

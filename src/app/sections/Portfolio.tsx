@@ -88,34 +88,36 @@ const Portfolio = () => {
           <p className="text-gray-400">Featured DevOps Projects</p>
         </motion.div>
 
-        {/* Filter buttons */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
-          <button
-            onClick={() => setSelectedTech('all')}
-            className={`px-4 py-2 rounded-full transition-colors ${
-              selectedTech === 'all'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-            }`}
-          >
-            All
-          </button>
-          {allTechnologies.map((tech) => (
+        {/* Filter buttons - Horizontal scrollable on mobile */}
+        <div className="overflow-x-auto -mx-4 px-4 mb-8">
+          <div className="flex flex-nowrap justify-start md:justify-center gap-3 min-w-max pb-4 md:pb-0">
             <button
-              key={tech}
-              onClick={() => setSelectedTech(tech)}
-              className={`px-4 py-2 rounded-full transition-colors ${
-                selectedTech === tech
+              onClick={() => setSelectedTech('all')}
+              className={`px-4 py-2 rounded-full transition-colors whitespace-nowrap ${
+                selectedTech === 'all'
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
-              {tech}
+              All
             </button>
-          ))}
+            {allTechnologies.map((tech) => (
+              <button
+                key={tech}
+                onClick={() => setSelectedTech(tech)}
+                className={`px-4 py-2 rounded-full transition-colors whitespace-nowrap ${
+                  selectedTech === tech
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                }`}
+              >
+                {tech}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
               <motion.div
@@ -125,14 +127,14 @@ const Portfolio = () => {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 layout
-                className="bg-gray-800 rounded-lg overflow-hidden"
+                className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow"
               >
-                <div className="relative h-48">
+                <div className="relative aspect-video">
                   <OptimizedImage
                     src={project.image}
                     alt={project.title}
-                    width={400}
-                    height={200}
+                    width={600}
+                    height={340}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900/80" />
@@ -141,12 +143,12 @@ const Portfolio = () => {
                   <h3 className="text-xl font-semibold text-white mb-2">
                     {project.title}
                   </h3>
-                  <p className="text-gray-400 mb-4">{project.description}</p>
+                  <p className="text-gray-400 mb-4 line-clamp-2">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech, techIndex) => (
                       <span
                         key={techIndex}
-                        className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm"
+                        className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm whitespace-nowrap"
                       >
                         {tech}
                       </span>
@@ -158,7 +160,7 @@ const Portfolio = () => {
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-white transition-colors"
+                        className="text-gray-400 hover:text-white transition-colors p-2"
                       >
                         <FaGithub className="w-6 h-6" />
                       </a>
@@ -168,7 +170,7 @@ const Portfolio = () => {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-white transition-colors"
+                        className="text-gray-400 hover:text-white transition-colors p-2"
                       >
                         <FaExternalLinkAlt className="w-5 h-5" />
                       </a>

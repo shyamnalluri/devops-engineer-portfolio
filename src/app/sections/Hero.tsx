@@ -41,7 +41,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 pt-16 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 pt-16 px-4 overflow-hidden"
     >
       <AnimatedBackground />
       <div className="relative z-10 text-center">
@@ -49,7 +49,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl font-bold text-white mb-4"
+          className="text-4xl md:text-5xl font-bold text-white mb-4"
         >
           Shyam Nalluri
         </motion.h1>
@@ -57,7 +57,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-2xl text-gray-300 mb-8 h-[60px] flex items-center justify-center"
+          className="text-xl md:text-2xl text-gray-300 mb-8 h-[60px] flex items-center justify-center"
         >
           <TypeAnimation
             sequence={[
@@ -80,7 +80,7 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex justify-center gap-4"
+          className="flex flex-col sm:flex-row justify-center gap-4"
         >
           <a
             href="#portfolio"
