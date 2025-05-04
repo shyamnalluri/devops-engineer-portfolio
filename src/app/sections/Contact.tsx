@@ -60,12 +60,14 @@ const Contact = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center"
+          className="max-w-4xl mx-auto"
         >
-          <h2 className="text-3xl font-bold text-white mb-8">Contact</h2>
-          <p className="text-gray-400 mb-12">Let&apos;s discuss your next project</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">Contact</h2>
+            <p className="text-gray-400">Let&apos;s discuss your next project</p>
+          </div>
 
-          <div className="flex justify-center space-x-6 mb-12">
+          <div className="flex flex-wrap justify-center gap-6 mb-12">
             {socialLinks.map((link, index) => (
               <motion.a
                 key={index}
@@ -76,7 +78,8 @@ const Contact = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="text-gray-400 hover:text-blue-500 transition-colors"
+                className="text-gray-400 hover:text-blue-500 transition-colors p-3"
+                aria-label={link.name}
               >
                 {link.icon}
               </motion.a>
@@ -88,47 +91,56 @@ const Contact = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-gray-800 p-8 rounded-lg"
+            className="bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl"
           >
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
+                  <label htmlFor="user_name" className="block text-gray-400 mb-2 text-sm">
+                    Name
+                  </label>
                   <input
                     type="text"
+                    id="user_name"
                     name="user_name"
-                    placeholder="Name"
                     required
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
                   />
                 </div>
                 <div>
+                  <label htmlFor="user_email" className="block text-gray-400 mb-2 text-sm">
+                    Email
+                  </label>
                   <input
                     type="email"
+                    id="user_email"
                     name="user_email"
-                    placeholder="Email"
                     required
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
                   />
                 </div>
               </div>
               <div>
+                <label htmlFor="message" className="block text-gray-400 mb-2 text-sm">
+                  Message
+                </label>
                 <textarea
+                  id="message"
                   name="message"
-                  placeholder="Message"
                   required
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow resize-y min-h-[120px]"
                 ></textarea>
               </div>
-              <div>
+              <div className="flex justify-center sm:justify-start">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full md:w-auto px-8 py-3 rounded-lg font-medium transition-colors ${
+                  className={`px-8 py-3 rounded-lg font-medium transition-colors ${
                     isSubmitting
                       ? 'bg-gray-600 cursor-not-allowed'
                       : 'bg-blue-600 hover:bg-blue-700'
-                  } text-white`}
+                  } text-white w-full sm:w-auto`}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
@@ -137,7 +149,7 @@ const Contact = () => {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-green-400 mt-4"
+                  className="text-green-400 text-center sm:text-left mt-4"
                 >
                   Message sent successfully!
                 </motion.p>
@@ -146,7 +158,7 @@ const Contact = () => {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-red-400 mt-4"
+                  className="text-red-400 text-center sm:text-left mt-4"
                 >
                   Failed to send message. Please try again.
                 </motion.p>

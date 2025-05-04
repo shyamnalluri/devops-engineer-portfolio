@@ -21,13 +21,14 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
+              className="max-w-sm mx-auto md:max-w-none"
             >
               <OptimizedImage
                 src="/profile.jpg"
                 alt="Profile picture"
                 width={400}
                 height={400}
-                className="rounded-lg shadow-xl mx-auto"
+                className="rounded-lg shadow-xl mx-auto w-full max-w-[300px] md:max-w-none"
               />
             </motion.div>
             <motion.div
@@ -35,17 +36,18 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
+              className="space-y-6"
             >
-              <p className="text-gray-300 mb-6">
+              <p className="text-gray-300">
                 I&apos;m a DevOps Engineer with expertise in cloud infrastructure and automation. My journey in technology has been driven by a passion for creating efficient, scalable solutions.
               </p>
-              <p className="text-gray-300 mb-6">
+              <p className="text-gray-300">
                 With over 5 years of experience, I&apos;ve helped organizations streamline their development workflows and optimize their cloud infrastructure. I&apos;m particularly passionate about Kubernetes, Infrastructure as Code, and CI/CD pipelines.
               </p>
-              <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-white font-semibold mb-2">Skills</h3>
-                  <ul className="text-gray-300">
+                  <h3 className="text-white font-semibold mb-3">Skills</h3>
+                  <ul className="text-gray-300 space-y-2">
                     <li>AWS & Cloud Platforms</li>
                     <li>Kubernetes</li>
                     <li>Docker</li>
@@ -54,8 +56,8 @@ const About = () => {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-2">Focus Areas</h3>
-                  <ul className="text-gray-300">
+                  <h3 className="text-white font-semibold mb-3">Focus Areas</h3>
+                  <ul className="text-gray-300 space-y-2">
                     <li>Cloud Architecture</li>
                     <li>Infrastructure as Code</li>
                     <li>Automation</li>
