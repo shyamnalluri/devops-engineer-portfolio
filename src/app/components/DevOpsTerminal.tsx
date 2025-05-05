@@ -37,18 +37,21 @@ const DevOpsTerminal = () => {
   const [displayedCommands, setDisplayedCommands] = useState<Command[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [currentChar, setCurrentChar] = useState(0);
+  const [showOutput, setShowOutput] = useState(false);
 
   useEffect(() => {
     const typeCommand = () => {
       if (currentCommandIndex >= commands.length) {
         setCurrentCommandIndex(0);
         setDisplayedCommands([]);
+        setShowOutput(false);
         return;
       }
 
       const currentCommand = commands[currentCommandIndex];
       if (!isTyping && currentChar === 0) {
         setIsTyping(true);
+        setShowOutput(false);
       }
 
       if (isTyping) {
@@ -60,9 +63,13 @@ const DevOpsTerminal = () => {
         } else {
           setIsTyping(false);
           const timer = setTimeout(() => {
-            setDisplayedCommands(prev => [...prev, currentCommand]);
-            setCurrentChar(0);
-            setCurrentCommandIndex(prev => prev + 1);
+            setShowOutput(true);
+            const nextTimer = setTimeout(() => {
+              setDisplayedCommands(prev => [...prev, currentCommand]);
+              setCurrentChar(0);
+              setCurrentCommandIndex(prev => prev + 1);
+            }, 2000); // Wait longer before moving to next command
+            return () => clearTimeout(nextTimer);
           }, 500);
           return () => clearTimeout(timer);
         }
@@ -89,42 +96,47 @@ const DevOpsTerminal = () => {
       </div>
       
       <div className="p-4 font-mono text-sm h-[calc(100%-2rem)] overflow-auto">
-        <AnimatePresence>
-          {displayedCommands.map((command, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-4"
-            >
-              <div className="flex items-center text-gray-300">
-                <span className="text-blue-400">➜</span>
-                <span className="text-green-400 ml-2">~/devops</span>
-                <span className="ml-2">{command.input}</span>
+        {displayedCommands.map((command, index) => (
+          <div key={index} className="mb-4">
+            <div className="flex items-center text-gray-300">
+              <span className="text-blue-400">➜</span>
+              <span className="text-green-400 ml-2">~/devops</span>
+              <span className="ml-2">{command.input}</span>
+            </div>
+            {command.output.map((line, i) => (
+              <div key={i} className="mt-1 text-gray-400">
+                {line}
               </div>
-              {command.output.map((line, i) => (
-                <div key={i} className="mt-1 text-gray-400">
-                  {line}
-                </div>
-              ))}
-            </motion.div>
-          ))}
-          {isTyping && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex items-center text-gray-300"
-            >
+            ))}
+          </div>
+        ))}
+        {(isTyping || showOutput) && (
+          <div className="mb-4">
+            <div className="flex items-center text-gray-300">
               <span className="text-blue-400">➜</span>
               <span className="text-green-400 ml-2">~/devops</span>
               <span className="ml-2">
                 {commands[currentCommandIndex].input.slice(0, currentChar)}
-                <span className="animate-pulse">_</span>
+                {isTyping && <span className="animate-pulse">_</span>}
               </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+            {showOutput && (
+              <AnimatePresence>
+                {commands[currentCommandIndex].output.map((line, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, delay: i * 0.1 }}
+                    className="mt-1 text-gray-400"
+                  >
+                    {line}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )}
+          </div>
+        )}
       </div>
     </motion.div>
   );
