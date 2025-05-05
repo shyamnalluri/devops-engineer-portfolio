@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import ClientWrapper from "./components/ClientWrapper";
-import ParticleBackground from "./components/ParticleBackground";
 import BackToTop from "./components/BackToTop";
 import ScrollProgressBar from "./components/ScrollProgressBar";
 
@@ -85,7 +84,6 @@ export default function RootLayout({
         <ClientWrapper>
           <div className="overflow-x-hidden w-full">
             <ScrollProgressBar />
-            <ParticleBackground />
             <Navigation />
             <main className="relative z-10">
               {children}
