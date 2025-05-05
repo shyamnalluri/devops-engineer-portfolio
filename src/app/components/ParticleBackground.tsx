@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Particles } from '@tsparticles/react';
-import { loadFull } from 'tsparticles';
-import type { Container, Engine } from '@tsparticles/engine';
+import Particles from "react-tsparticles";
+import type { Engine } from "tsparticles-engine";
+import { loadSlim } from "tsparticles-slim";
 
 const ParticleBackground = () => {
   const [mounted, setMounted] = useState(false);
@@ -13,13 +13,7 @@ const ParticleBackground = () => {
   }, []);
 
   const particlesInit = useCallback(async (engine: Engine) => {
-    await loadFull(engine);
-  }, []);
-
-  const particlesLoaded = useCallback(async (container: Container | undefined) => {
-    if (container) {
-      console.log('Particles loaded');
-    }
+    await loadSlim(engine);
   }, []);
 
   if (!mounted) return null;
@@ -28,94 +22,51 @@ const ParticleBackground = () => {
     <Particles
       id="tsparticles"
       init={particlesInit}
-      loaded={particlesLoaded}
       options={{
-        fullScreen: {
-          enable: true,
-          zIndex: 1
-        },
-        particles: {
-          number: {
-            value: 50,
-            density: {
-              enable: true,
-              value_area: 800
-            }
+        background: {
+          color: {
+            value: "transparent",
           },
+        },
+        fpsLimit: 120,
+        particles: {
           color: {
             value: "#3b82f6"
           },
-          shape: {
-            type: "circle"
-          },
-          opacity: {
-            value: 0.5,
-            random: true,
-            animation: {
-              enable: true,
-              speed: 1,
-              minimumValue: 0.1,
-              sync: false
-            }
-          },
-          size: {
-            value: 3,
-            random: true,
-            animation: {
-              enable: true,
-              speed: 2,
-              minimumValue: 0.1,
-              sync: false
-            }
-          },
           links: {
-            enable: true,
-            distance: 150,
             color: "#3b82f6",
-            opacity: 0.4,
+            distance: 150,
+            enable: true,
+            opacity: 0.5,
             width: 1
           },
           move: {
             enable: true,
-            speed: 2,
-            direction: "none",
-            random: false,
-            straight: false,
             outModes: {
-              default: "out"
+              default: "bounce"
             },
-            attract: {
+            random: false,
+            speed: 2,
+            straight: false
+          },
+          number: {
+            density: {
               enable: true,
-              rotateX: 600,
-              rotateY: 1200
-            }
+              area: 800
+            },
+            value: 50
+          },
+          opacity: {
+            value: 0.5
+          },
+          shape: {
+            type: "circle"
+          },
+          size: {
+            value: { min: 1, max: 5 }
           }
         },
-        interactivity: {
-          detectsOn: "window",
-          events: {
-            onHover: {
-              enable: true,
-              mode: "grab"
-            },
-            onClick: {
-              enable: true,
-              mode: "push"
-            },
-            resize: true
-          },
-          modes: {
-            grab: {
-              distance: 140,
-              links: {
-                opacity: 1
-              }
-            },
-            push: {
-              quantity: 4
-            }
-          }
-        }
+        detectRetina: true
       }}
     />
   );
