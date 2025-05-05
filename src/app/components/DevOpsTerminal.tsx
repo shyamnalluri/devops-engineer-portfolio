@@ -81,7 +81,7 @@ const DevOpsTerminal = () => {
 
   return (
     <motion.div 
-      className="w-full h-full bg-gray-900 rounded-lg border border-gray-700 overflow-hidden shadow-xl"
+      className="w-full h-full bg-gray-900 rounded-lg border border-gray-700 overflow-hidden shadow-xl relative z-0 mt-24 sm:mt-16"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -110,7 +110,7 @@ const DevOpsTerminal = () => {
             ))}
           </div>
         ))}
-        {(isTyping || showOutput) && (
+        {(isTyping || showOutput) && currentCommandIndex < commands.length && (
           <div className="mb-4">
             <div className="flex items-center text-gray-300">
               <span className="text-blue-400">➜</span>
