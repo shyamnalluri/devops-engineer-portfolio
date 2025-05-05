@@ -70,15 +70,7 @@ const Navigation = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
-            <Link 
-              href="#home"
-              onClick={(e) => scrollToSection(e, '#home')}
-              className="text-xl font-bold text-white hover:text-blue-500 transition"
-            >
-              Shyam Nalluri
-            </Link>
-
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation - Moved to left */}
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
                 <Link
@@ -92,9 +84,9 @@ const Navigation = () => {
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Moved to right */}
             <button
-              className="block md:hidden text-gray-300 hover:text-white p-2 -mr-2"
+              className="block md:hidden text-gray-300 hover:text-white p-2 ml-auto"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
             >
