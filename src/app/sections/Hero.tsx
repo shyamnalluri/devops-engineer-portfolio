@@ -1,21 +1,16 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import AnimatedSection from "../components/AnimatedSection";
 import DevOpsTerminal from "../components/DevOpsTerminal";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const [isMounted, setMounted] = useState(false);
 
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const scrollToSection = (
     e: React.MouseEvent<HTMLAnchorElement>,
