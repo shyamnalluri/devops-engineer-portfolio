@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
 type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Resume' | 'Contact' | 'Certifications';
@@ -11,10 +11,44 @@ type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Resume' | 'Conta
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('home');
+
+  const menuIcons: Record<MenuIconKey, React.ReactElement> = {
+    'Home': <FaHome className="w-4 h-4" />,
+    'About': <FaUser className="w-4 h-4" />,
+    'Skills': <FaCode className="w-4 h-4" />,
+    'Portfolio': <FaFolder className="w-4 h-4" />,
+    'Certifications': <FaCertificate className="w-4 h-4" />,
+    'Resume': <FaFileAlt className="w-4 h-4" />,
+    'Contact': <FaEnvelope className="w-4 h-4" />
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      // Active section detection
+      const sections = navItems.reduce<Array<{ id: string; top: number; bottom: number }>>((acc, item) => {
+        const element = document.querySelector(item.href);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          acc.push({
+            id: item.href.substring(1),
+            top: rect.top + window.scrollY,
+            bottom: rect.bottom + window.scrollY
+          });
+        }
+        return acc;
+      }, []);
+
+      const currentScroll = window.scrollY + 100; // Add offset for nav height
+      const currentSection = sections.find(
+        section => currentScroll >= section.top && currentScroll < section.bottom
+      );
+
+      if (currentSection) {
+        setActiveSection(currentSection.id);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -70,23 +104,41 @@ const Navigation = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
-            {/* Desktop Navigation - Moved to left */}
-            <div className="hidden md:flex items-center space-x-8">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={(e) => scrollToSection(e, item.href)}
-                  className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+                  className={`relative px-3 py-2 transition-all duration-200 text-sm font-medium group
+                    ${activeSection === item.href.substring(1)
+                      ? 'text-white'
+                      : 'text-gray-300 hover:text-white'
+                    }`}
                 >
-                  {item.name}
+                  <span className="relative z-10 flex items-center space-x-2 transform transition-transform duration-200 group-hover:scale-110">
+                    <span className={`${activeSection === item.href.substring(1) ? 'text-blue-500' : ''}`}>
+                      {menuIcons[item.name]}
+                    </span>
+                    <span>{item.name}</span>
+                  </span>
+                  {activeSection === item.href.substring(1) && (
+                    <motion.div
+                      layoutId="activeIndicator"
+                      className="absolute inset-0 bg-blue-500/10 rounded-lg -z-0"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100" />
                 </Link>
               ))}
             </div>
 
-            {/* Mobile Menu Button - Moved to right */}
+            {/* Mobile Menu Button */}
             <button
-              className="block md:hidden text-gray-300 hover:text-white p-2 ml-auto"
+              className="block md:hidden text-gray-300 hover:text-white p-2 ml-auto rounded-lg hover:bg-gray-800/50 transition-colors"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
             >
