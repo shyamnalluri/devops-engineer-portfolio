@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 const About = () => {
   return (
@@ -15,22 +14,7 @@ const About = () => {
           className="max-w-6xl mx-auto"
         >
           <h2 className="text-3xl font-bold text-white mb-8 text-center">About Me</h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="max-w-sm mx-auto md:max-w-none"
-            >
-              <Image
-                src="/profile.jpg"
-                alt="Profile picture"
-                width={400}
-                height={400}
-                className="rounded-lg shadow-xl mx-auto w-full max-w-[300px] md:max-w-none"
-              />
-            </motion.div>
+          <div className="max-w-3xl mx-auto">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
