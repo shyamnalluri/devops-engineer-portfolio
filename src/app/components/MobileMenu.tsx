@@ -121,12 +121,12 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
               stiffness: 300,
               damping: 30
             }}
-            className="fixed top-0 right-0 h-full w-[300px] bg-gray-900 shadow-lg z-50 flex flex-col"
+            className="fixed top-0 right-0 h-full w-[300px] bg-gray-900/95 backdrop-blur-md shadow-lg z-50 flex flex-col"
           >
             <div className="relative p-6">
               <button
                 onClick={onClose}
-                className="absolute top-6 right-6 text-gray-400 hover:text-white"
+                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-800/50 transition-colors"
                 aria-label="Close menu"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                 </svg>
               </button>
               
-              <div className="mt-16 flex flex-col space-y-6">
+              <div className="mt-16 flex flex-col space-y-3">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
@@ -143,13 +143,17 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                       scrollToSection(e, item.href);
                       onClose();
                     }}
-                    className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 ${
+                    className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 group ${
                       activeSection === item.href.substring(1)
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                        ? 'bg-blue-600/20 text-white'
+                        : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
                     }`}
                   >
-                    {menuIcons[item.name]}
+                    <span className={`transition-transform duration-200 group-hover:scale-110 ${
+                      activeSection === item.href.substring(1) ? 'text-blue-500' : ''
+                    }`}>
+                      {menuIcons[item.name]}
+                    </span>
                     <span className="text-base font-medium">{item.name}</span>
                   </Link>
                 ))}

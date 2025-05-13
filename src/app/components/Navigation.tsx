@@ -3,10 +3,20 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
 type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Resume' | 'Contact' | 'Certifications';
+
+const menuIcons: Record<MenuIconKey, React.ReactElement> = {
+  'Home': <FaHome className="w-4 h-4" />,
+  'About': <FaUser className="w-4 h-4" />,
+  'Skills': <FaCode className="w-4 h-4" />,
+  'Portfolio': <FaFolder className="w-4 h-4" />,
+  'Certifications': <FaCertificate className="w-4 h-4" />,
+  'Resume': <FaFileAlt className="w-4 h-4" />,
+  'Contact': <FaEnvelope className="w-4 h-4" />
+};
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -65,28 +75,31 @@ const Navigation = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-gray-900/95 shadow-lg backdrop-blur-sm py-4' : 'bg-transparent py-6'
+          isScrolled ? 'bg-gray-900/80 shadow-lg backdrop-blur-md py-4' : 'bg-transparent py-6'
         }`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
-            {/* Desktop Navigation - Moved to left */}
-            <div className="hidden md:flex items-center space-x-8">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={(e) => scrollToSection(e, item.href)}
-                  className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 text-gray-300 hover:text-white hover:bg-gray-800/50 group"
                 >
-                  {item.name}
+                  <span className="transition-transform duration-200 group-hover:scale-110">
+                    {menuIcons[item.name]}
+                  </span>
+                  <span className="text-sm font-medium">{item.name}</span>
                 </Link>
               ))}
             </div>
 
-            {/* Mobile Menu Button - Moved to right */}
+            {/* Mobile Menu Button */}
             <button
-              className="block md:hidden text-gray-300 hover:text-white p-2 ml-auto"
+              className="block md:hidden text-gray-300 hover:text-white p-2 ml-auto rounded-lg hover:bg-gray-800/50 transition-colors"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
             >
