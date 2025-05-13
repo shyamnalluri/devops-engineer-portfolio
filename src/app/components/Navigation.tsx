@@ -8,23 +8,47 @@ import MobileMenu from './MobileMenu';
 
 type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Resume' | 'Contact' | 'Certifications';
 
-const menuIcons: Record<MenuIconKey, React.ReactElement> = {
-  'Home': <FaHome className="w-4 h-4" />,
-  'About': <FaUser className="w-4 h-4" />,
-  'Skills': <FaCode className="w-4 h-4" />,
-  'Portfolio': <FaFolder className="w-4 h-4" />,
-  'Certifications': <FaCertificate className="w-4 h-4" />,
-  'Resume': <FaFileAlt className="w-4 h-4" />,
-  'Contact': <FaEnvelope className="w-4 h-4" />
-};
-
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('home');
+
+  const menuIcons: Record<MenuIconKey, React.ReactElement> = {
+    'Home': <FaHome className="w-4 h-4" />,
+    'About': <FaUser className="w-4 h-4" />,
+    'Skills': <FaCode className="w-4 h-4" />,
+    'Portfolio': <FaFolder className="w-4 h-4" />,
+    'Certifications': <FaCertificate className="w-4 h-4" />,
+    'Resume': <FaFileAlt className="w-4 h-4" />,
+    'Contact': <FaEnvelope className="w-4 h-4" />
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      // Active section detection
+      const sections = navItems.reduce<Array<{ id: string; top: number; bottom: number }>>((acc, item) => {
+        const element = document.querySelector(item.href);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          acc.push({
+            id: item.href.substring(1),
+            top: rect.top + window.scrollY,
+            bottom: rect.bottom + window.scrollY
+          });
+        }
+        return acc;
+      }, []);
+
+      const currentScroll = window.scrollY + 100; // Add offset for nav height
+      const currentSection = sections.find(
+        section => currentScroll >= section.top && currentScroll < section.bottom
+      );
+
+      if (currentSection) {
+        setActiveSection(currentSection.id);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -75,7 +99,7 @@ const Navigation = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-gray-900/80 shadow-lg backdrop-blur-md py-4' : 'bg-transparent py-6'
+          isScrolled ? 'bg-gray-900/95 shadow-lg backdrop-blur-sm py-4' : 'bg-transparent py-6'
         }`}
       >
         <div className="container mx-auto px-4">
@@ -87,12 +111,27 @@ const Navigation = () => {
                   key={item.name}
                   href={item.href}
                   onClick={(e) => scrollToSection(e, item.href)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 text-gray-300 hover:text-white hover:bg-gray-800/50 group"
+                  className={`relative px-3 py-2 transition-all duration-200 text-sm font-medium group
+                    ${activeSection === item.href.substring(1)
+                      ? 'text-white'
+                      : 'text-gray-300 hover:text-white'
+                    }`}
                 >
-                  <span className="transition-transform duration-200 group-hover:scale-110">
-                    {menuIcons[item.name]}
+                  <span className="relative z-10 flex items-center space-x-2 transform transition-transform duration-200 group-hover:scale-110">
+                    <span className={`${activeSection === item.href.substring(1) ? 'text-blue-500' : ''}`}>
+                      {menuIcons[item.name]}
+                    </span>
+                    <span>{item.name}</span>
                   </span>
-                  <span className="text-sm font-medium">{item.name}</span>
+                  {activeSection === item.href.substring(1) && (
+                    <motion.div
+                      layoutId="activeIndicator"
+                      className="absolute inset-0 bg-blue-500/10 rounded-lg -z-0"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100" />
                 </Link>
               ))}
             </div>
