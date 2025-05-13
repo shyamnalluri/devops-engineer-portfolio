@@ -79,8 +79,7 @@ const DevOpsTerminal = () => {
     typeCommand();
   }, [currentCommandIndex, currentChar, isTyping]);
 
-  return (
-    <motion.div 
+  return (    <motion.div 
       className="w-full h-full bg-gray-900 rounded-lg border border-gray-700 overflow-hidden shadow-xl relative z-0 mt-24 sm:mt-16"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -99,42 +98,42 @@ const DevOpsTerminal = () => {
         {displayedCommands.map((command, index) => (
           <div key={index} className="mb-4">
             <div className="flex items-center text-gray-300">
-              <span className="text-blue-400">➜</span>
-              <span className="text-green-400 ml-2">~/devops</span>
-              <span className="ml-2">{command.input}</span>
+              <span className="text-blue-400 mr-2">$</span>
+              <span>{command.input}</span>
             </div>
-            {command.output.map((line, i) => (
-              <div key={i} className="mt-1 text-gray-400">
-                {line}
+            {command.type === 'success' && (
+              <div className="mt-2 ml-4 text-green-400">
+                {command.output.map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
               </div>
-            ))}
+            )}
+            {command.type === 'error' && (
+              <div className="mt-2 ml-4 text-red-400">
+                {command.output.map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
+              </div>
+            )}
+            {command.type === 'info' && (
+              <div className="mt-2 ml-4 text-blue-400">
+                {command.output.map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
-        {(isTyping || showOutput) && currentCommandIndex < commands.length && (
-          <div className="mb-4">
-            <div className="flex items-center text-gray-300">
-              <span className="text-blue-400">➜</span>
-              <span className="text-green-400 ml-2">~/devops</span>
-              <span className="ml-2">
-                {commands[currentCommandIndex].input.slice(0, currentChar)}
-                {isTyping && <span className="animate-pulse">_</span>}
-              </span>
-            </div>
-            {showOutput && (
-              <AnimatePresence>
-                {commands[currentCommandIndex].output.map((line, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2, delay: i * 0.1 }}
-                    className="mt-1 text-gray-400"
-                  >
-                    {line}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            )}
+        {isTyping && (
+          <div className="flex items-center text-gray-300">
+            <span className="text-blue-400 mr-2">$</span>
+            <span>{commands[currentCommandIndex].input.slice(0, currentChar)}</span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 1, repeat: Infinity }}
+              className="ml-1 w-2 h-4 bg-gray-300"
+            />
           </div>
         )}
       </div>

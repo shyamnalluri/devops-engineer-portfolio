@@ -33,7 +33,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center"
+      className="relative min-h-screen flex items-center overflow-hidden"
       ref={containerRef}
     >
       <motion.div
@@ -43,34 +43,66 @@ const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="text-center lg:text-left">
             <AnimatedSection animation="slideLeft" delay={0.2}>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 md:mb-6">
-                Hi, I&apos;m Shyam Nalluri
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
+                <span className="text-white">Hi, I&apos;m </span>
+                <span className="text-blue-400">Shyam Nalluri</span>
               </h1>
             </AnimatedSection>
 
             <AnimatedSection animation="slideLeft" delay={0.4}>
-              <p className="text-lg sm:text-xl text-gray-300 mb-6 md:mb-8">
+              <p className="text-xl sm:text-2xl bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent font-semibold mb-6 md:mb-8">
                 DevOps Engineer & Cloud Architect
+              </p>
+              <p className="text-lg text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0">
+                Transforming infrastructure into scalable, automated solutions
               </p>
             </AnimatedSection>
 
             <AnimatedSection animation="slideUp" delay={0.6}>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start">
                 <a
                   href="#portfolio"
                   onClick={(e) => scrollToSection(e, "#portfolio")}
-                  className="group bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg relative overflow-hidden w-fit mx-auto sm:mx-0"
+                  className="group bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] relative overflow-hidden w-fit mx-auto sm:mx-0"
                 >
-                  <span className="relative z-10">View My Work</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    View My Work
+                    <svg
+                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </span>
                 </a>
                 <a
                   href="#contact"
                   onClick={(e) => scrollToSection(e, "#contact")}
-                  className="group border-2 border-blue-500 text-blue-500 hover:text-white text-sm sm:text-base px-4 sm:px-8 py-2 sm:py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 relative overflow-hidden w-fit mx-auto sm:mx-0"
+                  className="group bg-transparent hover:bg-blue-500/10 text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 relative overflow-hidden w-fit mx-auto sm:mx-0 border-2 border-blue-400 text-blue-400 hover:border-blue-300 hover:text-blue-300"
                 >
-                  <span className="relative z-10">Contact Me</span>
-                  <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    Contact Me
+                    <svg
+                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6m16-6l-8 8-8-8"
+                      />
+                    </svg>
+                  </span>
                 </a>
               </div>
             </AnimatedSection>
@@ -79,14 +111,22 @@ const Hero = () => {
           <AnimatedSection
             animation="scale"
             delay={0.4}
-            className="relative h-[500px] hidden lg:block"
+            className="relative h-[500px] hidden lg:block transform hover:scale-[1.02] transition-transform duration-300"
           >
             <DevOpsTerminal />
           </AnimatedSection>
         </div>
       </motion.div>
 
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900/90 to-gray-900 pointer-events-none" />
+      {/* Layered background with grid */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900/90 to-gray-900">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
+      </div>
+
+      {/* Glowing orb effects */}
+      <div className="absolute top-1/4 -left-32 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
     </section>
   );
 };
