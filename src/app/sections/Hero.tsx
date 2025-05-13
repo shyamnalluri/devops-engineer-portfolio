@@ -127,6 +127,35 @@ const Hero = () => {
       {/* Glowing orb effects */}
       <div className="absolute top-1/4 -left-32 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-gray-400 cursor-pointer"
+        animate={{ y: [0, 10, 0] }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        onClick={() =>
+          window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+        }
+      >
+        <span className="text-sm font-light tracking-wider">Scroll Down</span>
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
+      </motion.div>
     </section>
   );
 };
