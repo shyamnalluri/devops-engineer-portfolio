@@ -181,6 +181,19 @@ a, button {
   background: rgba(59, 130, 246, 0.7);
 }
 
+@keyframes slow-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.animate-slowly-rotate {
+  animation: slow-rotate 30s linear infinite;
+}
+
 @layer utilities {
   /* Hide scrollbar utilities */
   .hide-scrollbar {

@@ -225,25 +225,28 @@ const projects: Project[] = [
   }
 ];
 
-const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ project, onClick }) => {
+const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
   const categoryColors = {
     Infrastructure: {
-      gradient: 'from-blue-500/10 via-blue-500/5 to-transparent',
+      gradient: 'from-blue-600/20 via-blue-500/10 to-transparent',
+      hover: 'group-hover/card:from-blue-500/30 group-hover/card:via-blue-400/20',
       border: 'border-blue-500/20',
       text: 'text-blue-400',
-      shadow: 'shadow-blue-500/5'
+      glow: 'group-hover/card:shadow-blue-500/25'
     },
     Automation: {
-      gradient: 'from-green-500/10 via-green-500/5 to-transparent',
-      border: 'border-green-500/20',
-      text: 'text-green-400',
-      shadow: 'shadow-green-500/5'
+      gradient: 'from-emerald-600/20 via-emerald-500/10 to-transparent',
+      hover: 'group-hover/card:from-emerald-500/30 group-hover/card:via-emerald-400/20',
+      border: 'border-emerald-500/20',
+      text: 'text-emerald-400',
+      glow: 'group-hover/card:shadow-emerald-500/25'
     },
     DevOps: {
-      gradient: 'from-purple-500/10 via-purple-500/5 to-transparent',
+      gradient: 'from-purple-600/20 via-purple-500/10 to-transparent',
+      hover: 'group-hover/card:from-purple-500/30 group-hover/card:via-purple-400/20',
       border: 'border-purple-500/20',
       text: 'text-purple-400',
-      shadow: 'shadow-purple-500/5'
+      glow: 'group-hover/card:shadow-purple-500/25'
     }
   };
 
@@ -269,94 +272,103 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
       <div 
         className={`relative h-full rounded-2xl border bg-gradient-to-br backdrop-blur-sm cursor-pointer
           transition-all duration-500 ${colors.border} hover:border-opacity-50
-          bg-gray-900/40 overflow-hidden`}
+          bg-gray-900/40 overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-1
+          ${colors.glow}`}
       >
         {/* Hero Section with Image */}
         <div className="relative h-48 overflow-hidden rounded-t-2xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-900/50 to-transparent z-10" />
+          <div className={`absolute inset-0 bg-gradient-to-br ${colors.gradient} ${colors.hover} 
+            transition-all duration-500 z-20 opacity-80`} />
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-900/90 via-gray-900/50 to-transparent z-10" />
           <OptimizedImage
             src={project.image}
             alt={project.title}
             width={400}
             height={300}
-            className="w-full h-full object-cover object-center scale-105 group-hover/card:scale-110 transition-transform duration-700"
-          />
-          <div className={`absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 
-            bg-gradient-to-r ${colors.gradient}`} 
+            className="w-full h-full object-cover object-center scale-105 group-hover/card:scale-110 
+              transition-all duration-700 brightness-[0.8] group-hover/card:brightness-[0.9]"
           />
         </div>
 
         {/* Content Section */}
-        <div className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h3 className="text-xl font-bold text-white group-hover/card:text-blue-400 transition-colors duration-300 flex-1 pr-4">
-              {project.title}
-            </h3>
-            <Icon className={`w-6 h-6 ${colors.text} mt-1`} />
-          </div>
-
-          <p className="text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed">
-            {project.description}
-          </p>
-
-          <div className="space-y-4">
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {project.tags.slice(0, 3).map((tag, index) => (
-                <span
-                  key={index}
-                  className={`px-2.5 py-1 text-xs rounded-full ${colors.text} bg-gray-800/50 
-                    border ${colors.border} backdrop-blur-sm`}
-                >
-                  {tag}
-                </span>
-              ))}
+        <div className="p-6 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/80 to-gray-900 opacity-80" />
+          <div className="relative z-10">
+            <div className="flex items-start justify-between mb-4">
+              <h3 className={`text-xl font-bold group-hover/card:${colors.text} transition-colors duration-300 
+                flex-1 pr-4 tracking-wide`}>
+                {project.title}
+              </h3>
+              <Icon className={`w-6 h-6 ${colors.text} mt-1 transform transition-transform duration-300 
+                group-hover/card:scale-110 group-hover/card:rotate-[-8deg]`} />
             </div>
 
-            {/* View Project Link */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-800">
-              <button
-                className={`text-sm ${colors.text} hover:opacity-80 transition-opacity 
-                  flex items-center gap-1.5 group/btn`}
-              >
-                <span>View Project</span>
-                <svg
-                  className="w-4 h-4 transform transition-transform duration-300 group-hover/btn:translate-x-0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            <p className="text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed group-hover/card:text-gray-300 
+              transition-colors duration-300">
+              {project.description}
+            </p>
+
+            <div className="space-y-4">
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2">
+                {project.tags.slice(0, 3).map((tag, index) => (
+                  <span
+                    key={index}
+                    className={`px-2.5 py-1 text-xs rounded-full ${colors.text} bg-gray-800/50 
+                      border ${colors.border} backdrop-blur-sm transform transition-transform duration-200 
+                      hover:scale-105 hover:border-opacity-75`}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* View Project Link */}
+              <div className="flex items-center justify-between pt-4 border-t border-gray-800/50">
+                <button
+                  className={`text-sm ${colors.text} hover:opacity-90 transition-all duration-300 
+                    flex items-center gap-1.5 group/btn relative px-2 py-1 rounded-lg
+                    hover:bg-gray-800/30`}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </button>
-              
-              <div className="flex gap-3">
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors p-1.5 
-                      hover:bg-gray-800/50 rounded-full"
-                    onClick={(e) => e.stopPropagation()}
+                  <span>View Project</span>
+                  <svg
+                    className="w-4 h-4 transform transition-all duration-300 group-hover/btn:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <FaGithub className="w-4 h-4" />
-                  </a>
-                )}
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors p-1.5 
-                      hover:bg-gray-800/50 rounded-full"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <FaExternalLinkAlt className="w-3.5 h-3.5" />
-                  </a>
-                )}
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </button>
+                
+                <div className="flex gap-3">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-400 hover:text-white transition-all duration-300 p-1.5 
+                        hover:bg-gray-800/50 rounded-full transform hover:scale-110 hover:rotate-[-8deg]"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <FaGithub className="w-4 h-4" />
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-400 hover:text-white transition-all duration-300 p-1.5 
+                        hover:bg-gray-800/50 rounded-full transform hover:scale-110 hover:rotate-[-8deg]"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <FaExternalLinkAlt className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -369,11 +381,21 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
 const Projects = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
+
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      const scrollAmount = 380; // card width + gap
-      const targetScroll = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+      const scrollAmount = 380;
+      const targetScroll = scrollContainerRef.current.scrollLeft + 
+        (direction === 'left' ? -scrollAmount : scrollAmount);
       scrollContainerRef.current.scrollTo({
         left: targetScroll,
         behavior: 'smooth'
@@ -385,64 +407,45 @@ const Projects = () => {
     <>
       <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
       
-      <section id="projects" className="py-20 relative">
+      <section 
+        id="projects" 
+        className="py-20 relative overflow-hidden"
+        onMouseMove={handleMouseMove}
+      >
         <div className="container mx-auto px-4 relative z-10">
+          {/* Title Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
+            transition={{ duration: 0.8 }}            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
                 Featured Projects
               </span>
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
               Showcasing enterprise-scale infrastructure solutions and automation projects,
               demonstrating expertise in cloud architecture, DevOps practices, and scalable systems.
             </p>
           </motion.div>
 
           {/* Projects Slider */}
-          <div className="relative max-w-[1170px] mx-auto">
-            {/* Left Gradient Mask */}
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 via-gray-900/80 to-transparent z-10 pointer-events-none" />
-            
-            {/* Right Gradient Mask */}
-            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 via-gray-900/80 to-transparent z-10 pointer-events-none" />
-
-            {/* Scroll Buttons - Always Visible */}
-            <button
-              onClick={() => scroll('left')}
-              className="absolute left-[-20px] top-1/2 transform -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700/90 
-                text-gray-300 hover:text-white p-3 rounded-full z-20 backdrop-blur-sm transition-colors
-                shadow-lg shadow-black/20"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            
-            <button
-              onClick={() => scroll('right')}
-              className="absolute right-[-20px] top-1/2 transform -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700/90 
-                text-gray-300 hover:text-white p-3 rounded-full z-20 backdrop-blur-sm transition-colors
-                shadow-lg shadow-black/20"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-
-            {/* Projects Container */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="relative max-w-[1170px] mx-auto mt-8"
+          >
+            {/* Scroll Container */}
             <div 
               ref={scrollContainerRef}
               className="overflow-x-auto hide-scrollbar relative pb-4"
               style={{
-                maskImage: 'linear-gradient(to right, transparent, black 100px, black calc(100% - 100px), transparent)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent, black 100px, black calc(100% - 100px), transparent)'
+                maskImage: 'linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent)'
               }}
             >
               <div className="flex gap-[30px] px-[100px]">
@@ -458,14 +461,59 @@ const Projects = () => {
                 </AnimatePresence>
               </div>
             </div>
-          </div>
+
+            {/* Gradient Masks and Navigation */}
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-900 via-gray-900/95 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-900 via-gray-900/95 to-transparent z-10 pointer-events-none" />
+
+            <button
+              onClick={() => scroll('left')}
+              className="absolute left-[-20px] top-1/2 transform -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700/90 
+                text-gray-300 hover:text-white p-3 rounded-full z-20 backdrop-blur-sm transition-all duration-300
+                shadow-lg shadow-black/20 hover:shadow-xl hover:scale-110 hover:-translate-x-1"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              onClick={() => scroll('right')}
+              className="absolute right-[-20px] top-1/2 transform -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700/90 
+                text-gray-300 hover:text-white p-3 rounded-full z-20 backdrop-blur-sm transition-all duration-300
+                shadow-lg shadow-black/20 hover:shadow-xl hover:scale-110 hover:translate-x-1"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </motion.div>
         </div>
 
+        {/* Beam Effect */}
+        <motion.div
+          className="hidden lg:block absolute pointer-events-none"
+          animate={{
+            x: mousePosition.x - 200,
+            y: mousePosition.y - 200,
+          }}
+          transition={{ type: "spring", damping: 30, stiffness: 200 }}
+          style={{
+            width: '400px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(56, 189, 248, 0.03) 0%, rgba(56, 189, 248, 0.01) 40%, transparent 70%)',
+            borderRadius: '50%',
+            zIndex: 1
+          }}
+        />
+
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 -z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800/50 to-gray-900 -z-10" />
         <div className="absolute inset-0 bg-grid-white/[0.02] -z-10" />
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[100px] -z-10" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-[100px] -z-10" />
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] -z-10 animate-pulse" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] -z-10 animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] 
+          bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-teal-500/5 rounded-full blur-[120px] -z-10 animate-slowly-rotate" />
       </section>
     </>
   );

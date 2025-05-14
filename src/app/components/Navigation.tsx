@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
-type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Projects' | 'Experience' | 'Contact' | 'Certifications';
+type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Experience' | 'Projects' | 'Certifications' | 'Contact';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,9 +16,10 @@ const Navigation = () => {
   const menuIcons: Record<MenuIconKey, React.ReactElement> = {
     'Home': <FaHome className="w-4 h-4" />,
     'About': <FaUser className="w-4 h-4" />,
-    'Skills': <FaCode className="w-4 h-4" />,    'Projects': <FaFolder className="w-4 h-4" />,
+    'Skills': <FaCode className="w-4 h-4" />,
+    'Experience': <FaFileAlt className="w-4 h-4" />,    
+    'Projects': <FaFolder className="w-4 h-4" />,
     'Certifications': <FaCertificate className="w-4 h-4" />,
-    'Experience': <FaFileAlt className="w-4 h-4" />,
     'Contact': <FaEnvelope className="w-4 h-4" />
   };
 
@@ -58,9 +59,9 @@ const Navigation = () => {
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
     { name: 'Skills', href: '#skills' },
+    { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#projects' },
     { name: 'Certifications', href: '#certifications' },
-    { name: 'Experience', href: '#experience' },
     { name: 'Contact', href: '#contact' }
   ];
 
