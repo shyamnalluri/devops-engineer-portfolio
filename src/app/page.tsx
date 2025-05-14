@@ -16,8 +16,8 @@ const Skills = dynamic(() => import("./sections/Skills"), {
   ssr: true
 });
 
-const Portfolio = dynamic(() => import("./sections/Portfolio"), {
-  loading: () => <SkeletonScreen type="portfolio" />,
+const Projects = dynamic(() => import("./sections/Projects"), {
+  loading: () => <SkeletonScreen type="projects" />,
   ssr: true
 });
 
@@ -47,9 +47,10 @@ export default function Home() {
       <main className="bg-gray-900">
         <div id="content">
           <Hero />
-          <About />
-          <Skills />          <Experience />
-          <Portfolio />
+          <About />          
+          <Skills />
+          <Experience />
+          <Projects />
           <Certifications />
           <Achievements />
           <Contact />

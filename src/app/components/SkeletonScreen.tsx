@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 
 interface SkeletonScreenProps {
-  type: 'about' | 'skills' | 'portfolio' | 'contact' | 'experience' | 'certifications' | 'achievements';
+  type: 'about' | 'skills' | 'projects' | 'contact' | 'experience' | 'certifications' | 'achievements';
 }
 
 const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
@@ -37,7 +37,7 @@ const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
           </div>
         );
 
-      case 'portfolio':
+      case 'projects':
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, index) => (

@@ -60,9 +60,8 @@ const Hero = () => {
 
             <AnimatedSection animation="slideUp" delay={0.6}>
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start">
-                <a
-                  href="#portfolio"
-                  onClick={(e) => scrollToSection(e, "#portfolio")}
+                <a                  href="#projects"
+                  onClick={(e) => scrollToSection(e, "#projects")}
                   className="group bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] relative overflow-hidden w-fit mx-auto sm:mx-0"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
