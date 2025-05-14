@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
-type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Resume' | 'Contact' | 'Certifications';
+type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Portfolio' | 'Experience' | 'Contact' | 'Certifications';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,7 +19,7 @@ const Navigation = () => {
     'Skills': <FaCode className="w-4 h-4" />,
     'Portfolio': <FaFolder className="w-4 h-4" />,
     'Certifications': <FaCertificate className="w-4 h-4" />,
-    'Resume': <FaFileAlt className="w-4 h-4" />,
+    'Experience': <FaFileAlt className="w-4 h-4" />,
     'Contact': <FaEnvelope className="w-4 h-4" />
   };
 
@@ -61,7 +61,7 @@ const Navigation = () => {
     { name: 'Skills', href: '#skills' },
     { name: 'Portfolio', href: '#portfolio' },
     { name: 'Certifications', href: '#certifications' },
-    { name: 'Resume', href: '#resume' },
+    { name: 'Experience', href: '#experience' },
     { name: 'Contact', href: '#contact' }
   ];
 

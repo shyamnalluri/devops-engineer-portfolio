@@ -31,8 +31,8 @@ const Contact = dynamic(() => import("./sections/Contact"), {
   ssr: true
 });
 
-const Resume = dynamic(() => import("./sections/Resume"), {
-  loading: () => <SkeletonScreen type="resume" />,
+const Experience = dynamic(() => import("./sections/Experience"), {
+  loading: () => <SkeletonScreen type="experience" />,
   ssr: true
 });
 
@@ -48,8 +48,7 @@ export default function Home() {
         <div id="content">
           <Hero />
           <About />
-          <Skills />
-          <Resume />
+          <Skills />          <Experience />
           <Portfolio />
           <Certifications />
           <Achievements />

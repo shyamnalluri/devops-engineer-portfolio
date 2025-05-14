@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 
 interface SkeletonScreenProps {
-  type: 'about' | 'skills' | 'portfolio' | 'contact' | 'resume' | 'certifications' | 'achievements';
+  type: 'about' | 'skills' | 'portfolio' | 'contact' | 'experience' | 'certifications' | 'achievements';
 }
 
 const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
@@ -70,9 +70,7 @@ const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
               <div className="h-12 bg-gray-800 rounded w-1/4 mx-auto animate-pulse" />
             </div>
           </div>
-        );
-
-      case 'resume':
+        );      case 'experience':
         return (
           <div className="space-y-8">
             {[...Array(3)].map((_, index) => (
