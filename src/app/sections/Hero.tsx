@@ -1,17 +1,49 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import AnimatedSection from "../components/AnimatedSection";
 import DevOpsTerminal from "../components/DevOpsTerminal";
+import LinkedInRecommendations from "../components/LinkedInRecommendations";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollY } = useScroll();
 
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+
+  // Handle mouse movement for interactive orbs
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX / innerWidth) * 2 - 1;
+    const y = (clientY / innerHeight) * 2 - 1;
+    setMousePosition({ x, y });
+  };
+
+  const orb1X = useTransform(
+    () => mousePosition.x,
+    [-1, 1],
+    ["-20vw", "-40vw"]
+  );
+  const orb1Y = useTransform(
+    () => mousePosition.y,
+    [-1, 1],
+    ["20vh", "30vh"]
+  );
+  const orb2X = useTransform(
+    () => mousePosition.x,
+    [-1, 1],
+    ["110vw", "90vw"]
+  );
+  const orb2Y = useTransform(
+    () => mousePosition.y,
+    [-1, 1],
+    ["70vh", "60vh"]
+  );
 
   const socialLinks = [
     {
@@ -54,7 +86,12 @@ const Hero = () => {
       id="home"
       className="relative min-h-screen flex items-center overflow-hidden"
       ref={containerRef}
-    >      {/* Fixed Social Links */}
+      onMouseMove={handleMouseMove}
+    >
+      {/* Noise Texture Overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.015] bg-[url('/noise.svg')] mix-blend-soft-light" />
+
+      {/* Fixed Social Links */}
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -89,47 +126,28 @@ const Hero = () => {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="text-center lg:text-left">
-            <AnimatedSection animation="slideLeft" delay={0.2}>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-                <span className="text-white">Hi, I&apos;m </span>
-                <span className="text-blue-400">Shyam Nalluri</span>
+            <AnimatedSection animation="slideLeft" delay={0.2}>              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-10 leading-tight pt-4">
+                <span className="text-white">Hi, I'm </span>
+                <span className="text-blue-400">
+                  Shyam Nalluri
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+                    className="inline-block ml-[2px] -mr-[1px] w-[3px] h-[1em] align-middle bg-current"
+                  />
+                </span>
               </h1>
             </AnimatedSection>
 
             <AnimatedSection animation="slideLeft" delay={0.4}>
-              <p className="text-xl sm:text-2xl bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent font-semibold mb-6 md:mb-8">
+              <p className="text-xl sm:text-2xl bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent font-semibold mb-12">
                 DevOps Engineer & Cloud Architect
-              </p>
-              <p className="text-lg text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0">
-                Transforming infrastructure into scalable, automated solutions
               </p>
             </AnimatedSection>
 
-            <AnimatedSection animation="slideUp" delay={0.6}>
-              <div className="flex justify-center lg:justify-start mb-8">
-                <a
-                  href="#projects"
-                  onClick={(e) => scrollToSection(e, "#projects")}
-                  className="group bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] relative overflow-hidden w-fit"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    View My Work
-                    <svg
-                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
-                  </span>
-                </a>
-              </div>
+            {/* LinkedIn Recommendations */}
+            <AnimatedSection animation="slideUp" delay={0.5}>
+              <LinkedInRecommendations />
             </AnimatedSection>
           </div>
 
@@ -137,9 +155,21 @@ const Hero = () => {
             <AnimatedSection
               animation="scale"
               delay={0.4}
-              className="relative h-[500px] hidden lg:block transform hover:scale-[1.02] transition-transform duration-300"
+              className="relative h-[500px] hidden lg:block"
             >
-              <DevOpsTerminal />
+              <motion.div
+                animate={{
+                  y: [0, -10, 0],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="w-full h-full transform hover:scale-[1.02] transition-all duration-300"
+              >
+                <DevOpsTerminal />
+              </motion.div>
             </AnimatedSection>
           </div>
         </div>
@@ -151,9 +181,15 @@ const Hero = () => {
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
       </div>
 
-      {/* Glowing orb effects */}
-      <div className="absolute top-1/4 -left-32 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+      {/* Interactive Glowing orbs */}
+      <motion.div
+        style={{ x: orb1X, y: orb1Y }}
+        className="absolute w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse"
+      />
+      <motion.div
+        style={{ x: orb2X, y: orb2Y }}
+        className="absolute w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"
+      />
 
       {/* Scroll indicator */}
       <motion.div
