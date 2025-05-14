@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import AnimatedSection from "../components/AnimatedSection";
 import DevOpsTerminal from "../components/DevOpsTerminal";
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -11,6 +12,24 @@ const Hero = () => {
 
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+
+  const socialLinks = [
+    {
+      name: "GitHub",
+      icon: <FaGithub className="w-6 h-6" />,
+      url: "https://github.com/yourusername",
+    },
+    {
+      name: "LinkedIn",
+      icon: <FaLinkedin className="w-6 h-6" />,
+      url: "https://linkedin.com/in/yourusername",
+    },
+    {
+      name: "Email",
+      icon: <FaEnvelope className="w-6 h-6" />,
+      url: "mailto:your.email@example.com",
+    },
+  ];
 
   const scrollToSection = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -35,7 +54,35 @@ const Hero = () => {
       id="home"
       className="relative min-h-screen flex items-center overflow-hidden"
       ref={containerRef}
-    >
+    >      {/* Fixed Social Links */}
+      <motion.div
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1 }}
+        className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+      >
+        <div className="flex flex-col items-center">
+          <div className="w-px h-32 bg-gradient-to-b from-transparent to-gray-400 mb-6"></div>
+          <div className="flex flex-col gap-6 mb-6">
+            {socialLinks.map((link, index) => (
+              <motion.a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1, x: 5 }}
+                className="text-gray-400 hover:text-blue-400 transition-colors duration-300 p-2"
+                aria-label={link.name}
+              >
+                {link.icon}
+              </motion.a>
+            ))}
+          </div>
+          <div className="w-px h-32 bg-gradient-to-b from-gray-400 to-transparent"></div>
+        </div>
+      </motion.div>
+
+      {/* Main Content */}
       <motion.div
         style={{ y, opacity }}
         className="container mx-auto px-4 py-12 md:py-0 relative z-10"
@@ -59,10 +106,11 @@ const Hero = () => {
             </AnimatedSection>
 
             <AnimatedSection animation="slideUp" delay={0.6}>
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start">
-                <a                  href="#projects"
+              <div className="flex justify-center lg:justify-start mb-8">
+                <a
+                  href="#projects"
                   onClick={(e) => scrollToSection(e, "#projects")}
-                  className="group bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] relative overflow-hidden w-fit mx-auto sm:mx-0"
+                  className="group bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] relative overflow-hidden w-fit"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     View My Work
@@ -81,39 +129,19 @@ const Hero = () => {
                     </svg>
                   </span>
                 </a>
-                <a
-                  href="#contact"
-                  onClick={(e) => scrollToSection(e, "#contact")}
-                  className="group bg-transparent hover:bg-blue-500/10 text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 relative overflow-hidden w-fit mx-auto sm:mx-0 border-2 border-blue-400 text-blue-400 hover:border-blue-300 hover:text-blue-300"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    Contact Me
-                    <svg
-                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6m16-6l-8 8-8-8"
-                      />
-                    </svg>
-                  </span>
-                </a>
               </div>
             </AnimatedSection>
           </div>
 
-          <AnimatedSection
-            animation="scale"
-            delay={0.4}
-            className="relative h-[500px] hidden lg:block transform hover:scale-[1.02] transition-transform duration-300"
-          >
-            <DevOpsTerminal />
-          </AnimatedSection>
+          <div className="lg:block">
+            <AnimatedSection
+              animation="scale"
+              delay={0.4}
+              className="relative h-[500px] hidden lg:block transform hover:scale-[1.02] transition-transform duration-300"
+            >
+              <DevOpsTerminal />
+            </AnimatedSection>
+          </div>
         </div>
       </motion.div>
 

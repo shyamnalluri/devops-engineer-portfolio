@@ -19,16 +19,14 @@ type Section = {
   height: number;
 };
 
-type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Projects' | 'Certifications' | 'Experience' | 'Contact';
+type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Projects' | 'Certifications' | 'Experience';
 
 const menuIcons: Record<MenuIconKey, ReactElement> = {
   'Home': <FaHome className="w-5 h-5" />,
   'About': <FaUser className="w-5 h-5" />,
-  'Skills': <FaCode className="w-5 h-5" />,
-  'Projects': <FaFolder className="w-5 h-5" />,
+  'Skills': <FaCode className="w-5 h-5" />,  'Projects': <FaFolder className="w-5 h-5" />,
   'Certifications': <FaCertificate className="w-5 h-5" />,
-  'Experience': <FaFileAlt className="w-5 h-5" />,
-  'Contact': <FaEnvelope className="w-5 h-5" />
+  'Experience': <FaFileAlt className="w-5 h-5" />
 };
 
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {

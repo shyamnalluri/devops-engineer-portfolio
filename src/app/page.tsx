@@ -21,16 +21,6 @@ const Projects = dynamic(() => import("./sections/Projects"), {
   ssr: true
 });
 
-const Achievements = dynamic(() => import("./sections/Achievements"), {
-  loading: () => <SkeletonScreen type="achievements" />,
-  ssr: true
-});
-
-const Contact = dynamic(() => import("./sections/Contact"), {
-  loading: () => <SkeletonScreen type="contact" />,
-  ssr: true
-});
-
 const Experience = dynamic(() => import("./sections/Experience"), {
   loading: () => <SkeletonScreen type="experience" />,
   ssr: true
@@ -52,8 +42,6 @@ export default function Home() {
           <Experience />
           <Projects />
           <Certifications />
-          <Achievements />
-          <Contact />
         </div>
       </main>
     </ClientWrapper>

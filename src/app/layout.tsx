@@ -5,6 +5,7 @@ import Navigation from "./components/Navigation";
 import ClientWrapper from "./components/ClientWrapper";
 import BackToTop from "./components/BackToTop";
 import ScrollProgressBar from "./components/ScrollProgressBar";
+import MobileSocial from "./components/MobileSocial";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -82,13 +83,13 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}>
         <ClientWrapper>
-          <div className="overflow-x-hidden w-full">
-            <ScrollProgressBar />
+          <div className="overflow-x-hidden w-full">            <ScrollProgressBar />
             <Navigation />
             <main className="relative z-10">
               {children}
             </main>
             <BackToTop />
+            <MobileSocial />
           </div>
         </ClientWrapper>
       </body>

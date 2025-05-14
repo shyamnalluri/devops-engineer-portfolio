@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
-type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Experience' | 'Projects' | 'Certifications' | 'Contact';
+type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Experience' | 'Projects' | 'Certifications';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,10 +17,8 @@ const Navigation = () => {
     'Home': <FaHome className="w-4 h-4" />,
     'About': <FaUser className="w-4 h-4" />,
     'Skills': <FaCode className="w-4 h-4" />,
-    'Experience': <FaFileAlt className="w-4 h-4" />,    
-    'Projects': <FaFolder className="w-4 h-4" />,
-    'Certifications': <FaCertificate className="w-4 h-4" />,
-    'Contact': <FaEnvelope className="w-4 h-4" />
+    'Experience': <FaFileAlt className="w-4 h-4" />,      'Projects': <FaFolder className="w-4 h-4" />,
+    'Certifications': <FaCertificate className="w-4 h-4" />
   };
 
   useEffect(() => {
@@ -54,15 +52,13 @@ const Navigation = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   const navItems: Array<{ name: MenuIconKey; href: string }> = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
     { name: 'Skills', href: '#skills' },
     { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Certifications', href: '#certifications' },
-    { name: 'Contact', href: '#contact' }
+    { name: 'Certifications', href: '#certifications' }
   ];
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
