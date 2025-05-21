@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@floating-ui/react": "^0.27.8",
     "@heroicons/react": "^2.2.0",
     "@react-three/drei": "^10.0.7",

@@ -1,14 +1,24 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import ClientWrapper from "./components/ClientWrapper";
 import BackToTop from "./components/BackToTop";
 import ScrollProgressBar from "./components/ScrollProgressBar";
+import MobileSocial from "./components/MobileSocial";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#000000",
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.yourwebsite.com"),
   title: "Shyam Nalluri | DevOps Engineer",
   description:
     "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions. Expertise in AWS, Kubernetes, and CI/CD pipelines.",
@@ -58,14 +68,6 @@ export const metadata: Metadata = {
   other: {
     "theme-color": "#1e293b",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    minimumScale: 1,
-    userScalable: false,
-    viewportFit: "cover",
-  },
 };
 
 export default function RootLayout({
@@ -76,19 +78,23 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth overscroll-none">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover"
+        />
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="width" />
       </head>
-      <body className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}>
+      <body
+        className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}
+      >
         <ClientWrapper>
           <div className="overflow-x-hidden w-full">
             <ScrollProgressBar />
             <Navigation />
-            <main className="relative z-10">
-              {children}
-            </main>
+            <main className="relative z-10">{children}</main>
             <BackToTop />
+            <MobileSocial />
           </div>
         </ClientWrapper>
       </body>

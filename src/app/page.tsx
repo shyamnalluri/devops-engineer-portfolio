@@ -16,23 +16,13 @@ const Skills = dynamic(() => import("./sections/Skills"), {
   ssr: true
 });
 
-const Portfolio = dynamic(() => import("./sections/Portfolio"), {
-  loading: () => <SkeletonScreen type="portfolio" />,
+const Projects = dynamic(() => import("./sections/Projects"), {
+  loading: () => <SkeletonScreen type="projects" />,
   ssr: true
 });
 
-const Achievements = dynamic(() => import("./sections/Achievements"), {
-  loading: () => <SkeletonScreen type="achievements" />,
-  ssr: true
-});
-
-const Contact = dynamic(() => import("./sections/Contact"), {
-  loading: () => <SkeletonScreen type="contact" />,
-  ssr: true
-});
-
-const Resume = dynamic(() => import("./sections/Resume"), {
-  loading: () => <SkeletonScreen type="resume" />,
+const Experience = dynamic(() => import("./sections/Experience"), {
+  loading: () => <SkeletonScreen type="experience" />,
   ssr: true
 });
 
@@ -47,13 +37,11 @@ export default function Home() {
       <main className="bg-gray-900">
         <div id="content">
           <Hero />
-          <About />
+          <About />          
           <Skills />
-          <Resume />
-          <Portfolio />
+          <Experience />
+          <Projects />
           <Certifications />
-          <Achievements />
-          <Contact />
         </div>
       </main>
     </ClientWrapper>

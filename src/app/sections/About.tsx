@@ -65,14 +65,14 @@ const About = () => {
               >
                 <div className="prose prose-lg prose-invert max-w-none">
                   <p className="text-gray-300/90 text-lg leading-relaxed text-justify first-letter:text-3xl first-letter:font-bold first-letter:text-blue-400 first-letter:mr-1">
-                    I'm a passionate DevOps Engineer who thrives on transforming development processes 
-                    and building robust cloud infrastructures. In today's fast-paced tech landscape, 
+                    I&apos;m a passionate DevOps Engineer who thrives on transforming development processes 
+                    and building robust cloud infrastructures. In today&apos;s fast-paced tech landscape, 
                     I serve as the bridge between development and operations, crafting solutions that 
                     make deployment seamless and infrastructure reliable.
                   </p>
                   <p className="text-gray-300/90 text-lg leading-relaxed text-justify">
                     My approach combines automation-first thinking with cloud-native architectures. 
-                    I've helped organizations reduce deployment times by <span className="text-blue-400 font-semibold">70%</span> and achieve significant 
+                    I&apos;ve helped organizations reduce deployment times by <span className="text-blue-400 font-semibold">70%</span> and achieve significant 
                     cost savings through optimized cloud infrastructure. Every challenge is an 
                     opportunity to implement innovative solutions that scale.
                   </p>
