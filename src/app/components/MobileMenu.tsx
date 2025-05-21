@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState, ReactElement } from 'react';
-import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
+import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaCertificate } from 'react-icons/fa';
 
 interface MobileMenuProps {
   isOpen: boolean;

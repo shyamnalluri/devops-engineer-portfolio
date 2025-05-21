@@ -1,8 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FaBriefcase, FaGraduationCap } from 'react-icons/fa';
-import { ReactNode } from 'react';
 
 interface ExperienceData {
   title: string;
@@ -11,11 +9,6 @@ interface ExperienceData {
   period: string;
   description: string;
   technologies?: string[];
-}
-
-interface SectionTitleProps {
-  icon: React.ElementType;
-  title: string;
 }
 
 const ExperienceCard = ({ data }: { data: ExperienceData }) => (

@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
+import { useRef } from "react";
 import AnimatedSection from "../components/AnimatedSection";
 import DevOpsTerminal from "../components/DevOpsTerminal";
 import LinkedInRecommendations from "../components/LinkedInRecommendations";
@@ -9,7 +9,8 @@ import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
   const { scrollY } = useScroll();
 
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
@@ -21,26 +22,27 @@ const Hero = () => {
     const { innerWidth, innerHeight } = window;
     const x = (clientX / innerWidth) * 2 - 1;
     const y = (clientY / innerHeight) * 2 - 1;
-    setMousePosition({ x, y });
+    mouseX.set(x);
+    mouseY.set(y);
   };
 
   const orb1X = useTransform(
-    () => mousePosition.x,
+    mouseX,
     [-1, 1],
     ["-20vw", "-40vw"]
   );
   const orb1Y = useTransform(
-    () => mousePosition.y,
+    mouseY,
     [-1, 1],
     ["20vh", "30vh"]
   );
   const orb2X = useTransform(
-    () => mousePosition.x,
+    mouseX,
     [-1, 1],
     ["110vw", "90vw"]
   );
   const orb2Y = useTransform(
-    () => mousePosition.y,
+    mouseY,
     [-1, 1],
     ["70vh", "60vh"]
   );
@@ -62,24 +64,6 @@ const Hero = () => {
       url: "mailto:your.email@example.com",
     },
   ];
-
-  const scrollToSection = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (!element) return;
-
-    const offset = 80;
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth",
-    });
-  };
 
   return (
     <section
@@ -127,7 +111,7 @@ const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="text-center lg:text-left">
             <AnimatedSection animation="slideLeft" delay={0.2}>              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-10 leading-tight pt-4">
-                <span className="text-white">Hi, I'm </span>
+                <span className="text-white">Hi, I&apos;m </span>
                 <span className="text-blue-400">
                   Shyam Nalluri
                   <motion.span

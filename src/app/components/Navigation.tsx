@@ -3,10 +3,19 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaEnvelope, FaCertificate } from 'react-icons/fa';
+import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaCertificate } from 'react-icons/fa';
 import MobileMenu from './MobileMenu';
 
 type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Experience' | 'Projects' | 'Certifications';
+
+const navItems: Array<{ name: MenuIconKey; href: string }> = [
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Certifications', href: '#certifications' }
+];
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,7 +26,8 @@ const Navigation = () => {
     'Home': <FaHome className="w-4 h-4" />,
     'About': <FaUser className="w-4 h-4" />,
     'Skills': <FaCode className="w-4 h-4" />,
-    'Experience': <FaFileAlt className="w-4 h-4" />,      'Projects': <FaFolder className="w-4 h-4" />,
+    'Experience': <FaFileAlt className="w-4 h-4" />,
+    'Projects': <FaFolder className="w-4 h-4" />,
     'Certifications': <FaCertificate className="w-4 h-4" />
   };
 
@@ -25,24 +35,17 @@ const Navigation = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      // Active section detection
-      const sections = navItems.reduce<Array<{ id: string; top: number; bottom: number }>>((acc, item) => {
-        const element = document.querySelector(item.href);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          acc.push({
-            id: item.href.substring(1),
-            top: rect.top + window.scrollY,
-            bottom: rect.bottom + window.scrollY
-          });
-        }
-        return acc;
-      }, []);
+      // Update active section based on scroll position
+      const sections = navItems.map(item => ({
+        id: item.href.slice(1),
+        element: document.getElementById(item.href.slice(1))
+      }));
 
-      const currentScroll = window.scrollY + 100; // Add offset for nav height
-      const currentSection = sections.find(
-        section => currentScroll >= section.top && currentScroll < section.bottom
-      );
+      const currentSection = sections.find(section => {
+        if (!section.element) return false;
+        const rect = section.element.getBoundingClientRect();
+        return rect.top <= 100 && rect.bottom >= 100;
+      });
 
       if (currentSection) {
         setActiveSection(currentSection.id);
@@ -52,14 +55,6 @@ const Navigation = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  const navItems: Array<{ name: MenuIconKey; href: string }> = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Certifications', href: '#certifications' }
-  ];
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();

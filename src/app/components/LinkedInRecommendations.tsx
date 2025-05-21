@@ -42,7 +42,7 @@ const recommendations: Recommendation[] = [
 ];
 
 const LinkedInRecommendations = () => {
-  const [currentRecommendation, setCurrentRecommendation] = useState(recommendations[0]);
+  const currentRecommendation = recommendations[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);

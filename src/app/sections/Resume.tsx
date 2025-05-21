@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { FaDownload } from 'react-icons/fa';
 import Button from '../components/Button';
 
@@ -81,10 +82,11 @@ const CertificationItem = ({ certification, index }: { certification: Certificat
     viewport={{ once: true }}
     className="bg-gray-900/80 backdrop-blur-sm p-6 rounded-lg border border-gray-800 hover:border-blue-500/30 transition-all duration-300 group"
   >
-    <div className="flex items-center gap-4">
-      <img 
+    <div className="flex items-center gap-4">      <Image 
         src={certification.icon} 
         alt={certification.title}
+        width={48}
+        height={48}
         className="w-12 h-12 object-contain"
       />
       <div>

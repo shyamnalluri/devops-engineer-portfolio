@@ -38,6 +38,10 @@ const Button = ({ href, variant = 'primary', children, onClick, className }: But
     }
   };
 
+  const handleMouseEnter = () => {
+    playHover();
+  };
+
   if (!mounted) return null;
 
   if (href) {
@@ -46,7 +50,7 @@ const Button = ({ href, variant = 'primary', children, onClick, className }: But
         href={href}
         className={buttonStyles}
         onClick={handleClick}
-        onMouseEnter={playHover}
+        onMouseEnter={handleMouseEnter}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -59,7 +63,7 @@ const Button = ({ href, variant = 'primary', children, onClick, className }: But
     <motion.button
       className={buttonStyles}
       onClick={handleClick}
-      onMouseEnter={playHover}
+      onMouseEnter={handleMouseEnter}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
