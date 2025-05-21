@@ -40,6 +40,7 @@ const TimelineItem = ({
     className="relative md:flex items-center md:gap-8"
   >
     {/* Timeline line and dot - Only visible on desktop */}
+    {/* Timeline line and dot - Only visible on desktop */}
     <div className="hidden md:block absolute left-1/2 top-0 -translate-x-1/2 h-full w-0.5 bg-blue-500/20" />
     <div className="hidden md:block absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 rounded-full bg-blue-500" />
     

@@ -77,10 +77,29 @@ const Navigation = () => {
     
     // Add a small delay for menu close animation
     setTimeout(() => {
+    if (!element) return;
+
+    const navHeight = 80;
+    const elementRect = element.getBoundingClientRect();
+    const absoluteElementTop = elementRect.top + window.pageYOffset;
+    const targetPosition = absoluteElementTop - navHeight;
+
+    // If we're already very close to the target, just close menu
+    if (Math.abs(window.scrollY - targetPosition) < 100) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
+    // Close mobile menu and scroll
+    setIsMobileMenuOpen(false);
+    
+    // Add a small delay for menu close animation
+    setTimeout(() => {
       window.scrollTo({
         top: targetPosition,
         behavior: 'smooth'
       });
+    }, 100);
     }, 100);
   };
 
