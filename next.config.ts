@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
   experimental: {
-    optimizeCss: false, // Disabled to prevent WebAssembly memory allocation issues
+    optimizeCss: true,
   },
 };
 
