@@ -67,184 +67,25 @@ const commands: Command[] = [
   }
 ];
 
+// Updated DevOpsTerminal to match the Figma wireframe
 const DevOpsTerminal = () => {
-  const [currentCommandIndex, setCurrentCommandIndex] = useState(0);
-  const [displayedCommands, setDisplayedCommands] = useState<Command[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [currentChar, setCurrentChar] = useState(0);
-  const [showCursor, setShowCursor] = useState(true);
-  const [showOutput, setShowOutput] = useState(false);
-
-  useEffect(() => {
-    const typeCommand = () => {
-      if (currentCommandIndex >= commands.length) {
-        setCurrentCommandIndex(0);
-        setDisplayedCommands([]);
-        setShowOutput(false);
-        return;
-      }
-
-      const currentCommand = commands[currentCommandIndex];
-
-      if (!isTyping && currentChar === 0) {
-        setIsTyping(true);
-        setShowOutput(false);
-      }
-
-      if (isTyping) {
-        if (currentChar < currentCommand.input.length) {
-          const timer = setTimeout(() => {
-            setCurrentChar(prev => prev + 1);
-          }, 50);
-          return () => clearTimeout(timer);
-        } else {
-          setIsTyping(false);
-          const timer = setTimeout(() => {
-            setShowOutput(true);
-            const nextTimer = setTimeout(() => {
-              setDisplayedCommands(prev => [...prev, currentCommand]);
-              setCurrentChar(0);
-              setCurrentCommandIndex(prev => prev + 1);
-              setShowOutput(false);
-            }, 2000);
-            return () => clearTimeout(nextTimer);
-          }, 500);
-          return () => clearTimeout(timer);
-        }
-      }
-    };
-
-    typeCommand();
-  }, [currentCommandIndex, currentChar, isTyping]);
-
-  // Cursor blink effect
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 530);
-
-    return () => clearInterval(cursorInterval);
-  }, []);
-
-  const CommandPrompt = ({ command }: { command?: Command }) => (
-    <div className="flex items-center text-gray-300 space-x-2">
-      <span className="text-blue-400">➜</span>
-      <span className="text-green-400">~/project</span>
-      <span className="text-blue-400">git:(</span>
-      <span className="text-red-400">main</span>
-      <span className="text-blue-400">)</span>
-      <span className="flex items-center">
-        {command?.icon && <span className="mr-2">{command.icon}</span>}
-        {command?.input || ''}
-      </span>
-    </div>
-  );
-
   return (
-    <div className="relative w-full h-full">
-      {/* Terminal glow effect */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
-      
-      {/* Main terminal window */}
-      <div className="relative w-full h-full bg-gray-900/95 backdrop-blur-sm rounded-lg border border-gray-700/50 overflow-hidden shadow-2xl">
-        {/* Terminal header */}
-        <div className="w-full h-10 bg-gray-800/90 flex items-center px-4 border-b border-gray-700/50">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500/90 hover:bg-red-600 transition-colors duration-200"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500/90 hover:bg-yellow-600 transition-colors duration-200"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500/90 hover:bg-green-600 transition-colors duration-200"></div>
-          </div>
-          <div className="flex-1 text-center">
-            <span className="text-sm font-medium text-gray-400">~/devops-terminal</span>
-          </div>
+    <div className="relative w-full h-full bg-gray-900/95 rounded-lg border border-gray-700/50 shadow-2xl">
+      <div className="w-full h-10 bg-gray-800/90 flex items-center px-4 border-b border-gray-700/50">
+        <div className="flex space-x-2">
+          <div className="w-3 h-3 rounded-full bg-red-500/90"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500/90"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500/90"></div>
         </div>
-        
-        {/* Terminal content */}
-        <div className="p-4 font-mono text-sm h-[calc(100%-2.5rem)] overflow-auto custom-scrollbar">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key="terminal-content"
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 1 }}
-            >
-              {displayedCommands.map((command, index) => (
-                <motion.div
-                  key={`${command.id}-${index}`}
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 1 }}
-                  className="mb-4"
-                >
-                  <CommandPrompt command={command} />
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-2 ml-6"
-                  >
-                    {command.output.map((line, i) => (
-                      <div
-                        key={i}
-                        className={`${
-                          command.type === 'success' ? 'text-green-400' :
-                          command.type === 'error' ? 'text-red-400' :
-                          'text-blue-400'
-                        } opacity-90`}
-                      >
-                        {line}
-                      </div>
-                    ))}
-                  </motion.div>
-                </motion.div>
-              ))}
-
-              {/* Current typing command */}
-              {isTyping && (
-                <motion.div
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center text-gray-300 space-x-2"
-                >
-                  <CommandPrompt />
-                  <span>{commands[currentCommandIndex].input.slice(0, currentChar)}</span>
-                  <span 
-                    className={`w-2 h-5 bg-gray-400 ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}
-                  />
-                </motion.div>
-              )}
-
-              {/* Show output for current command */}
-              {!isTyping && showOutput && (
-                <motion.div className="mb-4">
-                  <CommandPrompt command={commands[currentCommandIndex]} />
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-2 ml-6"
-                  >
-                    {commands[currentCommandIndex].output.map((line, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.2, delay: i * 0.1 }}
-                        className={`${
-                          commands[currentCommandIndex].type === 'success' ? 'text-green-400' :
-                          commands[currentCommandIndex].type === 'error' ? 'text-red-400' :
-                          'text-blue-400'
-                        } opacity-90`}
-                      >
-                        {line}
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </motion.div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+        <div className="flex-1 text-center">
+          <span className="text-sm font-medium text-gray-400">~/devops-terminal</span>
         </div>
+      </div>
+      <div className="p-4 font-mono text-sm h-[calc(100%-2.5rem)] overflow-auto">
+        <div className="text-green-400">Initializing provider plugins...</div>
+        <div className="text-green-400">Planning infrastructure changes...</div>
+        <div className="text-green-400">Creating AWS resources...</div>
+        <div className="text-green-400">Apply complete! Resources: 12 added, 0 changed, 0 destroyed.</div>
       </div>
     </div>
   );

@@ -11,23 +11,28 @@ interface ExperienceData {
   technologies?: string[];
 }
 
-const ExperienceCard = ({ data }: { data: ExperienceData }) => (
+const ExperienceCard = ({ data, index }: { data: ExperienceData; index: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    transition={{ duration: 0.5 }}
-    className="group relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 rounded-xl p-6 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/30 transition-all duration-500"
+    transition={{ duration: 0.5, delay: index * 0.1 }}
+    className="relative"
   >
-    {/* Glowing effect on hover */}
-    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-blue-500/10 group-hover:to-blue-500/5 transition-all duration-500" />
+    {/* Timeline connector */}
+    <div className="absolute left-[14px] top-0 h-full w-0.5 bg-gradient-to-b from-red-500 to-orange-500 opacity-70"></div>
     
-    <div className="relative">
-      <h4 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
+    {/* Timeline dot */}
+    <div className="absolute left-0 top-6 h-7 w-7 rounded-full border-2 border-red-500 bg-black flex items-center justify-center">
+      <div className="h-3 w-3 rounded-full bg-gradient-to-r from-red-500 to-orange-500"></div>
+    </div>
+    
+    <div className="pl-14 pb-12">
+      <h4 className="text-xl font-semibold text-white mb-1 group-hover:text-red-400 transition-colors">
         {data.title}
       </h4>
-      <div className="flex flex-wrap items-center gap-3 mb-4 text-sm">
-        <span className="text-blue-400 font-medium">{data.company || data.institution}</span>
+      <div className="flex flex-wrap items-center gap-3 mb-3 text-sm">
+        <span className="text-red-400 font-medium">{data.company || data.institution}</span>
         <span className="w-1.5 h-1.5 rounded-full bg-gray-600" />
         <span className="text-gray-400">{data.period}</span>
       </div>
@@ -39,7 +44,7 @@ const ExperienceCard = ({ data }: { data: ExperienceData }) => (
           {data.technologies.map((tech, i) => (
             <span
               key={i}
-              className="px-3 py-1 text-sm rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
+              className="px-3 py-1 text-xs rounded-full bg-gray-800 text-gray-300 border border-gray-700 hover:border-red-500/30 hover:bg-gray-700 transition-colors"
             >
               {tech}
             </span>
@@ -91,51 +96,48 @@ const Experience = () => {
   ];
 
   return (
-    <section id="experience" className="py-20 relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+    <section id="experience" className="py-24 relative bg-black">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-800/50 -z-0" />
+      
+      {/* Decorative elements */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}          className="max-w-6xl mx-auto space-y-16"
+          viewport={{ once: true }}
+          className="max-w-5xl mx-auto space-y-24"
         >
-          {/* Work Experience Section */}
-          <div>
-            <h2 className="text-4xl font-bold text-center mb-16">
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-                Work Experience
-              </span>
+          {/* Work Experience Section */}          <div>
+            <h2 className="text-4xl font-bold text-white mb-16 relative">
+              Work Experience
+              <div className="absolute -bottom-4 left-0 w-20 h-1 bg-gradient-to-r from-red-500 to-orange-500"></div>
             </h2>
-            <div className="grid gap-6">
+            <div className="ml-4">
               {experiences.map((exp, index) => (
-                <ExperienceCard key={index} data={exp} />
+                <ExperienceCard key={index} data={exp} index={index} />
               ))}
             </div>
           </div>
 
           {/* Education Section */}
           <div>
-            <h2 className="text-4xl font-bold text-center mb-16">
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-                Education
-              </span>
+            <h2 className="text-4xl font-bold text-white mb-16 relative">
+              Education
+              <div className="absolute -bottom-4 left-0 w-20 h-1 bg-gradient-to-r from-red-500 to-orange-500"></div>
             </h2>
-            <div className="grid gap-6">
+            <div className="ml-4">
               {education.map((edu, index) => (
-                <ExperienceCard key={index} data={edu} />
+                <ExperienceCard key={index} data={edu} index={index} />
               ))}
             </div>
           </div>
         </motion.div>
       </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
     </section>
   );
 };

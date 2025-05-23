@@ -7,17 +7,17 @@ const socialLinks = [
   {
     name: 'GitHub',
     icon: <FaGithub className="w-6 h-6" />,
-    url: 'https://github.com/yourusername',
+    url: 'https://github.com/shyamnalluri',
   },
   {
     name: 'LinkedIn',
     icon: <FaLinkedin className="w-6 h-6" />,
-    url: 'https://linkedin.com/in/yourusername',
+    url: 'https://www.linkedin.com/in/shyamnalluri',
   },
   {
     name: 'Email',
     icon: <FaEnvelope className="w-6 h-6" />,
-    url: 'mailto:your.email@example.com',
+    url: 'mailto:nallurishyam@gmail.com',
   },
 ];
 

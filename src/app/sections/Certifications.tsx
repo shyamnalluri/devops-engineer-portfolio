@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import OptimizedImage from '../components/OptimizedImage';
+import Image from 'next/image';
 
 interface Certification {
   name: string;
@@ -59,22 +60,30 @@ const certifications: Certification[] = [
 ];
 
 const Certifications = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  
+  const categories = [
+    { id: 'all', label: 'All Certifications' },
+    { id: 'cloud', label: 'Cloud' },
+    { id: 'devops', label: 'DevOps' },
+    { id: 'security', label: 'Security' }
+  ];
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    });
-  };
+  const filteredCertifications = selectedCategory === 'all'
+    ? certifications
+    : certifications.filter(cert => cert.category === selectedCategory);
 
   return (
     <section 
       id="certifications" 
-      className="py-20 relative overflow-hidden"
-      onMouseMove={handleMouseMove}
+      className="py-24 bg-black relative overflow-hidden"
     >
+      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
+      
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl" />
+      
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -83,69 +92,97 @@ const Certifications = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-              Professional Certifications
-            </span>
+          <h2 className="text-4xl font-bold mb-6 text-white relative inline-block">
+            Professional Certifications
+            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500"></div>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg mt-8">
             Industry-recognized certifications demonstrating expertise in cloud architecture,
             DevOps practices, and infrastructure management
           </p>
-        </motion.div>        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto relative z-10">
+          
+          {/* Category filters */}
+          <div className="flex flex-wrap justify-center gap-4 mt-8 mb-12">
+            {categories.map((category) => (
+              <motion.button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300
+                  ${selectedCategory === category.id 
+                    ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg shadow-red-600/20' 
+                    : 'bg-gray-800/80 text-gray-300 hover:bg-gray-700 hover:text-white'
+                  }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {category.label}
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           <AnimatePresence mode="popLayout">
-            {certifications.map((cert) => (
+            {filteredCertifications.map((cert, index) => (
               <motion.div
                 key={cert.credentialId}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                className="group relative"
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="group"
               >
-                <div className="relative h-full rounded-xl border bg-gradient-to-br from-gray-900/90 to-gray-800/90 
-                  backdrop-blur-sm overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500
-                  border-blue-500/20 hover:border-blue-500/40 hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-transparent opacity-0 
+                <div className="relative h-full rounded-xl overflow-hidden bg-gradient-to-br from-gray-900 to-black 
+                  border border-gray-800 hover:border-red-500/50 shadow-lg hover:shadow-red-600/10 transition-all duration-500
+                  hover:-translate-y-1">
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 via-red-500/0 to-transparent opacity-0 
                     group-hover:opacity-100 transition-opacity duration-500" />
                   
-                  <div className="p-4 relative">
-                    <div className="flex items-center gap-4">
-                      <div className="relative flex-shrink-0">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-transparent to-transparent 
-                          rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="p-6 relative">
+                    <div className="flex justify-center mb-4">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 via-transparent to-transparent 
+                          rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         <OptimizedImage
                           src={cert.logo}
                           alt={`${cert.name} logo`}
-                          width={48}
-                          height={48}
-                          className="w-12 h-12 object-contain relative z-10 transform group-hover:scale-110 
+                          width={60}
+                          height={60}
+                          className="w-16 h-16 object-contain relative z-10 transform group-hover:scale-110 
                             transition-transform duration-500"
                         />
-                      </div>                      <div className="flex-1">
-                        <h3 className="text-sm font-medium text-white group-hover:text-blue-400 
-                          transition-colors duration-300 leading-snug line-clamp-2">
-                          {cert.name}
-                        </h3>
-                        <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">{cert.issuer}</p>
                       </div>
-                    </div>                    <div className="mt-2 flex items-center justify-between border-t border-gray-700/50 pt-2">
-                      <div className="flex flex-col">
-                        <p className="text-[10px] text-gray-500">Valid until</p>
-                        <p className="text-xs text-gray-400">{cert.validUntil}</p>
+                    </div>
+                    
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-white group-hover:text-red-400 
+                        transition-colors duration-300 mb-2">
+                        {cert.name}
+                      </h3>
+                      <p className="text-sm text-gray-400 mb-4">{cert.issuer}</p>
+                      
+                      <div className="flex justify-between items-center text-xs text-gray-500 mb-6">
+                        <div>
+                          <p className="text-gray-600">Issued</p>
+                          <p className="text-gray-400">{cert.issueDate}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-600">Valid until</p>
+                          <p className="text-gray-400">{cert.validUntil}</p>
+                        </div>
                       </div>
+                      
                       <a
                         href={cert.credentialUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium
-                          bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 
-                          text-white transition-all duration-300 transform hover:scale-105 
-                          hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 w-full rounded-lg text-sm font-medium
+                          bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 
+                          text-white transition-all duration-300 transform hover:scale-[1.02]"
                       >
-                        Verify
+                        Verify Credential
                         <svg
-                          className="w-3 h-3 transform transition-transform group-hover:translate-x-0.5"
+                          className="w-4 h-4 transform transition-transform group-hover:translate-x-0.5"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -163,31 +200,6 @@ const Certifications = () => {
           </AnimatePresence>
         </div>
       </div>
-
-      {/* Beam Effect */}
-      <motion.div
-        className="hidden lg:block absolute pointer-events-none"
-        animate={{
-          x: mousePosition.x - 200,
-          y: mousePosition.y - 200,
-        }}
-        transition={{ type: "spring", damping: 30, stiffness: 200 }}
-        style={{
-          width: '400px',
-          height: '400px',
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.03) 0%, rgba(56, 189, 248, 0.01) 40%, transparent 70%)',
-          borderRadius: '50%',
-          zIndex: 1
-        }}
-      />
-
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800/50 to-gray-900 -z-10" />
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-10" />
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] 
-        bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-teal-500/5 rounded-full blur-[120px] -z-10 animate-slowly-rotate" />
     </section>
   );
 };

@@ -34,15 +34,14 @@ const Certifications = dynamic(() => import("./sections/Certifications"), {
 export default function Home() {
   return (
     <ClientWrapper>
-      <main className="bg-gray-900">
-        <div id="content">
-          <Hero />
-          <About />          
-          <Skills />
-          <Experience />
-          <Projects />
-          <Certifications />
-        </div>
+      <main className="bg-black text-white min-h-screen">
+        {/* All sections */}
+        <Hero />
+        <About />          
+        <Skills />
+        <Experience />
+        <Projects />
+        <Certifications />
       </main>
     </ClientWrapper>
   );

@@ -1,171 +1,51 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { FaBars, FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaCertificate } from 'react-icons/fa';
-import MobileMenu from './MobileMenu';
 
-type MenuIconKey = 'Home' | 'About' | 'Skills' | 'Experience' | 'Projects' | 'Certifications';
-
-const navItems: Array<{ name: MenuIconKey; href: string }> = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Certifications', href: '#certifications' }
+const navItems = [
+  { name: 'HOME', href: '#home' },
+  { name: 'ABOUT ME', href: '#about' },
+  { name: 'SKILLS', href: '#skills' },
+  { name: 'EXPERIENCE', href: '#experience' },
+  { name: 'PROJECTS', href: '#projects' },
+  { name: 'CERTIFICATIONS', href: '#certifications' }
 ];
 
-const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>('home');
-
-  const menuIcons: Record<MenuIconKey, React.ReactElement> = {
-    'Home': <FaHome className="w-4 h-4" />,
-    'About': <FaUser className="w-4 h-4" />,
-    'Skills': <FaCode className="w-4 h-4" />,
-    'Experience': <FaFileAlt className="w-4 h-4" />,
-    'Projects': <FaFolder className="w-4 h-4" />,
-    'Certifications': <FaCertificate className="w-4 h-4" />
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-
-      // Update active section based on scroll position
-      const sections = navItems.map(item => ({
-        id: item.href.slice(1),
-        element: document.getElementById(item.href.slice(1))
-      }));
-
-      const currentSection = sections.find(section => {
-        if (!section.element) return false;
-        const rect = section.element.getBoundingClientRect();
-        return rect.top <= 100 && rect.bottom >= 100;
-      });
-
-      if (currentSection) {
-        setActiveSection(currentSection.id);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (!element) return;
-
-    const navHeight = 80;
-    const elementRect = element.getBoundingClientRect();
-    const absoluteElementTop = elementRect.top + window.pageYOffset;
-    const targetPosition = absoluteElementTop - navHeight;
-
-    // If we're already very close to the target, just close menu
-    if (Math.abs(window.scrollY - targetPosition) < 100) {
-      setIsMobileMenuOpen(false);
-      return;
-    }
-
-    // Close mobile menu and scroll
-    setIsMobileMenuOpen(false);
-    
-    // Add a small delay for menu close animation
-    setTimeout(() => {
-    if (!element) return;
-
-    const navHeight = 80;
-    const elementRect = element.getBoundingClientRect();
-    const absoluteElementTop = elementRect.top + window.pageYOffset;
-    const targetPosition = absoluteElementTop - navHeight;
-
-    // If we're already very close to the target, just close menu
-    if (Math.abs(window.scrollY - targetPosition) < 100) {
-      setIsMobileMenuOpen(false);
-      return;
-    }
-
-    // Close mobile menu and scroll
-    setIsMobileMenuOpen(false);
-    
-    // Add a small delay for menu close animation
-    setTimeout(() => {
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
-    }, 100);
-    }, 100);
-  };
-
+const Navigation: React.FC = () => {
   return (
-    <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className={`fixed w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-gray-900/95 shadow-lg backdrop-blur-sm py-4' : 'bg-transparent py-6'
-        }`}
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => scrollToSection(e, item.href)}
-                  className={`relative px-3 py-2 transition-all duration-200 text-sm font-medium group
-                    ${activeSection === item.href.substring(1)
-                      ? 'text-white'
-                      : 'text-gray-300 hover:text-white'
-                    }`}
-                >
-                  <span className="relative z-10 flex items-center space-x-2 transform transition-transform duration-200 group-hover:scale-110">
-                    <span className={`${activeSection === item.href.substring(1) ? 'text-blue-500' : ''}`}>
-                      {menuIcons[item.name]}
-                    </span>
-                    <span>{item.name}</span>
-                  </span>
-                  {activeSection === item.href.substring(1) && (
-                    <motion.div
-                      layoutId="activeIndicator"
-                      className="absolute inset-0 bg-blue-500/10 rounded-lg -z-0"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100" />
-                </Link>
-              ))}
-            </div>
+    <nav className="fixed inset-y-0 left-0 w-[214px] bg-black text-white flex flex-col z-50">
+      {/* Logo Section */}
+      <div className="px-6 py-8">
+        <h1 className="text-3xl font-bold text-white">
+          SN
+        </h1>
+      </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="block md:hidden text-gray-300 hover:text-white p-2 ml-auto rounded-lg hover:bg-gray-800/50 transition-colors"
-              onClick={() => setIsMobileMenuOpen(true)}
-              aria-label="Open mobile menu"
-            >
-              <FaBars className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </motion.nav>
+      {/* Menu Links */}
+      <div className="flex-1 flex flex-col">
+        <ul className="flex flex-col py-8">
+          {navItems.map((item, index) => (
+            <li key={item.name} className="block">
+              <Link
+                href={item.href}
+                className={`block px-10 py-4 text-base font-normal hover:text-orange-500 transition-all ${
+                  index === 0 
+                    ? 'border-l-2 border-orange-500 text-orange-500 font-medium' 
+                    : 'border-l-2 border-transparent hover:border-gray-700'
+                }`}
+              >
+                {item.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      {/* Mobile Menu */}
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-        navItems={navItems}
-        scrollToSection={scrollToSection}
-      />
-    </>
+      {/* Footer */}
+      <div className="px-6 pb-4 text-xs text-gray-500 mt-auto">
+        <p>Copyright ©2024 Shyam</p>
+        <p className="mt-1">Nalluri. All right reserved.</p>
+      </div>
+    </nav>
   );
 };
 

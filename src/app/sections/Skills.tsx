@@ -69,10 +69,13 @@ const Skills = () => {
     : skills.filter(skill => skill.category === selectedCategory);
 
   return (
-    <section id="skills" className="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+    <section id="skills" className="py-24 bg-black relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/10 -z-0" />
+      
+      {/* Decorative elements from design */}
+      <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -80,12 +83,10 @@ const Skills = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-              Technologies I Use
-            </span>
+          <h2 className="text-4xl font-bold mb-6 text-white">
+            Technologies I Use
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg mb-8">
             Over the years, I have mastered various technologies that enable me to build robust, 
@@ -93,15 +94,15 @@ const Skills = () => {
           </p>
 
           {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3 mb-10">
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
             {categories.map((category) => (
               <motion.button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 
                   ${selectedCategory === category 
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' 
-                    : 'bg-gray-800/50 text-gray-400 border border-gray-700/50 hover:bg-gray-700/50 hover:text-gray-300'
+                    ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg shadow-red-600/20' 
+                    : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-white'
                   }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -116,7 +117,7 @@ const Skills = () => {
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-5xl mx-auto"
         >
           {filteredSkills.map((skill, index) => (
             <motion.div
@@ -130,24 +131,20 @@ const Skills = () => {
                 stiffness: 100
               }}
               viewport={{ once: true }}
-              layout
+              className="group"
             >
-              <div className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-gray-800/80 to-gray-700/50 rounded-xl border border-gray-700/50 hover:border-blue-500/50 hover:from-blue-900/20 hover:to-gray-800/50 transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-blue-900/20">
-                <div className="text-blue-400 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+              <div className="flex flex-col items-center justify-center p-5 bg-gray-900/80 hover:bg-gray-800 rounded-xl border border-gray-800 hover:border-red-500/50 transition-all duration-300 shadow-lg hover:shadow-red-900/20 h-full">
+                <div className="text-3xl text-gradient-primary mb-3 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                   {skill.icon}
                 </div>
-                <span className="text-base text-gray-300 font-medium group-hover:text-blue-300 transition-colors duration-300">
+                <span className="text-base text-gray-300 font-medium group-hover:text-white transition-colors duration-300">
                   {skill.title}
                 </span>
-                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Decorative corners */}
-        <div className="absolute top-0 left-0 w-32 h-32 bg-blue-500/10 rounded-br-full blur-2xl" />
-        <div className="absolute bottom-0 right-0 w-32 h-32 bg-teal-500/10 rounded-tl-full blur-2xl" />
       </div>
     </section>
   );

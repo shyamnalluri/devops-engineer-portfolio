@@ -12,13 +12,13 @@ const inter = Inter({ subsets: ["latin"] });
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: "#000000",
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.yourwebsite.com"),
+  metadataBase: new URL("https://www.shyamnalluri.com"),
   title: "Shyam Nalluri | DevOps Engineer",
   description:
     "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions. Expertise in AWS, Kubernetes, and CI/CD pipelines.",
@@ -37,17 +37,16 @@ export const metadata: Metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://www.yourwebsite.com",
-  },
-  openGraph: {
+  },  openGraph: {
     type: "website",
     title: "Shyam Nalluri - DevOps Engineer",
     description:
       "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions.",
     siteName: "Shyam Nalluri Portfolio",
-    url: "https://www.yourwebsite.com",
+    url: "https://www.shyamnalluri.com",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/images/profile.jpg",
         width: 1200,
         height: 630,
         alt: "Shyam Nalluri - DevOps Engineer",
@@ -59,21 +58,19 @@ export const metadata: Metadata = {
     title: "Shyam Nalluri - DevOps Engineer",
     description:
       "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions.",
-    creator: "@yourtwitterhandle",
-    images: ["/og-image.jpg"],
+    creator: "@shyamnalluri",
+    images: ["/images/profile.jpg"],
   },
   verification: {
-    google: "your-google-verification-code",
-  },
-  other: {
-    "theme-color": "#1e293b",
+    google: "verification-code",
+  },  other: {
+    "theme-color": "#000000",
   },
   viewport: {
     width: "device-width",
     initialScale: 1,
-    maximumScale: 1,
-    minimumScale: 1,
-    userScalable: false,
+    maximumScale: 5,
+    userScalable: true,
     viewportFit: "cover",
   },
 };
@@ -84,24 +81,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth overscroll-none">
-      <head>
+    <html lang="en" className="scroll-smooth overscroll-none">      <head>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover"
+          content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes, viewport-fit=cover"
         />
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="width" />
       </head>
       <body
         className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}
-      >
-        <ClientWrapper>
+      >        <ClientWrapper>
           <div className="overflow-x-hidden w-full">
-            <ScrollProgressBar />
             <Navigation />
             <main className="relative z-10">{children}</main>
-            <BackToTop />
             <MobileSocial />
           </div>
         </ClientWrapper>

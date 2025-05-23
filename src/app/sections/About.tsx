@@ -1,38 +1,36 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FaCode, FaCloud, FaShieldAlt, FaTools } from 'react-icons/fa';
+import Image from 'next/image';
+import { FaServer, FaCloud, FaTools, FaCode } from 'react-icons/fa';
 
-const About = () => {
-  const highlights = [
+const About = () => {  const highlights = [
     {
       icon: <FaCloud className="w-6 h-6" />,
-      title: "Cloud Architecture",
-      description: "Designing resilient and scalable cloud solutions"
+      title: "Cloud Infrastructure",
+      description: "Building and managing scalable cloud solutions on AWS, Azure, and GCP"
     },
     {
-      icon: <FaCode className="w-6 h-6" />,
-      title: "Infrastructure as Code",
-      description: "Automating infrastructure deployment with modern tools"
-    },
-    {
-      icon: <FaShieldAlt className="w-6 h-6" />,
-      title: "Security First",
-      description: "Implementing robust security practices"
+      icon: <FaServer className="w-6 h-6" />,
+      title: "CI/CD Pipelines",
+      description: "Implementing efficient automated deployment workflows for applications"
     },
     {
       icon: <FaTools className="w-6 h-6" />,
-      title: "DevOps Culture",
-      description: "Fostering collaboration and continuous improvement"
+      title: "Infrastructure as Code",
+      description: "Automating infrastructure deployment using Terraform and CloudFormation"
+    },
+    {
+      icon: <FaCode className="w-6 h-6" />,
+      title: "Container Orchestration",
+      description: "Managing containerized applications with Kubernetes and Docker"
     }
   ];
-
-  return (
-    <section id="about" className="min-h-screen flex items-center bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-8 relative overflow-hidden">
-      {/* Subtle background pattern */}
+  return (    <section id="about" className="min-h-screen flex items-center bg-black py-24 relative overflow-hidden">
+      {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/10 -z-0" />
-      
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,52 +38,81 @@ const About = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="max-w-5xl mx-auto"
-        >
-          <h2 className="text-4xl font-bold mb-8 text-center">
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
+        >          <h2 className="text-5xl font-bold mb-8 text-center text-white">
+            <span className="relative">
               About Me
+              <motion.div 
+                className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-red-500"
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+              />
             </span>
           </h2>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            <motion.div
+            initial={{ opacity: 0, y: 20 }}            
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-b from-gray-800/80 to-gray-900/80 p-10 rounded-xl backdrop-blur-xl border border-gray-700/50 shadow-[0_0_25px_-5px_rgba(59,130,246,0.1)] hover:shadow-[0_0_35px_-5px_rgba(59,130,246,0.2)] transition-shadow duration-300"
+            className="p-10"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {/* About Text Column */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              {/* Add decorative image */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="relative hidden md:block"
+              >
+                <div className="relative w-full h-[500px]">
+                  <div className="absolute top-10 left-10 w-[280px] h-[280px] rounded-full bg-orange-500/20 animate-pulse-slow" />
+                  <div className="absolute bottom-10 right-10 w-[220px] h-[220px] rounded-full bg-purple-500/20 animate-pulse-slow" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="relative w-[320px] h-[400px] overflow-hidden border-[8px] border-gray-800 bg-gray-900 shadow-xl transform rotate-3">
+                      <Image
+                        src="/images/profile.jpg"
+                        alt="Shyam Nalluri"
+                        fill
+                        className="object-cover"
+                        style={{ objectFit: 'cover', objectPosition: 'center' }}
+                      />
+                    </div>
+                    
+                    {/* Decorative elements */}
+                    <div className="absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-red-500"></div>
+                    <div className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-red-500"></div>
+                  </div>
+                </div>
+              </motion.div>              {/* About Text Column */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
                 viewport={{ once: true }}
                 className="space-y-6"
-              >
-                <div className="prose prose-lg prose-invert max-w-none">
-                  <p className="text-gray-300/90 text-lg leading-relaxed text-justify first-letter:text-3xl first-letter:font-bold first-letter:text-blue-400 first-letter:mr-1">
-                    I&apos;m a passionate DevOps Engineer who thrives on transforming development processes 
-                    and building robust cloud infrastructures. In today&apos;s fast-paced tech landscape, 
-                    I serve as the bridge between development and operations, crafting solutions that 
-                    make deployment seamless and infrastructure reliable.
+              >                <div className="prose prose-lg max-w-none prose-invert">
+                  <p className="text-gray-300 text-lg leading-relaxed first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1">
+                    I&apos;m a passionate DevOps Engineer with 5 years of experience streamlining 
+                    development processes and optimizing infrastructure. My expertise lies in 
+                    bridging the gap between development and operations, creating robust, 
+                    scalable, and highly available systems that empower development teams.
                   </p>
-                  <p className="text-gray-300/90 text-lg leading-relaxed text-justify">
-                    My approach combines automation-first thinking with cloud-native architectures. 
-                    I&apos;ve helped organizations reduce deployment times by <span className="text-blue-400 font-semibold">70%</span> and achieve significant 
-                    cost savings through optimized cloud infrastructure. Every challenge is an 
-                    opportunity to implement innovative solutions that scale.
+                  <p className="text-gray-400 text-lg leading-relaxed">
+                    My approach combines automation with security best practices. 
+                    I&apos;ve helped organizations reduce deployment time by <span className="text-red-500 font-semibold">75%</span> through 
+                    implementing efficient CI/CD pipelines and infrastructure as code solutions. Every project is an 
+                    opportunity to improve reliability and accelerate software delivery.
                   </p>
                 </div>
-              </motion.div>
-
-              {/* Highlights Grid Column */}
+              </motion.div>              {/* Highlights Grid Column */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 viewport={{ once: true }}
-                className="grid grid-cols-1 gap-4"
+                className="grid grid-cols-1 gap-6"
               >
                 {highlights.map((highlight, index) => (
                   <motion.div
@@ -94,13 +121,13 @@ const About = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 * index }}
                     viewport={{ once: true }}
-                    className="group flex items-start space-x-4 p-4 rounded-lg bg-gradient-to-r from-gray-800/50 to-gray-700/30 border border-gray-600/50 hover:border-blue-500/50 hover:from-blue-900/20 hover:to-gray-800/50 transition-all duration-300"
+                    className="group flex items-start space-x-4 p-5 rounded-lg bg-gray-900/80 border border-gray-800 hover:border-red-500/50 shadow-md hover:shadow-red-900/20 transition-all duration-300"
                   >
-                    <div className="text-blue-400 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    <div className="text-red-500 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                       {highlight.icon}
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold mb-1 group-hover:text-blue-400 transition-colors duration-300">
+                      <h3 className="text-white font-semibold mb-1 group-hover:text-red-400 transition-colors duration-300">
                         {highlight.title}
                       </h3>
                       <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">
