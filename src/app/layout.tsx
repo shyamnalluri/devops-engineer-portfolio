@@ -88,13 +88,11 @@ export default function RootLayout({
         />
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="width" />
-      </head>
-      <body
+      </head>      <body
         className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}
-      >        <ClientWrapper>
-          <div className="overflow-x-hidden w-full">
+      >        <ClientWrapper>          <div className="overflow-x-hidden w-full">
             <Navigation />
-            <main className="relative z-10">{children}</main>
+            <main className="relative z-10 lg:ml-[214px]">{children}</main>
             <MobileSocial />
           </div>
         </ClientWrapper>

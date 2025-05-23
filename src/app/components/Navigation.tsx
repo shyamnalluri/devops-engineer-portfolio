@@ -13,7 +13,7 @@ const navItems = [
 
 const Navigation: React.FC = () => {
   return (
-    <nav className="fixed inset-y-0 left-0 w-[214px] bg-black text-white flex flex-col z-50">
+    <nav className="fixed inset-y-0 left-0 w-[214px] bg-black text-white flex-col z-50 hidden lg:flex">
       {/* Logo Section */}
       <div className="px-6 py-8">
         <h1 className="text-3xl font-bold text-white">
