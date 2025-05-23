@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState, ReactElement } from 'react';
-import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaCertificate, FaEnvelope } from 'react-icons/fa';
+import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaCertificate, FaEnvelope, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -99,7 +99,6 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
       }
     };
   }, [isOpen, navItems]);
-
   return (
     <AnimatePresence mode="wait">
       {isOpen && (
@@ -109,10 +108,9 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/70 backdrop-blur-md z-40"
             onClick={onClose}
-          />
-          <motion.div
+          /><motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -121,12 +119,12 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
               stiffness: 300,
               damping: 30
             }}
-            className="fixed top-0 right-0 h-full w-[300px] bg-gray-900/95 backdrop-blur-md shadow-lg z-50 flex flex-col"
+            className="fixed top-0 right-0 h-full w-[300px] bg-gray-900/95 backdrop-blur-md shadow-xl z-50 flex flex-col border-l border-gray-800"
           >
             <div className="relative p-6">
               <button
                 onClick={onClose}
-                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-800/50 transition-colors"
+                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 rounded-full hover:bg-gradient-to-r hover:from-orange-600/30 hover:to-red-600/30 transition-all"
                 aria-label="Close menu"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,29 +132,78 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                 </svg>
               </button>
               
-              <div className="mt-16 flex flex-col space-y-3">
+              {/* Logo section */}
+              <div className="mb-12 mt-4">
+                <h2 className="text-3xl font-bold text-white">SN</h2>
+              </div>
+                <div className="flex flex-col space-y-1">
                 {navItems.map((item) => (
-                  <Link
+                  <motion.div 
                     key={item.name}
-                    href={item.href}
-                    onClick={(e) => {
-                      scrollToSection(e, item.href);
-                      onClose();
-                    }}
-                    className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 group ${
-                      activeSection === item.href.substring(1)
-                        ? 'bg-blue-600/20 text-white'
-                        : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
-                    }`}
+                    whileHover={{ x: 5 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <span className={`transition-transform duration-200 group-hover:scale-110 ${
-                      activeSection === item.href.substring(1) ? 'text-blue-500' : ''
-                    }`}>
-                      {menuIcons[item.name]}
-                    </span>
-                    <span className="text-base font-medium">{item.name}</span>
-                  </Link>
-                ))}
+                    <Link
+                      href={item.href}
+                      onClick={(e) => {
+                        scrollToSection(e, item.href);
+                        onClose();
+                      }}
+                      className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 group ${
+                        activeSection === item.href.substring(1)
+                          ? 'bg-gradient-to-r from-orange-600/20 to-red-600/20 text-white border-l-2 border-orange-500'
+                          : 'text-gray-400 hover:bg-gray-800/50 hover:text-white border-l-2 border-transparent'
+                      }`}
+                    >
+                      <span className={`transition-all duration-300 group-hover:scale-110 ${
+                        activeSection === item.href.substring(1) ? 'text-orange-500' : ''
+                      }`}>
+                        {menuIcons[item.name]}
+                      </span>
+                      <span className="text-base font-medium tracking-wide">{item.name}</span>
+                    </Link>
+                  </motion.div>
+                ))}</div>
+                {/* Social links at the bottom */}
+              <div className="mt-auto pt-8 pb-8 border-t border-gray-800 mt-8">
+                <div className="flex justify-center gap-6">
+                  <motion.a 
+                    href="https://github.com/shyamnalluri" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800/50"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label="GitHub profile"
+                  >
+                    <FaGithub className="w-6 h-6" />
+                  </motion.a>
+                  <motion.a 
+                    href="https://www.linkedin.com/in/shyamnalluri" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800/50"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label="LinkedIn profile"
+                  >
+                    <FaLinkedin className="w-6 h-6" />
+                  </motion.a>
+                  <motion.a 
+                    href="mailto:nallurishyam@gmail.com" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800/50"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label="Email"
+                  >
+                    <FaEnvelope className="w-6 h-6" />
+                  </motion.a>
+                </div>
+                <p className="text-center text-gray-500 text-xs mt-4">
+                  &copy; {new Date().getFullYear()} Shyam Nalluri. All rights reserved.
+                </p>
               </div>
             </div>
           </motion.div>

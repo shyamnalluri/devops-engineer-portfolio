@@ -57,14 +57,6 @@ const Hero = () => {
       <div className="container mx-auto max-w-[1440px]">
         {/* Responsive grid with conditional layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-0 items-center relative pt-4 lg:pt-0">
-        {/* Mobile Scroll Indicator - Only visible on small screens */}
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-30 lg:hidden animate-bounce" aria-hidden="true">
-          <span className="text-gray-400 text-xs font-medium mb-2">Scroll Down</span>
-          <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-          </svg>
-        </div>
-
           {/* Text Column - First on mobile, left side on desktop */}
           <div className="lg:col-span-6 lg:ml-8">          
           {/* Image Column - Only visible on desktop */}

@@ -38,14 +38,13 @@ export default function ClientWrapper({ children }: { children: ReactNode }) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   return (
     <>
       <ScrollProgressBar />
       {/* Mobile menu button */}
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="fixed top-4 right-4 z-50 p-3 rounded-full bg-black text-white lg:hidden"
+        className="fixed top-4 right-4 z-50 p-3 rounded-full bg-gradient-to-r from-orange-600 to-red-600 text-white lg:hidden shadow-md shadow-red-500/20 hover:from-orange-500 hover:to-red-500 transition-all duration-300"
         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
       >
         {isMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
