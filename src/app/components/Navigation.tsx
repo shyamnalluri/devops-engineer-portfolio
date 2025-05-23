@@ -7,7 +7,8 @@ const navItems = [
   { name: 'SKILLS', href: '#skills' },
   { name: 'EXPERIENCE', href: '#experience' },
   { name: 'PROJECTS', href: '#projects' },
-  { name: 'CERTIFICATIONS', href: '#certifications' }
+  { name: 'CERTIFICATIONS', href: '#certifications' },
+  { name: 'CONTACT', href: '#contact' }
 ];
 
 const Navigation: React.FC = () => {

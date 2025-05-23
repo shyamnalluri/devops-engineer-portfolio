@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Contact = () => {  const socialLinks = [
     {
@@ -19,16 +19,10 @@ const Contact = () => {  const socialLinks = [
       icon: <FaEnvelope className="w-6 h-6" />,
       url: 'mailto:nallurishyam@gmail.com',
     },
-  ];
-  return (
-    <section id="contact" className="relative py-24 bg-gray-50 overflow-hidden">
+  ];  return (
+    <section id="contact" className="relative py-24 bg-black overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.1) 1px, transparent 0)',
-          backgroundSize: '20px 20px',
-        }}/>
-      </div>
+      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
 
       {/* Decorative Elements */}
       <div className="absolute top-1/4 -left-20 w-72 h-72 bg-orange-500/20 rounded-full filter blur-[80px]" />
@@ -41,51 +35,33 @@ const Contact = () => {  const socialLinks = [
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
           className="max-w-6xl mx-auto"
-        >
-          <div className="text-center mb-16">
+        >          <div className="text-center mb-16">
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              viewport={{ once: true }}              className="text-5xl font-bold mb-4 text-gray-900"
+              viewport={{ once: true }}
+              className="text-4xl font-bold mb-6 text-white relative inline-block"
             >
-              <span className="relative">
-                Get In Touch
-                <motion.div 
-                  className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-pink-500"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  viewport={{ once: true }}
-                />
-              </span>
+              Get In Touch
+              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500"></div>
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
-              className="text-gray-700 text-xl max-w-2xl mx-auto"
+              className="text-gray-400 text-lg max-w-2xl mx-auto mt-8"
             >
               Have a project in mind? Let's work together to create something amazing.
             </motion.p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 bg-white rounded-xl shadow-lg overflow-hidden">
+          </div>          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 bg-gray-900 rounded-xl shadow-lg shadow-red-500/5 border border-gray-800 overflow-hidden">
             {/* Contact Info Column */}
-            <div className="lg:col-span-2 bg-black text-white p-10">
+            <div className="lg:col-span-2 bg-gradient-to-br from-gray-900 to-black text-white p-10">
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
               <p className="text-gray-400 mb-8">Fill up the form and I'll get back to you within 24 hours.</p>
               
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="mr-4 mt-1 bg-gray-800 p-2 rounded-full">
-                    <FaPhone className="w-5 h-5 text-orange-500" />
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Phone</p>                    <p className="font-medium">07405036754</p>
-                  </div>
-                </div>
+              <div className="space-y-6">                {/* Phone section removed */}
                 
                 <div className="flex items-start">
                   <div className="mr-4 mt-1 bg-gray-800 p-2 rounded-full">
@@ -130,47 +106,45 @@ const Contact = () => {  const socialLinks = [
                   ))}
                 </div>
               </div>            </div>
-            
-            {/* Contact Form Column */}
+              {/* Contact Form Column */}
             <div className="lg:col-span-3 p-10">
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Full Name</label>
+                    <label htmlFor="name" className="block text-gray-300 font-medium mb-2">Full Name</label>
                     <input 
                       type="text" 
                       id="name" 
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-700 bg-gray-800/50 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       placeholder="Your name"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email Address</label>
+                    <label htmlFor="email" className="block text-gray-300 font-medium mb-2">Email Address</label>
                     <input 
                       type="email" 
                       id="email" 
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-700 bg-gray-800/50 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       placeholder="your@email.com"
                     />
                   </div>
                 </div>
-                
-                <div>
-                  <label htmlFor="subject" className="block text-gray-700 font-medium mb-2">Subject</label>
+                  <div>
+                  <label htmlFor="subject" className="block text-gray-300 font-medium mb-2">Subject</label>
                   <input 
                     type="text" 
                     id="subject" 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-700 bg-gray-800/50 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholder="Subject"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Message</label>
+                  <label htmlFor="message" className="block text-gray-300 font-medium mb-2">Message</label>
                   <textarea 
                     id="message" 
                     rows={6} 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-700 bg-gray-800/50 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholder="Your message here..."
                   ></textarea>
                 </div>
@@ -178,7 +152,7 @@ const Contact = () => {  const socialLinks = [
                 <div className="flex justify-end">
                   <button 
                     type="submit"
-                    className="inline-flex items-center justify-center bg-black text-white px-8 py-4 text-base font-medium hover:bg-gray-800 transition-all"
+                    className="inline-flex items-center justify-center bg-gradient-to-r from-orange-600 to-red-600 text-white px-8 py-4 text-base font-medium hover:from-orange-500 hover:to-red-500 transition-all"
                   >
                     Send Message
                   </button>

@@ -31,17 +31,22 @@ const Certifications = dynamic(() => import("./sections/Certifications"), {
   ssr: true
 });
 
+const Contact = dynamic(() => import("./sections/Contact"), {
+  loading: () => <SkeletonScreen type="contact" />,
+  ssr: true
+});
+
 export default function Home() {
   return (
     <ClientWrapper>
       <main className="bg-black text-white min-h-screen">
         {/* All sections */}
         <Hero />
-        <About />          
-        <Skills />
+        <About />            <Skills />
         <Experience />
         <Projects />
         <Certifications />
+        <Contact />
       </main>
     </ClientWrapper>
   );

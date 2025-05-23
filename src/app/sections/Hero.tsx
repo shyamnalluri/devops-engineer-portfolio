@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
+import OptimizedImage from "../components/OptimizedImage";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -74,35 +75,35 @@ const Hero = () => {
                 href="#contact"
                 className="inline-flex items-center justify-center bg-gradient-to-r from-orange-600 to-red-600 text-white px-8 py-4 text-base font-medium hover:from-orange-500 hover:to-red-500 transition-all"
               >
-                Let&apos;s Connect <span className="ml-2">🚀</span>
+                Let&apos;s Connect <span className="ml-2"></span>
               </a>
             </motion.div>
 
             {/* Social Media Icons */}
             <motion.div className="flex items-center gap-4 pt-4" variants={slideFromBottom}>
-              <a 
-                href="https://www.linkedin.com/in/shyamnalluri" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.linkedin.com/in/shyamnalluri"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center transition-transform hover:scale-110"
               >
-                <FaLinkedin className="w-5 h-5 text-black" />
+                <FaLinkedin className="w-5 h-5 text-black"/>
               </a>
-              <a 
-                href="https://github.com/shyamnalluri" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://github.com/shyamnalluri"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center transition-transform hover:scale-110"
               >
-                <FaGithub className="w-5 h-5 text-black" />
+                <FaGithub className="w-5 h-5 text-black"/>
               </a>
-              <a 
-                href="mailto:nallurishyam@gmail.com" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="mailto:nallurishyam@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center transition-transform hover:scale-110"
               >
-                <FaEnvelope className="w-5 h-5 text-black" />
+                <FaEnvelope className="w-5 h-5 text-black"/>
               </a>
             </motion.div>
           </motion.div>
@@ -158,10 +159,13 @@ const Hero = () => {
                       clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" 
                     }}
                   >
-                    <img
+                    <OptimizedImage
                       src="/images/profile.jpg"
                       alt="Shyam Nalluri"
                       className="w-full h-full object-cover object-center"
+                      width={500}
+                      height={500}
+                      priority={true}
                     />
                   </div>
                 </div>
@@ -182,7 +186,7 @@ const Hero = () => {
                   }
                 }}
               >
-                ✧
+                
               </motion.div>
               
               {/* Decorative star - bottom */}
@@ -200,7 +204,7 @@ const Hero = () => {
                   }
                 }}
               >
-                ✧
+                
               </motion.div>
 
               {/* Additional decorative circle element */}

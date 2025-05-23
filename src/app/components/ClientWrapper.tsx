@@ -7,18 +7,18 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import BackToTop from './BackToTop';
 
 // Import MenuIconKey type from MobileMenu
-type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE';
+type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT';
 
 export default function ClientWrapper({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  const navItems: Array<{ name: MenuIconKey; href: string }> = [
+  const [showBackToTop, setShowBackToTop] = useState(false);  const navItems: Array<{ name: MenuIconKey; href: string }> = [
     { name: 'HOME', href: '#home' },
     { name: 'ABOUT ME', href: '#about' },
     { name: 'SKILLS', href: '#skills' },
     { name: 'EXPERIENCE', href: '#experience' },
     { name: 'PROJECTS', href: '#projects' },
-    { name: 'CERTIFICATIONS', href: '#certifications' }
+    { name: 'CERTIFICATIONS', href: '#certifications' },
+    { name: 'CONTACT', href: '#contact' }
   ];
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
