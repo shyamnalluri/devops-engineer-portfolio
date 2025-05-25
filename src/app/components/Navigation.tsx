@@ -1,6 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 
+interface NavItem {
+  name: string;
+  href: string;
+  isExternal?: boolean;
+}
+
 const navItems = [
   { name: 'HOME', href: '#home' },
   { name: 'ABOUT ME', href: '#about' },
@@ -8,7 +14,8 @@ const navItems = [
   { name: 'EXPERIENCE', href: '#experience' },
   { name: 'PROJECTS', href: '#projects' },
   { name: 'CERTIFICATIONS', href: '#certifications' },
-  { name: 'CONTACT', href: '#contact' }
+  { name: 'CONTACT', href: '#contact' },
+  { name: 'PLAY GAME', href: '/game', isExternal: true }
 ];
 
 const Navigation: React.FC = () => {
@@ -26,16 +33,26 @@ const Navigation: React.FC = () => {
         <ul className="flex flex-col py-8">
           {navItems.map((item, index) => (
             <li key={item.name} className="block">
-              <Link
-                href={item.href}
-                className={`block px-10 py-4 text-base font-normal hover:text-orange-500 transition-all ${
-                  index === 0 
-                    ? 'border-l-2 border-orange-500 text-orange-500 font-medium' 
-                    : 'border-l-2 border-transparent hover:border-gray-700'
-                }`}
-              >
-                {item.name}
-              </Link>
+              {item.isExternal ? (
+                <Link
+                  href={item.href}
+                  className="block px-10 py-4 text-base font-normal text-green-500 hover:text-green-400 transition-all flex items-center gap-2"
+                >
+                  {item.name}
+                  <span className="text-xs">→</span>
+                </Link>
+              ) : (
+                <Link
+                  href={item.href}
+                  className={`block px-10 py-4 text-base font-normal hover:text-orange-500 transition-all ${
+                    index === 0 
+                      ? 'border-l-2 border-orange-500 text-orange-500 font-medium' 
+                      : 'border-l-2 border-transparent hover:border-gray-700'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -43,7 +60,7 @@ const Navigation: React.FC = () => {
 
       {/* Footer */}
       <div className="px-6 pb-4 text-xs text-gray-500 mt-auto">
-        <p>Copyright ©2024 Shyam</p>
+        <p>Copyright ©2025 Shyam</p>
         <p className="mt-1">Nalluri. All right reserved.</p>
       </div>
     </nav>
