@@ -43,8 +43,9 @@ const GamePage = () => {
         shieldEffect?: Phaser.GameObjects.Ellipse;
 
         preload() {
-          this.load.image('human', '/assets/game/human.png');
-          this.load.image('ai', '/assets/game/ai.png');
+          // Load 2D character images instead of simple boxes
+          this.load.image('human', '/assets/game/devops-human.svg');
+          this.load.image('ai', '/assets/game/ai-robot.svg');
           this.load.image('jenkins', '/assets/game/jenkins.svg');
           this.load.image('docker', '/assets/game/docker.svg');
           
@@ -68,6 +69,9 @@ const GamePage = () => {
           // Create ground as a scrolling platform
           this.ground = this.add.rectangle(width/2, height - 30, width, 60, 0x333333);
           this.physics.add.existing(this.ground, true);
+          
+          // Make the ground collision more reliable
+          (this.ground.body as Phaser.Physics.Arcade.StaticBody).updateFromGameObject();
 
           // Add background with grid pattern
           this.add.rectangle(0, 0, width, height, 0x16213e).setOrigin(0, 0);
@@ -92,16 +96,55 @@ const GamePage = () => {
           }
           
           // Create player fixed in the left side (similar to Chrome dino)
-          this.player = this.physics.add.sprite(width * 0.2, height - 100, 'human').setScale(0.5);
+          this.player = this.physics.add.sprite(width * 0.2, height - 120, 'human').setScale(0.35);
           this.player.setCollideWorldBounds(true);
-          this.player.setGravityY(1200);
-          // Fix X position
+          this.player.setGravityY(1000); // Reduced gravity for better jump feel
+          // Fix X position and set a smaller hit box
           this.player.body.setAllowGravity(true);
+          this.player.body.setSize(70, 150); // Adjusted collision box to match character shape
+          this.player.body.setOffset(65, 50); // Adjusted offset for better ground detection
+          
+          // Add running animation to player (bobbing up and down slightly)
+          const runTween = this.tweens.add({
+            targets: this.player,
+            y: this.player.y - 5,
+            duration: 300,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut',
+            paused: false
+          });
+          
+          // Store the run animation tween for pausing during jumps
+          this.player.setData('runTween', runTween);
           
           // Create AI chaser slightly behind the player (fixed distance)
-          this.aiChaser = this.physics.add.sprite(width * 0.1, height - 100, 'ai').setScale(0.5);
+          this.aiChaser = this.physics.add.sprite(width * 0.1, height - 120, 'ai').setScale(0.35);
           this.aiChaser.setCollideWorldBounds(true);
           this.aiChaser.setGravityY(1200);
+          // Set a smaller hit box for AI as well
+          this.aiChaser.body.setSize(80, 140);
+          this.aiChaser.body.setOffset(60, 60);
+          
+          // Add AI chaser animation (more robotic movement)
+          this.tweens.add({
+            targets: this.aiChaser,
+            angle: 5,
+            duration: 150,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+          });
+          
+          // Add pulsing glow effect to AI
+          this.tweens.add({
+            targets: this.aiChaser,
+            alpha: 0.8,
+            duration: 400,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+          });
           
           // Visual distance indicator between human and AI
           this.dangerZone = this.add.rectangle(
@@ -210,11 +253,56 @@ const GamePage = () => {
           const targetX = Math.min(width * 0.15, width * 0.05 + (this.score * 0.0005 * width));
           this.aiChaser.x = Phaser.Math.Linear(this.aiChaser.x, targetX, 0.01);
           
+          // Make the AI try to match player's jump sometimes
+          if (this.player.body.velocity.y < -100 && this.aiChaser.body.onFloor() && Math.random() > 0.7) {
+            // AI jumps with less height than player
+            this.aiChaser.setVelocityY(-500);
+          }
+          
           // Jump controls - more like Chrome dino game
           // Allow jumping with both up arrow and space
-          if ((this.cursors.up?.isDown || this.cursors.space?.isDown) && this.player.body.touching.down) {
-            this.player.setVelocityY(-700); // Higher jump
-            // Play jump sound if we had one
+          // Track if the player is jumping to prevent double jumps
+          const isJumping = !this.player.body.onFloor();
+          const jumpKeyPressed = this.cursors.up?.isDown || this.cursors.space?.isDown;
+          
+          // Get the run animation tween
+          const runTween = this.player.getData('runTween') as Phaser.Tweens.Tween;
+          
+          // Handle jump start
+          if (jumpKeyPressed && !isJumping && this.player.body.onFloor()) {
+            // Set jump velocity
+            this.player.setVelocityY(-650);
+            
+            // Pause the running animation during jump
+            if (runTween) runTween.pause();
+            
+            // Visual feedback - slight squish effect before jumping
+            this.tweens.add({
+              targets: this.player,
+              scaleY: 0.9,
+              scaleX: 1.1,
+              duration: 100,
+              yoyo: true,
+              onComplete: () => {
+                this.player.setScale(0.35); // Reset to original scale
+              }
+            });
+          }
+          
+          // Handle landing
+          if (isJumping && this.player.body.onFloor()) {
+            // Resume the running animation when landing
+            if (runTween && runTween.isPaused()) runTween.resume();
+            
+            // Small bounce effect when landing
+            this.tweens.add({
+              targets: this.player,
+              scaleY: 0.9,
+              scaleX: 1.1,
+              duration: 200,
+              yoyo: true,
+              ease: 'Bounce'
+            });
           }
           
           // Game speed increases with score
@@ -300,7 +388,13 @@ const GamePage = () => {
             width + 100,
             obstacleY,
             obstacleType
-          ).setScale(0.3) as Phaser.Physics.Arcade.Sprite;
+          ).setScale(0.4) as Phaser.Physics.Arcade.Sprite;
+          
+          // Set a more accurate collision box for obstacles
+          if (obstacle.body) {
+            obstacle.body.setSize(obstacle.width * 0.6, obstacle.height * 0.6);
+            obstacle.body.setOffset(obstacle.width * 0.2, obstacle.height * 0.2);
+          }
           
           // Speed increases with game progress
           obstacle.setVelocityX(-this.gameSpeed);
@@ -319,7 +413,7 @@ const GamePage = () => {
               width + 150,
               height - 80,
               Phaser.Math.RND.pick(this.obstacleTypes)
-            ).setScale(0.3) as Phaser.Physics.Arcade.Sprite;
+            ).setScale(0.4) as Phaser.Physics.Arcade.Sprite;
             
             secondObstacle.setVelocityX(-this.gameSpeed);
             secondObstacle.setImmovable(true);
@@ -328,6 +422,9 @@ const GamePage = () => {
             if (secondObstacle.body) {
               // @ts-ignore - This property exists but TypeScript doesn't recognize it
               secondObstacle.body.allowGravity = false;
+              // Set a more accurate collision box
+              secondObstacle.body.setSize(secondObstacle.width * 0.6, secondObstacle.height * 0.6);
+              secondObstacle.body.setOffset(secondObstacle.width * 0.2, secondObstacle.height * 0.2);
             }
           }
           
@@ -372,12 +469,13 @@ const GamePage = () => {
           });
         }
         
-        collectPowerUp(player: Phaser.Physics.Arcade.Sprite, powerUp: Phaser.Physics.Arcade.Sprite) {
+        collectPowerUp(player: any, powerUp: any) {
           // Remove the power-up
-          powerUp.destroy();
+          const powerUpSprite = powerUp as Phaser.Physics.Arcade.Sprite;
+          powerUpSprite.destroy();
           
           // Apply different effects based on power-up type
-          const powerUpType = powerUp.texture.key;
+          const powerUpType = powerUpSprite.texture.key;
           
           switch (powerUpType) {
             case 'shield':
@@ -390,6 +488,10 @@ const GamePage = () => {
               this.activateSlowDown();
               break;
           }
+          
+          // Add a score bonus when collecting power-ups
+          this.score += 5;
+          this.scoreText.setText(`Score: ${this.score}`);
         }
         
         activateShield() {
@@ -468,8 +570,10 @@ const GamePage = () => {
             sprite.setVelocityX(-this.gameSpeed);
           });
           
-          // Visual effect
-          this.cameras.main.setTint(0xe0ffec);
+          // Visual effect - add a slight tint to the game world
+          const tintRect = this.add.rectangle(0, 0, this.sys.game.canvas.width, this.sys.game.canvas.height, 0x6ee7b7, 0.2);
+          tintRect.setOrigin(0, 0);
+          tintRect.setDepth(100); // Make sure it's on top but not covering UI
           
           // Display status
           this.statusText.setText('TIME SLOW');
@@ -478,7 +582,7 @@ const GamePage = () => {
           // Effect lasts for 6 seconds
           this.slowDownTimer = this.time.delayedCall(6000, () => {
             this.gameSpeed = originalSpeed;
-            this.cameras.main.clearTint();
+            tintRect.destroy(); // Remove the tint effect
             this.statusText.setText('');
           });
         }
@@ -571,8 +675,9 @@ const GamePage = () => {
         physics: {
           default: 'arcade',
           arcade: {
-            gravity: { y: 1200, x: 0 }, // Adjusted gravity for higher jumps
-            debug: false
+            gravity: { y: 1000, x: 0 }, // Reduced global gravity for better jump feel
+            debug: false,
+            tileBias: 40, // Helps with platform collision detection
           },
         },
         scene: [GameScene],
