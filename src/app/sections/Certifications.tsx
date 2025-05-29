@@ -72,11 +72,9 @@ const Certifications = () => {
   const filteredCertifications = selectedCategory === 'all'
     ? certifications
     : certifications.filter(cert => cert.category === selectedCategory);
-
-  return (
-    <section 
+  return (    <section 
       id="certifications" 
-      className="py-24 bg-black relative overflow-hidden"
+      className="py-8 sm:py-12 bg-black relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       
@@ -89,20 +87,19 @@ const Certifications = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          viewport={{ once: true }}        className="text-center mb-8"
         >
-          <h2 className="text-4xl font-bold mb-6 text-white relative inline-block">
+          <h2 className="text-4xl font-bold mb-4 text-white relative inline-block">
             Professional Certifications
             <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500"></div>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg mt-8">
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg mt-4">
             Industry-recognized certifications demonstrating expertise in cloud architecture,
             DevOps practices, and infrastructure management
           </p>
           
           {/* Category filters */}
-          <div className="flex flex-wrap justify-center gap-4 mt-8 mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mt-4 mb-6">
             {categories.map((category) => (
               <motion.button
                 key={category.id}

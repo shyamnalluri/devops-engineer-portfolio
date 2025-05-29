@@ -20,7 +20,7 @@ const Contact = () => {  const socialLinks = [
       url: 'mailto:nallurishyam@gmail.com',
     },
   ];  return (
-    <section id="contact" className="relative py-24 bg-black overflow-hidden">
+    <section id="contact" className="relative py-12 bg-black overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
 
@@ -59,7 +59,7 @@ const Contact = () => {  const socialLinks = [
             {/* Contact Info Column */}
             <div className="lg:col-span-2 bg-gradient-to-br from-gray-900 to-black text-white p-10">
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-              <p className="text-gray-400 mb-8">Fill up the form and I'll get back to you within 24 hours.</p>
+              <p className="text-gray-400 mb-4">Fill up the form and I'll get back to you within 24 hours.</p>
               
               <div className="space-y-6">                {/* Phone section removed */}
                 

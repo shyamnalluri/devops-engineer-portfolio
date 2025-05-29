@@ -338,7 +338,7 @@ const Experience = () => {
 
   const workExperiences = allExperiences.filter(exp => exp.type === 'work');
   const educationExperiences = allExperiences.filter(exp => exp.type === 'education');  return (
-    <section id="experience" className="py-32 relative bg-black overflow-hidden">
+    <section id="experience" className="py-16 relative bg-black overflow-hidden">
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02]" />
       <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-gradient-to-br from-red-500/8 via-orange-500/8 to-yellow-500/8 rounded-full blur-3xl" />

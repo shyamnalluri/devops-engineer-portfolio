@@ -67,9 +67,8 @@ const Skills = () => {
   const filteredSkills = selectedCategory === 'All' 
     ? skills 
     : skills.filter(skill => skill.category === selectedCategory);
-
   return (
-    <section id="skills" className="py-24 bg-black relative overflow-hidden">
+    <section id="skills" className="py-12 bg-black relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       
@@ -88,7 +87,7 @@ const Skills = () => {
           <h2 className="text-4xl font-bold mb-6 text-white">
             Technologies I Use
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg mb-8">
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg mb-4">
             Over the years, I have mastered various technologies that enable me to build robust, 
             scalable, and efficient infrastructure solutions.
           </p>

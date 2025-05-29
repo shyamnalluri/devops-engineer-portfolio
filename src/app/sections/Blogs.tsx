@@ -63,14 +63,14 @@ const Blogs = () => {
   const [otherPosts] = useState<BlogPost[]>(blogPosts.slice(1));
 
   return (
-    <section id="blogs" className="py-24 bg-gray-50">
+    <section id="blogs" className="py-8 sm:py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <h2 className="text-5xl font-bold mb-4">
             <span className="relative">
@@ -89,7 +89,7 @@ const Blogs = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Featured Post */}
           <motion.div
             className="lg:col-span-2 bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"

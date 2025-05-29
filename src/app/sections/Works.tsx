@@ -82,7 +82,7 @@ const Works = () => {
     : cases.filter(c => c.category === selectedCategory);
 
   return (
-    <section id="works" className="py-24 bg-black relative">
+    <section id="works" className="py-12 bg-black relative">
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-full blur-3xl" />

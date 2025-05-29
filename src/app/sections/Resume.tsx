@@ -49,7 +49,7 @@ const TimelineItem = ({
       <div className="absolute top-8 -left-1.5 w-3 h-3 rounded-full bg-blue-500" />
     </div>
 
-    <div className={`w-full md:w-1/2 ${isLeft ? 'md:text-right' : ''} pl-8 md:pl-0 mb-8`}>
+    <div className={`w-full md:w-1/2 ${isLeft ? 'md:text-right' : ''} pl-8 md:pl-0 mb-4`}>
       <div className="bg-gray-900/80 backdrop-blur-sm p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-800 hover:border-blue-500/30 group">
         <h4 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">{data.title}</h4>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
@@ -172,7 +172,7 @@ const Resume = () => {
   };
 
   return (
-    <section id="resume" className="py-16 pt-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 relative">
+    <section id="resume" className="py-8 pt-12 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-800/50 -z-0" />
@@ -184,8 +184,7 @@ const Resume = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
           className="max-w-6xl mx-auto"
-        >
-          <div className="flex justify-between items-center mb-12">
+        >          <div className="flex justify-between items-center mb-4">
             <h2 className="text-3xl font-bold text-white">Resume</h2>
             <Button 
               onClick={handleDownloadResume}
@@ -194,10 +193,8 @@ const Resume = () => {
               <FaDownload className="w-4 h-4" />
               <span>Download CV</span>
             </Button>
-          </div>
-          
-          <div className="mb-16">
-            <h3 className="text-2xl font-semibold text-white mb-8">Work Experience</h3>
+          </div>            <div className="mb-4">
+            <h3 className="text-2xl font-semibold text-white mb-4">Work Experience</h3>
             <div className="relative">
               {experiences.map((exp, index) => (
                 <TimelineItem 
@@ -208,10 +205,8 @@ const Resume = () => {
                 />
               ))}
             </div>
-          </div>
-
-          <div className="mb-16">
-            <h3 className="text-2xl font-semibold text-white mb-8">Education</h3>
+          </div>          <div className="mb-4">
+            <h3 className="text-2xl font-semibold text-white mb-4">Education</h3>
             <div className="relative">
               {education.map((edu, index) => (
                 <TimelineItem 
@@ -225,8 +220,8 @@ const Resume = () => {
           </div>
 
           <div>
-            <h3 className="text-2xl font-semibold text-white mb-8">Certifications</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h3 className="text-2xl font-semibold text-white mb-4">Certifications</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {certifications.map((cert, index) => (
                 <CertificationItem 
                   key={index}

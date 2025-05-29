@@ -242,7 +242,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-24 bg-black relative">
+    <section id="projects" className="py-12 bg-black relative">
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-full blur-3xl" />

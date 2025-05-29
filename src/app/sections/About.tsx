@@ -26,7 +26,7 @@ const About = () => {  const highlights = [
       description: "Managing containerized applications with Kubernetes and Docker"
     }
   ];
-  return (    <section id="about" className="min-h-screen flex items-center bg-black py-24 relative overflow-hidden">
+  return (    <section id="about" className="min-h-screen flex items-center bg-black py-12 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
@@ -38,7 +38,7 @@ const About = () => {  const highlights = [
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="max-w-5xl mx-auto"
-        >          <h2 className="text-5xl font-bold mb-8 text-center text-white">
+        >          <h2 className="text-5xl font-bold mb-4 text-center text-white">
             <span className="relative">
               About Me
               <motion.div 
