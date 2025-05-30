@@ -396,7 +396,6 @@ const Projects = () => {
             <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto"></div>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg mt-6 mb-10">
-            Showcasing my work in infrastructure design, automation solutions, and DevOps implementations
           </p>
           
           {/* Category filters */}
