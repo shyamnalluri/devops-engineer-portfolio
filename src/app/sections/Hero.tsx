@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { FaEnvelope, FaLinkedin, FaGithub, FaArrowRight } from "react-icons/fa";
 import OptimizedImage from "../components/OptimizedImage";
+import LiveTerminal from "../components/LiveTerminal";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,87 +69,18 @@ const Hero = () => {
           >
             {/* Main container for profile and shapes - desktop only */}
             <div className="relative w-[380px] h-[400px]">
-              {/* Background shape - orange/red gradient arc */}
-              <motion.div 
-                className="absolute top-0 right-0 w-[420px] h-[420px] rounded-full bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 z-0"
-                style={{ clipPath: "polygon(20% 0%, 100% 0%, 100% 100%, 70% 80%, 30% 40%)" }}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                aria-hidden="true"
-              />
-
-              {/* Background shape - purple gradient */}
-              <motion.div 
-                className="absolute bottom-0 left-1/4 w-[380px] h-[380px] rounded-full bg-gradient-to-tr from-purple-600 via-purple-500 to-violet-400 z-10"
-                style={{ clipPath: "polygon(0% 40%, 100% 0%, 100% 100%, 0% 100%)" }}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                aria-hidden="true"
-              />
-
-              {/* Profile image with hexagonal shape */}
+             {/* Live Terminal with hexagonal background effects */}
               <motion.div
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[380px] z-20"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[540px] z-20"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
                 <div className="relative w-full h-full">
-                  {/* Glowing outer border */}
-                  <div 
-                    className="absolute inset-0"
-                    style={{ 
-                      clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                      transform: "scale(1.12)",
-                      background: "linear-gradient(135deg, #FF4500 0%, #FF0080 50%, #6A5ACD 100%)",
-                      opacity: 0.6,
-                      filter: "blur(8px)"
-                    }}
-                    aria-hidden="true"
-                  ></div>
-
-                  {/* White background frame */}
-                  <div 
-                    className="absolute inset-0 bg-white"
-                    style={{ 
-                      clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                      transform: "scale(1.06)",
-                      boxShadow: "inset 0 0 20px rgba(0,0,0,0.2)"
-                    }}
-                    aria-hidden="true"
-                  ></div>
-                  
-                  {/* Profile image */}
-                  <div 
-                    className="absolute inset-0 overflow-hidden"
-                    style={{ 
-                      clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                      filter: "contrast(1.05) saturate(1.1)"
-                    }}
-                  >
-                    <OptimizedImage
-                      src="/images/profile.jpg"
-                      alt="Shyam Nalluri - DevOps Engineer"
-                      className="w-full h-full object-cover object-center scale-110"
-                      width={500}
-                      height={500}
-                      priority={true}
-                      fetchPriority="high"
-                      loading="eager"
-                    />
+                  {/* Terminal container - no clipping */}
+                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                    <LiveTerminal />
                   </div>
-                  
-                  {/* Geometric patterned overlay */}
-                  <div 
-                    className="absolute inset-0 mix-blend-soft-light opacity-30"
-                    style={{ 
-                      clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)"
-                    }}
-                    aria-hidden="true"
-                  ></div>
                 </div>
               </motion.div>
 
@@ -275,16 +207,13 @@ const Hero = () => {
                   clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                   filter: "contrast(1.05) saturate(1.1)"
                 }}
-              >
-                <OptimizedImage
+              >                <OptimizedImage
                   src="/images/profile.jpg"
                   alt="Shyam Nalluri - DevOps Engineer"
                   className="w-full h-full object-cover object-center scale-110"
                   width={300}
                   height={300}
                   priority={true}
-                  fetchPriority="high"
-                  loading="eager"
                 />
               </div>
               
@@ -331,7 +260,7 @@ const Hero = () => {
                 <span className="inline-block">Shyam</span> <span className="font-bold text-red-500 inline-block">Nalluri</span>
               </h1>
               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 mb-1 sm:mb-2 relative z-10">
-                DevOps Engineer
+                DevOps and Platform Engineer
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-gray-400 mx-auto lg:mx-0 max-w-md mb-3 sm:mb-4 relative z-10" aria-label="Professional summary">
                 Delivering scalable infrastructure solutions & automated workflows for modern enterprises
@@ -339,11 +268,9 @@ const Hero = () => {
             </motion.div>
 
             <motion.p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 font-medium mt-4 sm:mt-6" variants={slideFromBottom}>
-              Specialized in <span className="relative inline-block border-b-2 border-red-500/70 pb-1 hover:text-white transition-colors focus-visible:outline-offset-2 focus-visible:outline-2 focus-visible:outline-red-500" tabIndex={0} role="text">cloud infrastructure</span> & automation
+              <span className="relative inline-block border-b-2 border-red-500/70 pb-1 hover:text-white transition-colors focus-visible:outline-offset-2 focus-visible:outline-2 focus-visible:outline-red-500" tabIndex={0} role="text">Specialized in cloud infrastructure</span> & automation
               <span className="font-normal block mt-2">
                 <span className="inline-flex gap-2 items-center justify-center lg:justify-start">
-                  <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" role="presentation" aria-hidden="true"></span>
-                  <span>based in London</span>
                 </span>
               </span>
             </motion.p>
@@ -354,7 +281,7 @@ const Hero = () => {
                 className="inline-flex items-center justify-center bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium hover:from-orange-500 hover:to-red-500 active:scale-95 transition-all rounded-lg shadow-lg shadow-red-600/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation"
                 aria-label="Contact Shyam Nalluri to discuss DevOps opportunities"
               >
-                <span>Let&apos;s Connect</span> 
+                <span>Hire Me</span>
                 <FaArrowRight className="ml-2 text-sm" aria-hidden="true" />
               </a>
             </motion.div>
