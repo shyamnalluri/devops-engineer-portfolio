@@ -344,8 +344,6 @@ const Experience = () => {
       <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-gradient-to-br from-red-500/8 via-orange-500/8 to-yellow-500/8 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/8 via-purple-500/8 to-pink-500/8 rounded-full blur-3xl" />
 
-      {/* DevOps Pipeline Visual */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-3 bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 opacity-25" />
 
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -356,9 +354,9 @@ const Experience = () => {
           className="max-w-7xl mx-auto"
         >
           {/* Section Header */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-12">
             <motion.h2
-              className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-6"
+              className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
@@ -370,7 +368,7 @@ const Experience = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              A visual journey through my DevOps evolution - from foundation learning to innovation leadership.
+              A visual journey through my DevOps evolution
               <span className="text-orange-400 font-semibold"> Click timeline nodes to expand details</span>
             </motion.p>
           </div>
@@ -444,40 +442,6 @@ const Experience = () => {
               </div>
             </motion.div>
           </div>
-
-          {/* DevOps Evolution Summary */}
-          <motion.div
-            className="mt-24 p-8 rounded-2xl bg-gradient-to-r from-gray-900/50 to-gray-800/50 border border-gray-700/50 backdrop-blur-sm"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <h4 className="text-2xl font-bold text-white mb-6 text-center">
-              🔄 DevOps Evolution Journey
-            </h4>
-            <div className="grid md:grid-cols-4 gap-6 text-center">
-              <div className="p-5 rounded-xl bg-blue-500/10 border border-blue-500/30 hover:bg-blue-500/15 transition-all duration-300">
-                <div className="text-2xl mb-3">📚</div>
-                <div className="text-blue-400 font-semibold">Foundation</div>
-                <div className="text-sm text-gray-300 mt-1">Learning & Building</div>
-              </div>
-              <div className="p-5 rounded-xl bg-green-500/10 border border-green-500/30 hover:bg-green-500/15 transition-all duration-300">
-                <div className="text-2xl mb-3">⚙️</div>
-                <div className="text-green-400 font-semibold">Automation</div>
-                <div className="text-sm text-gray-300 mt-1">Scaling & Optimizing</div>
-              </div>
-              <div className="p-5 rounded-xl bg-orange-500/10 border border-orange-500/30 hover:bg-orange-500/15 transition-all duration-300">
-                <div className="text-2xl mb-3">🚀</div>
-                <div className="text-orange-400 font-semibold">Innovation</div>
-                <div className="text-sm text-gray-300 mt-1">Leading & Mentoring</div>
-              </div>
-              <div className="p-5 rounded-xl bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/15 transition-all duration-300">
-                <div className="text-2xl mb-3">🎯</div>
-                <div className="text-purple-400 font-semibold">Mastery</div>
-                <div className="text-sm text-gray-300 mt-1">Continuous Evolution</div>
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>
