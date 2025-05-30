@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
 interface ExperienceData {
@@ -22,247 +22,275 @@ const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
   index: number;
   isActive: boolean;
   onClick: () => void;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, x: -50 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    viewport={{ once: true }}
-    animate={{
-      marginBottom: isActive ? '2rem' : '1rem'
-    }}
-    transition={{
-      duration: 0.6,
-      delay: index * 0.15,
-      ease: [0.4, 0.0, 0.2, 1]
-    }}
-    layout
-    className="relative cursor-pointer"
-    onClick={onClick}
-    id={data.id}
-  >
-    {/* Dynamic Timeline connector */}
+}) => {  // Smooth animation configuration - removed unused variables to fix ESLint warnings
+
+  return (
     <motion.div
-      className="absolute left-[23px] top-0 w-1 bg-gradient-to-b from-red-500 via-orange-500 to-blue-500 rounded-full"
-      animate={{
-        height: isActive ? '100%' : '60px',
-        opacity: isActive ? 1 : 0.7,
-        width: isActive ? '4px' : '2px'
-      }}
-      transition={{
-        duration: 0.8,
-        ease: [0.4, 0.0, 0.2, 1],
-        height: { duration: 1.0 }
-      }}
-    />
-    
-    {/* Interactive Timeline Node */}
-    <motion.div
-      className="absolute left-0 top-3 h-10 w-10 rounded-full border-2 flex items-center justify-center cursor-pointer z-10"
-      animate={{
-        borderColor: isActive ? '#ef4444' : '#6b7280',
-        backgroundColor: isActive ? '#1f2937' : '#111827',
-        scale: isActive ? 1.15 : 1,
-        boxShadow: isActive ? '0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3)' : '0 0 6px rgba(107, 114, 128, 0.4)'
-      }}
-      whileHover={{
-        scale: 1.1,
-        boxShadow: '0 0 15px rgba(239, 68, 68, 0.5)'
-      }}
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
       transition={{
         duration: 0.6,
+        delay: index * 0.15,
         ease: [0.4, 0.0, 0.2, 1]
       }}
+      className={`relative cursor-pointer transition-all duration-400 ${
+        isActive ? 'mb-8' : 'mb-4'
+      }`}
+      onClick={onClick}
+      id={data.id}
+      style={{ minHeight: isActive ? 'auto' : '80px' }}
     >
-      <span className="text-lg">{data.icon}</span>
-    </motion.div>
-    
-    {/* Content Card */}
-    <motion.div
-      className="group"
-      animate={{
-        backgroundColor: isActive ? 'rgba(31, 41, 55, 0.9)' : 'transparent',
-        padding: isActive ? '2rem 1.5rem 3rem 4rem' : '0.5rem 0 1.5rem 4rem',
-        paddingLeft: '4rem',
-        borderRadius: isActive ? '1rem' : '0.5rem',
-        border: isActive ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid transparent',
-        marginLeft: isActive ? '0.5rem' : '0rem',
-        boxShadow: isActive ? '0 4px 20px rgba(0, 0, 0, 0.3)' : 'none'
-      }}
-      transition={{
-        duration: 0.8,
-        ease: [0.4, 0.0, 0.2, 1]
-      }}
-      layout
-    >
-      <motion.h4
-        className="font-bold transition-colors cursor-pointer"
-        animate={{
-          color: isActive ? '#fbbf24' : '#ffffff',
-          fontSize: isActive ? '1.25rem' : '1.125rem',
-          marginBottom: isActive ? '0.75rem' : '0.5rem'
-        }}
-        transition={{
-          duration: 0.6,
-          ease: [0.4, 0.0, 0.2, 1]
-        }}
-      >
-        {data.title}
-      </motion.h4>
-
+      {/* Dynamic Timeline connector */}
       <motion.div
-        className="flex flex-wrap items-center gap-3 text-sm"
+        className="absolute left-[23px] top-0 w-1 bg-gradient-to-b from-red-500 via-orange-500 to-blue-500 rounded-full"
         animate={{
-          marginBottom: isActive ? '1rem' : '0.5rem',
-          opacity: isActive ? 1 : 0.8
+          height: isActive ? '100%' : '60px',
+          opacity: isActive ? 1 : 0.7,
+          width: isActive ? '4px' : '2px'
         }}
         transition={{
-          duration: 0.5,
+          duration: 0.4,
+          ease: [0.4, 0.0, 0.2, 1]
+        }}
+      />
+
+      {/* Interactive Timeline Node */}
+      <motion.div
+        className="absolute left-0 top-3 h-10 w-10 rounded-full border-2 flex items-center justify-center cursor-pointer z-10"
+        animate={{
+          borderColor: isActive ? '#ef4444' : '#6b7280',
+          backgroundColor: isActive ? '#1f2937' : '#111827',
+          scale: isActive ? 1.15 : 1,
+          boxShadow: isActive 
+            ? '0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3)' 
+            : '0 0 6px rgba(107, 114, 128, 0.4)'
+        }}
+        whileHover={{
+          scale: isActive ? 1.2 : 1.1,
+          boxShadow: '0 0 25px rgba(239, 68, 68, 0.7), 0 0 50px rgba(239, 68, 68, 0.4)'
+        }}
+        whileTap={{
+          scale: 1.0,
+          transition: { duration: 0.1 }
+        }}
+        transition={{
+          duration: 0.4,
           ease: [0.4, 0.0, 0.2, 1]
         }}
       >
-        <span className="text-red-400 font-medium">
-          {data.company || data.institution}
-        </span>
-        <span className="w-1 h-1 rounded-full bg-gray-500" />
-        <span className="text-gray-400 font-medium">{data.period}</span>
-        <span className="w-1 h-1 rounded-full bg-gray-500" />
-        <span className="text-blue-400 text-xs uppercase tracking-wide font-medium bg-blue-500/10 px-2 py-1 rounded-full border border-blue-500/20">
-          {data.type}
-        </span>
+        <motion.span 
+          className="text-lg"
+          animate={{
+            scale: isActive ? 1.1 : 1
+          }}
+          transition={{
+            duration: 0.3,
+            ease: [0.4, 0.0, 0.2, 1]
+          }}
+        >
+          {data.icon}
+        </motion.span>
       </motion.div>
 
-      {/* Description - Always visible but with different styling */}
-      <motion.p
-        className="text-gray-300 leading-relaxed"
+      {/* Content Card */}
+      <motion.div
+        className="group"
         animate={{
-          fontSize: isActive ? '0.95rem' : '0.875rem',
-          lineHeight: isActive ? '1.6' : '1.5',
-          marginBottom: isActive ? '1rem' : '0.75rem',
-          opacity: isActive ? 1 : 0.9
+          backgroundColor: isActive ? 'rgba(31, 41, 55, 0.9)' : 'transparent',
+          padding: isActive ? '2rem 1.5rem 2rem 4rem' : '0.5rem 0 1.5rem 4rem',
+          borderRadius: isActive ? '1rem' : '0.5rem',
+          border: isActive ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid transparent',
+          marginLeft: isActive ? '0.5rem' : '0rem',
+          boxShadow: isActive ? '0 4px 20px rgba(0, 0, 0, 0.3)' : 'none'
         }}
         transition={{
           duration: 0.6,
           ease: [0.4, 0.0, 0.2, 1]
         }}
-        layout
       >
-        {isActive ? data.description : `${data.description.substring(0, 120)}${data.description.length > 120 ? '...' : ''}`}
-      </motion.p>
-
-      {/* Achievements (only show when active) */}
-      {isActive && data.achievements && (
-        <motion.div
-          initial={{ opacity: 0, y: 15, height: 0 }}
-          animate={{ opacity: 1, y: 0, height: 'auto' }}
-          exit={{ opacity: 0, y: -15, height: 0 }}
-          transition={{
-            duration: 0.8,
-            ease: [0.4, 0.0, 0.2, 1],
-            delay: 0.2
-          }}
-          className="mb-5 p-4 rounded-lg bg-gradient-to-r from-orange-500/8 to-yellow-500/8 border border-orange-500/25 overflow-hidden"
-        >
-          <h5 className="text-sm font-semibold text-orange-400 mb-3 flex items-center gap-2">
-            <span className="text-base">🏆</span>
-            Key Achievements:
-          </h5>
-          <ul className="space-y-2">
-            {data.achievements.map((achievement, i) => (
-              <motion.li
-                key={i}
-                className="text-sm text-gray-300 flex items-start gap-3"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.3 + (i * 0.1),
-                  ease: [0.4, 0.0, 0.2, 1]
-                }}
-              >
-                <span className="text-green-400 mt-0.5 flex-shrink-0">✓</span>
-                <span className="leading-relaxed">{achievement}</span>
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
-      )}
-
-      {/* Technologies - Always visible but condensed when collapsed */}
-      {data.technologies && (
-        <motion.div
-          className="flex flex-wrap gap-2"
+        <motion.h4
+          className="font-bold transition-colors cursor-pointer"
           animate={{
-            opacity: isActive ? 1 : 0.8,
-            marginBottom: isActive ? '0rem' : '0.5rem'
+            color: isActive ? '#fbbf24' : '#ffffff',
+            fontSize: isActive ? '1.25rem' : '1.125rem',
+            marginBottom: isActive ? '0.75rem' : '0.5rem'
+          }}
+          transition={{
+            duration: 0.6,
+            ease: [0.4, 0.0, 0.2, 1]
+          }}
+        >
+          {data.title}
+        </motion.h4>
+
+        <motion.div
+          className="flex flex-wrap items-center gap-3 text-sm"
+          animate={{
+            marginBottom: isActive ? '1rem' : '0.5rem',
+            opacity: isActive ? 1 : 0.8
           }}
           transition={{
             duration: 0.5,
             ease: [0.4, 0.0, 0.2, 1]
           }}
-          layout
         >
-          {(isActive ? data.technologies : data.technologies.slice(0, 4)).map((tech, i) => (
-            <motion.span
-              key={i}
-              className="px-2.5 py-1 text-xs rounded-full border transition-all duration-300 font-medium"
-              animate={{
-                backgroundColor: isActive ? 'rgba(239, 68, 68, 0.12)' : 'rgba(31, 41, 55, 1)',
-                borderColor: isActive ? 'rgba(239, 68, 68, 0.6)' : 'rgba(107, 114, 128, 1)',
-                color: isActive ? '#fbbf24' : '#d1d5db'
-              }}
-              whileHover={{
-                scale: 1.05,
-                backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                borderColor: 'rgba(239, 68, 68, 0.8)'
-              }}
-              transition={{
-                duration: 0.4,
-                ease: [0.4, 0.0, 0.2, 1]
-              }}
-              layout
-            >
-              {tech}
-            </motion.span>
-          ))}
-          {!isActive && data.technologies.length > 4 && (
-            <motion.span
-              className="px-2.5 py-1 text-xs rounded-full border border-gray-600 bg-gray-800 text-gray-400 font-medium"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.4,
-                ease: [0.4, 0.0, 0.2, 1]
-              }}
-            >
-              +{data.technologies.length - 4}
-            </motion.span>
-          )}
+          <span className="text-red-400 font-medium">
+            {data.company || data.institution}
+          </span>
+          <span className="w-1 h-1 rounded-full bg-gray-500" />
+          <span className="text-gray-400 font-medium">{data.period}</span>
+          <span className="w-1 h-1 rounded-full bg-gray-500" />
+          <span className="text-blue-400 text-xs uppercase tracking-wide font-medium bg-blue-500/10 px-2 py-1 rounded-full border border-blue-500/20">
+            {data.type}
+          </span>
         </motion.div>
-      )}
+
+        {/* Description - Always visible but with different styling */}
+        <motion.p
+          className="text-gray-300 leading-relaxed"
+          animate={{
+            fontSize: isActive ? '0.95rem' : '0.875rem',
+            lineHeight: isActive ? '1.6' : '1.5',
+            marginBottom: isActive ? '1.25rem' : '0.75rem',
+            opacity: isActive ? 1 : 0.9
+          }}
+          transition={{
+            duration: 0.5,
+            ease: [0.4, 0.0, 0.2, 1]
+          }}
+        >
+          {isActive ? data.description : `${data.description.substring(0, 120)}${data.description.length > 120 ? '...' : ''}`}
+        </motion.p>
+
+        {/* Achievements (only show when active) */}
+        <AnimatePresence mode="wait">
+          {isActive && data.achievements && (
+            <motion.div
+              initial={{ opacity: 0, scaleY: 0, marginBottom: 0 }}
+              animate={{ opacity: 1, scaleY: 1, marginBottom: 20 }}
+              exit={{ opacity: 0, scaleY: 0, marginBottom: 0 }}
+              transition={{
+                duration: 0.5,
+                ease: [0.4, 0.0, 0.2, 1],
+                opacity: { duration: 0.3, delay: isActive ? 0.1 : 0 },
+                scaleY: { duration: 0.4, delay: isActive ? 0.1 : 0 },
+                marginBottom: { duration: 0.4, delay: isActive ? 0.1 : 0 }
+              }}
+              style={{ transformOrigin: 'top' }}
+              className="p-4 rounded-lg bg-gradient-to-r from-orange-500/8 to-yellow-500/8 border border-orange-500/25 overflow-hidden"
+            >
+              <motion.h5 
+                className="text-sm font-semibold text-orange-400 mb-3 flex items-center gap-2"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+              >
+                <span className="text-base">🏆</span>
+                Key Achievements:
+              </motion.h5>
+              <ul className="space-y-2">
+                {data.achievements.map((achievement, i) => (
+                  <motion.li
+                    key={i}
+                    className="text-sm text-gray-300 flex items-start gap-3"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.3 + (i * 0.05),
+                      ease: [0.4, 0.0, 0.2, 1]
+                    }}
+                  >
+                    <span className="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+                    <span className="leading-relaxed">{achievement}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Technologies - Always visible but condensed when collapsed */}
+        {data.technologies && (
+          <motion.div
+            className="flex flex-wrap gap-2"
+            animate={{
+              opacity: isActive ? 1 : 0.8
+            }}
+            transition={{
+              duration: 0.4,
+              ease: [0.4, 0.0, 0.2, 1]
+            }}
+          >            <AnimatePresence mode="popLayout">
+              {(isActive ? data.technologies : data.technologies.slice(0, 4)).map((tech) => (
+                <motion.span
+                  key={tech}
+                  className="px-2.5 py-1 text-xs rounded-full border transition-all duration-300 font-medium"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    backgroundColor: isActive ? 'rgba(239, 68, 68, 0.12)' : 'rgba(31, 41, 55, 1)',
+                    borderColor: isActive ? 'rgba(239, 68, 68, 0.6)' : 'rgba(107, 114, 128, 1)',
+                    color: isActive ? '#fbbf24' : '#d1d5db'
+                  }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{
+                    scale: 1.05,
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                    borderColor: 'rgba(239, 68, 68, 0.8)'
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.4, 0.0, 0.2, 1]
+                  }}
+                >
+                  {tech}
+                </motion.span>
+              ))}
+            </AnimatePresence>
+            {!isActive && data.technologies.length > 4 && (
+              <motion.span
+                className="px-2.5 py-1 text-xs rounded-full border border-gray-600 bg-gray-800 text-gray-400 font-medium"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.3,
+                  ease: [0.4, 0.0, 0.2, 1],
+                  delay: 0.1
+                }}
+              >
+                +{data.technologies.length - 4}
+              </motion.span>
+            )}
+          </motion.div>
+        )}
+      </motion.div>
     </motion.div>
-  </motion.div>
-);
+  );
+};
 
 const Experience = () => {
   const [activeCard, setActiveCard] = useState<string | null>('senior-devops');
-  
+
   const handleCardClick = (cardId: string) => {
     // If clicking on the active card, collapse it
     if (activeCard === cardId) {
       setActiveCard(null);
     } else {
       setActiveCard(cardId);
-      // Smooth scroll to the clicked card
+      // Smooth scroll to the clicked card with reduced delay
       setTimeout(() => {
         const element = document.getElementById(cardId);
         if (element) {
           element.scrollIntoView({
             behavior: 'smooth',
-            block: 'center',
+            block: 'nearest',
             inline: 'nearest'
           });
         }
-      }, 100);
+      }, 50);
     }
   };
 
@@ -394,10 +422,9 @@ const Experience = () => {
           <div className="grid lg:grid-cols-2 gap-20 xl:gap-24">
             {/* Professional Experience */}
             <motion.div
-              className="space-y-8"
-              layout
+              className="space-y-4"
               transition={{
-                duration: 0.6,
+                duration: 0.4,
                 ease: [0.4, 0.0, 0.2, 1]
               }}
             >
@@ -429,10 +456,9 @@ const Experience = () => {
 
             {/* Educational Background */}
             <motion.div
-              className="space-y-8"
-              layout
+              className="space-y-4"
               transition={{
-                duration: 0.6,
+                duration: 0.4,
                 ease: [0.4, 0.0, 0.2, 1]
               }}
             >

@@ -70,7 +70,8 @@ const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
               <div className="h-12 bg-gray-800 rounded w-1/4 mx-auto animate-pulse" />
             </div>
           </div>
-        );      case 'experience':
+        );      
+        case 'experience':
         return (
           <div className="space-y-8">
             {[...Array(3)].map((_, index) => (
