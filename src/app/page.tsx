@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import Hero from "./sections/Hero";
 import ClientWrapper from "./components/ClientWrapper";
 import SkeletonScreen from './components/SkeletonScreen';
-
 // Lazy load all sections except Hero
 const About = dynamic(() => import("./sections/About"), {
   loading: () => <SkeletonScreen type="about" />,
@@ -47,10 +46,10 @@ export default function Home() {
       <main className="bg-black text-white min-h-screen">
         {/* All sections */}        <Hero />
         <About />            <Skills />
-        <Experience />
-        <Testimonials />
+        <Experience />        <Testimonials />
         <Projects />
         <Certifications />
+        
         <Contact />
       </main>
     </ClientWrapper>

@@ -1,17 +1,15 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { FaGithub, FaExternalLinkAlt, FaServer, FaCode, FaLightbulb } from 'react-icons/fa';
-import OptimizedImage from '../components/OptimizedImage';
 import ProjectModal from '../components/ProjectModal';
+import DottedNavButton from '../components/DottedNavButton';
 
 export interface Project {
   title: string;
   description: string;
   detailedDescription: string;
-  image: string;
-  images?: string[];
   category: 'Infrastructure' | 'Automation' | 'DevOps';
   tags: string[];
   technologies: string[];
@@ -27,7 +25,6 @@ const projects: Project[] = [
     title: "Cloud Infrastructure Migration",
     description: "Enterprise-scale on-premise to AWS cloud migration with zero downtime",
     detailedDescription: "Architected and executed a comprehensive cloud migration strategy for a mission-critical infrastructure supporting 100+ microservices.",
-    image: "/projects/cloud-migration.jpg",
     category: 'Infrastructure',
     tags: ["Cloud Migration", "High Availability", "Cost Optimization"],
     technologies: ["AWS", "Terraform", "Docker", "Route53", "EKS", "RDS"],
@@ -52,7 +49,6 @@ const projects: Project[] = [
     title: "Kubernetes Platform Engineering",
     description: "Production-grade Kubernetes platform with automated scaling and self-healing",
     detailedDescription: "Designed and implemented a robust Kubernetes platform supporting multiple development teams and environments.",
-    image: "/projects/kubernetes.jpg",
     category: 'Infrastructure',
     tags: ["Container Orchestration", "Platform Engineering"],
     technologies: ["Kubernetes", "Helm", "Prometheus", "Grafana", "ArgoCD", "Istio"],
@@ -77,7 +73,6 @@ const projects: Project[] = [
     title: "GitOps CI/CD Pipeline",
     description: "Fully automated GitOps pipeline with advanced deployment strategies",
     detailedDescription: "End-to-end CI/CD automation implementing GitOps principles for a microservices architecture.",
-    image: "/projects/cicd.jpg",
     category: 'Automation',
     tags: ["CI/CD", "GitOps", "Automation"],
     technologies: ["ArgoCD", "GitHub Actions", "Terraform", "Docker"],
@@ -102,7 +97,6 @@ const projects: Project[] = [
     title: "Multi-Region Disaster Recovery",
     description: "Designed and implemented a comprehensive DR strategy with automated failover across multiple regions",
     detailedDescription: "Enterprise-grade disaster recovery solution ensuring business continuity with minimal data loss and downtime.",
-    image: "/projects/disaster-recovery.jpg",
     category: 'Infrastructure',
     tags: ["Disaster Recovery", "High Availability", "Cloud Architecture"],
     technologies: ["Azure Site Recovery", "Traffic Manager", "PowerShell", "Terraform"],
@@ -127,7 +121,6 @@ const projects: Project[] = [
     title: "DevSecOps Pipeline Enhancement",
     description: "Integrated security scanning and compliance checks into the CI/CD pipeline",
     detailedDescription: "Advanced DevSecOps implementation with automated security testing, vulnerability scanning, and compliance verification.",
-    image: "/projects/devsecops.jpg",
     category: 'Automation',
     tags: ["Security", "Compliance", "CI/CD"],
     technologies: ["SonarQube", "Snyk", "OWASP", "Jenkins", "Artifactory"],
@@ -152,7 +145,6 @@ const projects: Project[] = [
     title: "Container Platform Optimization",
     description: "Optimized Kubernetes cluster performance and resource utilization",
     detailedDescription: "Comprehensive Kubernetes platform optimization project focusing on cost efficiency and performance.",
-    image: "/projects/kubernetes-opt.jpg",
     category: 'DevOps',
     tags: ["Kubernetes", "Performance", "Cost Optimization"],
     technologies: ["Kubernetes", "Prometheus", "Grafana", "Horizontal Pod Autoscaling"],
@@ -177,7 +169,6 @@ const projects: Project[] = [
     title: "Zero-Trust Security Implementation",
     description: "Implemented zero-trust architecture across cloud infrastructure",
     detailedDescription: "Complete zero-trust security model implementation with identity-based access control and network segmentation.",
-    image: "/projects/zero-trust.jpg",
     category: 'Infrastructure',
     tags: ["Security", "Zero-Trust", "IAM"],
     technologies: ["Azure AD", "NSGs", "Service Endpoints", "Private Link"],
@@ -202,7 +193,6 @@ const projects: Project[] = [
     title: "Infrastructure as Code Migration",
     description: "Migrated manual infrastructure provisioning to Infrastructure as Code",
     detailedDescription: "Large-scale migration of manually provisioned infrastructure to Terraform with state management and modular design.",
-    image: "/projects/iac.jpg",
     category: 'Automation',
     tags: ["IaC", "Terraform", "Automation"],
     technologies: ["Terraform", "Azure DevOps", "Python", "Go"],
@@ -225,16 +215,161 @@ const projects: Project[] = [
   }
 ];
 
+const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
+  return (
+    <motion.div
+      className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-6 backdrop-blur-sm hover:border-red-500/30 transition-all duration-300 h-96 cursor-pointer flex flex-col"
+      onClick={onClick}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      {/* Category Badge */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="px-3 py-1 bg-red-500/20 text-red-400 text-xs rounded-full font-medium">
+          {project.category}
+        </span>
+      </div>
+
+      {/* Content Area - Dynamic space distribution */}
+      <div className="flex-grow flex flex-col mb-4">
+        {/* Project Title - Dynamic */}
+        <div className="mb-3">
+          <h3 className="text-lg font-semibold text-white group-hover:text-red-400 transition-colors leading-6">
+            {project.title}
+          </h3>
+        </div>        {/* Project Description - Dynamic */}
+        <div className="flex-grow mb-4">
+          <p className="text-gray-300 text-sm leading-relaxed">
+            {project.description}
+          </p>
+        </div>
+          {/* Technologies - Dynamic */}
+        <div className="flex items-center">
+          <div className="flex flex-wrap gap-1">
+            {project.technologies.map((tech, i) => (
+              <span
+                key={i}
+                className="px-2 py-1 text-xs rounded-md bg-gray-800/60 text-gray-300 border border-gray-700/50 whitespace-nowrap"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer - View Details (Fixed at bottom) */}
+      <div className="flex items-center justify-between pt-4 border-t border-gray-700/50">
+        <div className="flex items-center gap-2 text-white text-sm">
+          <FaExternalLinkAlt className="w-3 h-3 text-red-400" />
+          <span>View Details</span>
+        </div>
+        {project.githubUrl && (
+          <a 
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-full bg-gray-800/60 hover:bg-gray-700 text-gray-200 transition-colors border border-gray-700/50"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <FaGithub className="w-4 h-4" />
+          </a>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
   
   const categories = ['All', ...Array.from(new Set(projects.map((project) => project.category)))];
   
   const filteredProjects = selectedCategory === 'All'
     ? projects
     : projects.filter((project) => project.category === selectedCategory);
+
+  // Create infinite scroll by duplicating projects
+  const infiniteProjects = [...filteredProjects, ...filteredProjects, ...filteredProjects];
+  const totalOriginalItems = filteredProjects.length;
+  const startIndex = totalOriginalItems;
+
+  // Calculate how many projects can fit in view (3 for desktop, 1 for mobile)
+  const getProjectsPerView = () => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768 ? 3 : 1;
+    }
+    return 3;
+  };
+
+  const [projectsPerView, setProjectsPerView] = useState(getProjectsPerView());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setProjectsPerView(getProjectsPerView());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Initialize scroll position to middle set
+  useEffect(() => {
+    if (carouselRef.current) {
+      const containerWidth = carouselRef.current.clientWidth;
+      const scrollPosition = startIndex * (containerWidth / projectsPerView);
+      carouselRef.current.scrollLeft = scrollPosition;
+      setCurrentIndex(0);
+    }
+  }, [selectedCategory, projectsPerView]);
+
+  // Check scroll position and handle infinite scroll
+  const checkScrollPosition = () => {
+    if (carouselRef.current) {
+      const { scrollLeft, clientWidth } = carouselRef.current;
+      const itemWidth = clientWidth / projectsPerView;
+      const rawIndex = Math.round(scrollLeft / itemWidth);
+      
+      // Handle infinite scroll wrapping
+      if (rawIndex >= totalOriginalItems * 2) {
+        carouselRef.current.scrollLeft = totalOriginalItems * itemWidth;
+        setCurrentIndex(0);
+      } else if (rawIndex < totalOriginalItems) {
+        carouselRef.current.scrollLeft = (totalOriginalItems * 2 - 1) * itemWidth;
+        setCurrentIndex(totalOriginalItems - 1);
+      } else {
+        const actualIndex = rawIndex - totalOriginalItems;
+        setCurrentIndex(actualIndex);
+      }
+    }
+  };
+
+  const scrollToIndex = (index: number) => {
+    if (carouselRef.current) {
+      const containerWidth = carouselRef.current.clientWidth;
+      const itemWidth = containerWidth / projectsPerView;
+      const scrollPosition = (startIndex + index) * itemWidth;
+      carouselRef.current.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+      setCurrentIndex(index);
+    }
+  };
+
+  const scrollLeft = () => {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : totalOriginalItems - 1;
+    scrollToIndex(newIndex);
+  };
+
+  const scrollRight = () => {
+    const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;
+    scrollToIndex(newIndex);
+  };
   
   const openProjectModal = (project: Project) => {
     setSelectedProject(project);
@@ -280,89 +415,46 @@ const Projects = () => {
               >
                 {category}
               </motion.button>
+            ))}          </div>
+        </motion.div>        {/* Projects Carousel */}
+        <div className="relative max-w-7xl mx-auto px-20">
+          {/* Navigation Arrows - Stylish Dotted Buttons */}
+          <DottedNavButton
+            direction="left"
+            onClick={scrollLeft}
+            className="absolute -left-8 top-1/2 -translate-y-1/2 z-20"
+          />
+
+          <DottedNavButton
+            direction="right"
+            onClick={scrollRight}
+            className="absolute -right-8 top-1/2 -translate-y-1/2 z-20"
+          />{/* Carousel Container */}
+          <div
+            ref={carouselRef}
+            onScroll={checkScrollPosition}
+            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {infiniteProjects.map((project, index) => (
+              <div key={`${project.title}-${Math.floor(index / totalOriginalItems)}`} className="flex-shrink-0 w-full md:w-1/3 px-3 snap-center">
+                <ProjectCard project={project} onClick={() => openProjectModal(project)} />
+              </div>
+            ))}
+          </div>          {/* Dot Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {filteredProjects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  currentIndex === index
+                    ? 'bg-red-500 w-8'
+                    : 'bg-gray-600 hover:bg-gray-500'
+                }`}
+              />
             ))}
           </div>
-        </motion.div>
-
-        {/* Projects grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="group relative bg-black shadow-xl rounded-lg overflow-hidden h-[400px] cursor-pointer border border-gray-800 hover:border-red-500/50 transition-all duration-300"
-                onClick={() => openProjectModal(project)}
-              >
-                {/* Project image */}
-                <div className="absolute inset-0 z-0">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-80 z-10" />
-                  <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-colors duration-300 z-0" />
-                  {project.image && (
-                    <OptimizedImage
-                      src={project.image}
-                      alt={project.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                  )}
-                </div>
-                
-                {/* Project content */}
-                <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
-                  <div className="bg-black/60 backdrop-blur-sm p-4 rounded-lg transform translate-y-4 group-hover:translate-y-0 opacity-90 group-hover:opacity-100 transition-all duration-500">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-md font-medium">
-                        {project.category}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-red-400 transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-300 text-sm line-clamp-2 mb-3">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {project.technologies.slice(0, 3).map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-1 text-xs rounded-md bg-gray-800/80 text-gray-300"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                      {project.technologies.length > 3 && (
-                        <span className="px-2 py-1 text-xs rounded-md bg-gray-800/80 text-gray-300">
-                          +{project.technologies.length - 3}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-white text-sm">
-                        <FaExternalLinkAlt className="w-3 h-3 text-red-400" />
-                        <span>View Details</span>
-                      </div>
-                      {project.githubUrl && (
-                        <a 
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-200 transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FaGithub className="w-4 h-4" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
         </div>
       </div>
         {/* Project Modal */}
