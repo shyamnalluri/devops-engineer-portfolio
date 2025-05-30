@@ -36,7 +36,8 @@ export const metadata: Metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://www.yourwebsite.com",
-  },  openGraph: {
+  },
+  openGraph: {
     type: "website",
     title: "Shyam Nalluri - DevOps Engineer",
     description:
@@ -62,15 +63,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "verification-code",
-  },  other: {
-    "theme-color": "#000000",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-    viewportFit: "cover",
+  other: {
+    "theme-color": "#000000",
   },
 };
 
@@ -80,15 +75,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth overscroll-none">      <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes, viewport-fit=cover"
-        />
-        <meta name="HandheldFriendly" content="true" />
-        <meta name="MobileOptimized" content="width" />
-      </head>      <body
-        className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}      >        <ClientWrapper>          <div className="overflow-x-hidden w-full">
+    <html lang="en" className="scroll-smooth overscroll-none">
+      <body
+        className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}
+      >
+        <ClientWrapper>
+          <div className="overflow-x-hidden w-full">
             <Navigation />
             <main className="relative z-10 lg:ml-[214px]">{children}</main>
           </div>

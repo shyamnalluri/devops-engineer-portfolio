@@ -456,11 +456,13 @@ const Projects = () => {
             ))}
           </div>
         </div>
-      </div>
-        {/* Project Modal */}
+      </div>        {/* Project Modal */}
       <ProjectModal
         project={selectedProject}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setSelectedProject(null);
+          setIsModalOpen(false);
+        }}
       />
     </section>
   );
