@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import OptimizedImage from '../components/OptimizedImage';
-import Image from 'next/image';
 
 interface Certification {
   name: string;
@@ -71,16 +70,14 @@ const Certifications = () => {
 
   const filteredCertifications = selectedCategory === 'all'
     ? certifications
-    : certifications.filter(cert => cert.category === selectedCategory);
-  return (    <section 
+    : certifications.filter(cert => cert.category === selectedCategory);  return (    <section 
       id="certifications" 
       className="py-8 sm:py-12 bg-black relative overflow-hidden"
     >
+      {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div

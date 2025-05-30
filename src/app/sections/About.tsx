@@ -70,14 +70,14 @@ const About = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
               className="space-y-6"
-            >                <div className="prose prose-lg max-w-none prose-invert">
-                <p className="text-gray-300 text-lg leading-relaxed first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1">
+            >              <div className="prose prose-lg max-w-none prose-invert">
+                <p className="text-gray-300 text-lg leading-relaxed text-justify first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1">
                   I&apos;m a passionate DevOps Engineer with 5 years of experience streamlining
                   development processes and optimizing infrastructure. My expertise lies in
                   bridging the gap between development and operations, creating robust,
                   scalable, and highly available systems that empower development teams.
                 </p>
-                <p className="text-gray-400 text-lg leading-relaxed">
+                <p className="text-gray-400 text-lg leading-relaxed text-justify">
                   My approach combines automation with security best practices.
                   I&apos;ve helped organizations reduce deployment time by <span className="text-red-500 font-semibold">75%</span> through
                   implementing efficient CI/CD pipelines and infrastructure as code solutions. Every project is an

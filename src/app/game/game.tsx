@@ -217,13 +217,12 @@ const GamePage = () => {
           this.statusText = this.add.text(width - 16, 16, '', { 
             fontSize: '16px', 
             color: '#6ee7b7',
-            fontFamily: 'Arial, sans-serif',
-            stroke: '#000000',
+            fontFamily: 'Arial, sans-serif',          stroke: '#000000',
             strokeThickness: 2
           }).setOrigin(1, 0);
           
           // Add instruction text
-          const instructions = this.add.text(width/2, 50, 'Press SPACE or UP ARROW to Jump', {
+          this.add.text(width/2, 50, 'Press SPACE or UP ARROW to Jump', {
             fontSize: '16px',
             color: '#ffff99',
             fontFamily: 'Arial, sans-serif',
@@ -238,11 +237,9 @@ const GamePage = () => {
         }
 
         update(time: number) {
-          // If game over, don't update anything
-          if (this.isGameOver) return;
+          // If game over, don't update anything        if (this.isGameOver) return;
 
           const width = this.sys.game.canvas.width;
-          const height = this.sys.game.canvas.height;
           
           // Lock player X position (Chrome dino style)
           // Reset X position if it moved somehow
@@ -343,10 +340,9 @@ const GamePage = () => {
             if (sprite.x < -100) {
               sprite.destroy();
             }
-          });
-          
-          // Collision with power-ups
-          this.physics.overlap(this.player, this.powerUps, this.collectPowerUp, undefined, this);
+          });          // Collision with power-ups
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          this.physics.overlap(this.player, this.powerUps, this.collectPowerUp as any, undefined, this);
           
           // Game over if AI catches player
           // As score increases, required distance gets smaller
@@ -400,10 +396,9 @@ const GamePage = () => {
           obstacle.setVelocityX(-this.gameSpeed);
           obstacle.setImmovable(true);
           
-          // Make sure the obstacle isn't affected by gravity
-          this.physics.world.enableBody(obstacle, Phaser.Physics.Arcade.DYNAMIC_BODY);
+          // Make sure the obstacle isn't affected by gravity          this.physics.world.enableBody(obstacle, Phaser.Physics.Arcade.DYNAMIC_BODY);
           if (obstacle.body) {
-            // @ts-ignore - This property exists but TypeScript doesn't recognize it
+            // @ts-expect-error - This property exists but TypeScript doesn't recognize it
             obstacle.body.allowGravity = false;
           }
           
@@ -417,10 +412,9 @@ const GamePage = () => {
             
             secondObstacle.setVelocityX(-this.gameSpeed);
             secondObstacle.setImmovable(true);
-            
-            this.physics.world.enableBody(secondObstacle, Phaser.Physics.Arcade.DYNAMIC_BODY);
+              this.physics.world.enableBody(secondObstacle, Phaser.Physics.Arcade.DYNAMIC_BODY);
             if (secondObstacle.body) {
-              // @ts-ignore - This property exists but TypeScript doesn't recognize it
+              // @ts-expect-error - This property exists but TypeScript doesn't recognize it
               secondObstacle.body.allowGravity = false;
               // Set a more accurate collision box
               secondObstacle.body.setSize(secondObstacle.width * 0.6, secondObstacle.height * 0.6);
@@ -450,11 +444,9 @@ const GamePage = () => {
           
           // Move with game speed
           powerUp.setVelocityX(-this.gameSpeed);
-          
-          // Enable physics but don't apply gravity
-          this.physics.world.enableBody(powerUp, Phaser.Physics.Arcade.DYNAMIC_BODY);
-          if (powerUp.body) {
-            // @ts-ignore
+            // Enable physics but don't apply gravity
+          this.physics.world.enableBody(powerUp, Phaser.Physics.Arcade.DYNAMIC_BODY);          if (powerUp.body) {
+            // @ts-expect-error - Phaser types don't include allowGravity property
             powerUp.body.allowGravity = false;
           }
           
@@ -466,12 +458,10 @@ const GamePage = () => {
             ease: 'Sine.easeInOut',
             yoyo: true,
             repeat: -1
-          });
-        }
-        
-        collectPowerUp(player: any, powerUp: any) {
-          // Remove the power-up
-          const powerUpSprite = powerUp as Phaser.Physics.Arcade.Sprite;
+          });        }
+            collectPowerUp = (object1: Phaser.Types.Physics.Arcade.GameObjectWithBody, object2: Phaser.Types.Physics.Arcade.GameObjectWithBody) => {
+          // Cast to sprites for easier use  
+          const powerUpSprite = object2 as Phaser.Physics.Arcade.Sprite;
           powerUpSprite.destroy();
           
           // Apply different effects based on power-up type
@@ -603,12 +593,11 @@ const GamePage = () => {
             const sprite = powerUp as Phaser.Physics.Arcade.Sprite;
             sprite.setVelocityX(0);
           });
-          
-          // Game over text
+              // Game over text
           const width = this.sys.game.canvas.width;
           const height = this.sys.game.canvas.height;
           
-          const gameOverPanel = this.add.rectangle(
+          this.add.rectangle(
             width/2, 
             height/2, 
             300, 

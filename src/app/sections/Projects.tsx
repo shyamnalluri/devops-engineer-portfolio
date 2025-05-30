@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaServer, FaCode, FaLightbulb } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import ProjectModal from '../components/ProjectModal';
 import DottedNavButton from '../components/DottedNavButton';
 
@@ -283,7 +283,6 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   
@@ -316,7 +315,6 @@ const Projects = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   // Initialize scroll position to middle set
   useEffect(() => {
     if (carouselRef.current) {
@@ -325,7 +323,7 @@ const Projects = () => {
       carouselRef.current.scrollLeft = scrollPosition;
       setCurrentIndex(0);
     }
-  }, [selectedCategory, projectsPerView]);
+  }, [selectedCategory, projectsPerView, startIndex]);
 
   // Check scroll position and handle infinite scroll
   const checkScrollPosition = () => {
@@ -370,18 +368,15 @@ const Projects = () => {
     const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;
     scrollToIndex(newIndex);
   };
-  
-  const openProjectModal = (project: Project) => {
+    const openProjectModal = (project: Project) => {
     setSelectedProject(project);
-    setIsModalOpen(true);
   };
 
-  return (
-    <section id="projects" className="py-12 bg-black relative">
+  return (    <section id="projects" className="py-12 bg-black relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full blur-3xl" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -455,12 +450,10 @@ const Projects = () => {
             ))}
           </div>
         </div>
-      </div>        {/* Project Modal */}
-      <ProjectModal
+      </div>        {/* Project Modal */}      <ProjectModal
         project={selectedProject}
         onClose={() => {
           setSelectedProject(null);
-          setIsModalOpen(false);
         }}
       />
     </section>

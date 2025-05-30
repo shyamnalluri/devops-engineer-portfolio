@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 
 interface Command {
@@ -16,8 +16,7 @@ const LiveTerminal = () => {
   const [showCursor, setShowCursor] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [showOutput, setShowOutput] = useState(false);
-
-  const commands: Command[] = [
+  const commands: Command[] = useMemo(() => [
     {
       prompt: "~/devops$",
       command: "kubectl get pods -n production",
@@ -79,11 +78,10 @@ const LiveTerminal = () => {
       prompt: "~/devops$",
       command: "aws eks update-kubeconfig --region us-west-2 --name prod-cluster",
       output: [
-        "Added new context arn:aws:eks:us-west-2:123456789012:cluster/prod-cluster to ~/.kube/config"
-      ],
+        "Added new context arn:aws:eks:us-west-2:123456789012:cluster/prod-cluster to ~/.kube/config"      ],
       delay: 110
     }
-  ];
+  ], []);
 
   // Typewriter effect
   useEffect(() => {
@@ -119,7 +117,7 @@ const LiveTerminal = () => {
         }, 2000);
       }, 500);
     }
-  }, [currentText, currentCommandIndex]);
+  }, [currentText, currentCommandIndex, commands]);
 
   // Cursor blinking effect
   useEffect(() => {

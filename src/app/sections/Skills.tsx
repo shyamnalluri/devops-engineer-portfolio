@@ -67,14 +67,11 @@ const Skills = () => {
   const filteredSkills = selectedCategory === 'All' 
     ? skills 
     : skills.filter(skill => skill.category === selectedCategory);
-  return (
-    <section id="skills" className="py-12 bg-black relative overflow-hidden">
-      {/* Background Effects */}
+  return (    <section id="skills" className="py-12 bg-black relative overflow-hidden">
+      {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      
-      {/* Decorative elements from design */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl" />
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div

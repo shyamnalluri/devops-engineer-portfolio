@@ -51,7 +51,7 @@ export default function GamePage() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-blue-400 text-xl">•</span> 
-                <span>Stay ahead of the AI that's chasing you from behind</span>
+                <span>Stay ahead of the AI that&apos;s chasing you from behind</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-blue-400 text-xl">•</span> 

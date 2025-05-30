@@ -1,8 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { FaLinkedin, FaQuoteLeft, FaTimes } from 'react-icons/fa';
+import { FaLinkedin, FaQuoteLeft } from 'react-icons/fa';
 
 interface Recommendation {
   id: number;

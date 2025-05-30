@@ -19,14 +19,11 @@ const Contact = () => {  const socialLinks = [
       icon: <FaEnvelope className="w-6 h-6" />,
       url: 'mailto:nallurishyam@gmail.com',
     },
-  ];  return (
-    <section id="contact" className="relative py-12 bg-black overflow-hidden">
-      {/* Background Pattern */}
+  ];  return (    <section id="contact" className="relative py-12 bg-black overflow-hidden">
+      {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-
-      {/* Decorative Elements */}
-      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-orange-500/20 rounded-full filter blur-[80px]" />
-      <div className="absolute bottom-1/4 -right-20 w-72 h-72 bg-purple-500/20 rounded-full filter blur-[80px]" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
 
       <div className="container relative mx-auto px-4">
         <motion.div
@@ -53,13 +50,13 @@ const Contact = () => {  const socialLinks = [
               viewport={{ once: true }}
               className="text-gray-400 text-lg max-w-2xl mx-auto mt-8"
             >
-              Have a project in mind? Let's work together to create something amazing.
+              Have a project in mind? Let&apos;s work together to create something amazing.
             </motion.p>
           </div>          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 bg-gray-900 rounded-xl shadow-lg shadow-red-500/5 border border-gray-800 overflow-hidden">
             {/* Contact Info Column */}
             <div className="lg:col-span-2 bg-gradient-to-br from-gray-900 to-black text-white p-10">
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-              <p className="text-gray-400 mb-4">Fill up the form and I'll get back to you within 24 hours.</p>
+              <p className="text-gray-400 mb-4">Fill up the form and I&apos;ll get back to you within 24 hours.</p>
               
               <div className="space-y-6">                {/* Phone section removed */}
                 

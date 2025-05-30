@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
-import { FaLinkedin, FaQuoteLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { FaLinkedin, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 interface Testimonial {
   id: number;
@@ -30,7 +30,7 @@ const testimonials: Testimonial[] = [
     author: "Sarah Johnson",
     title: "Engineering Manager",
     company: "Cloud Innovations Ltd.",
-    text: "I've had the pleasure of working with Shyam on several critical infrastructure projects. His expertise in cloud technologies and automation has been invaluable to our team's success. Shyam consistently delivers high-quality solutions and has an excellent ability to mentor junior team members.",
+    text: "I&apos;ve had the pleasure of working with Shyam on several critical infrastructure projects. His expertise in cloud technologies and automation has been invaluable to our team&apos;s success. Shyam consistently delivers high-quality solutions and has an excellent ability to mentor junior team members.",
     relationship: "Managed Shyam directly",
     linkedinUrl: "#"
   },
@@ -39,7 +39,7 @@ const testimonials: Testimonial[] = [
     author: "Michael Chen",
     title: "Lead DevOps Engineer",
     company: "Global Systems Corp",
-    text: "Shyam's knowledge of DevOps practices and cloud platforms is outstanding. He has a unique ability to solve complex problems while maintaining high standards of code quality and security. His collaborative approach and technical leadership make him an asset to any development team.",
+    text: "Shyam&apos;s knowledge of DevOps practices and cloud platforms is outstanding. He has a unique ability to solve complex problems while maintaining high standards of code quality and security. His collaborative approach and technical leadership make him an asset to any development team.",
     relationship: "Collaborated with Shyam",
     linkedinUrl: "#"
   },
@@ -48,7 +48,7 @@ const testimonials: Testimonial[] = [
     author: "Emily Rodriguez",
     title: "Product Manager",
     company: "InnovateCloud",
-    text: "Shyam's technical expertise and communication skills are exceptional. He bridges the gap between technical and business requirements seamlessly. His contributions to our product delivery pipeline were instrumental in reducing deployment times by 60%.",
+    text: "Shyam&apos;s technical expertise and communication skills are exceptional. He bridges the gap between technical and business requirements seamlessly. His contributions to our product delivery pipeline were instrumental in reducing deployment times by 60%.",
     relationship: "Worked closely with Shyam",
     linkedinUrl: "#"
   },
@@ -58,7 +58,7 @@ const testimonials: Testimonial[] = [
     title: "VP of Engineering",
     company: "NextGen Technologies",
     text: "Shyam is a highly skilled professional who brings both technical depth and strategic thinking to every project. His implementation of infrastructure as code practices transformed our deployment process and significantly improved our system reliability.",
-    relationship: "Supervised Shyam's work",
+    relationship: "Supervised Shyam&apos;s work",
     linkedinUrl: "#"
   },
   {
@@ -66,7 +66,7 @@ const testimonials: Testimonial[] = [
     author: "Lisa Thompson",
     title: "Senior Software Engineer",
     company: "CodeCraft Solutions",
-    text: "Working alongside Shyam has been an incredible learning experience. His expertise in containerization and orchestration helped our team adopt modern DevOps practices. He's always willing to share knowledge and mentor others.",
+    text: "Working alongside Shyam has been an incredible learning experience. His expertise in containerization and orchestration helped our team adopt modern DevOps practices. He&apos;s always willing to share knowledge and mentor others.",
     relationship: "Team member with Shyam",
     linkedinUrl: "#"
   }
@@ -78,9 +78,8 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-8 md:p-12 backdrop-blur-sm hover:border-red-500/30 transition-all duration-300 h-96 md:h-[450px] lg:h-[350px] flex flex-col justify-center">
           {/* Testimonial Text */}
-          <div className="mb-6 flex-grow flex items-center">
-            <p className="text-gray-300 leading-tight text-lg md:text-xl lg:text-2xl font-normal italic text-justify tracking-wide">
-              <span className="text-orange-400 text-3xl md:text-4xl font-serif">"</span>{testimonial.text}<span className="text-orange-400 text-3xl md:text-4xl font-serif">"</span>
+          <div className="mb-6 flex-grow flex items-center">            <p className="text-gray-300 leading-tight text-lg md:text-xl lg:text-2xl font-normal italic text-justify tracking-wide">
+              <span className="text-orange-400 text-3xl md:text-4xl font-serif">&ldquo;</span>{testimonial.text}<span className="text-orange-400 text-3xl md:text-4xl font-serif">&rdquo;</span>
             </p>
           </div>
 
@@ -118,13 +117,11 @@ const Testimonials = () => {
   useEffect(() => {
     if (carouselRef.current) {
       const clientWidth = carouselRef.current.clientWidth;
-      carouselRef.current.scrollLeft = startIndex * clientWidth;
-      setCurrentIndex(0);
+      carouselRef.current.scrollLeft = startIndex * clientWidth;      setCurrentIndex(0);
     }
-  }, []);
-
+  }, [startIndex]);
   // Check scroll position to update current index and handle infinite scroll
-  const checkScrollPosition = () => {
+  const checkScrollPosition = useCallback(() => {
     if (carouselRef.current) {
       const { scrollLeft, clientWidth } = carouselRef.current;
       const rawIndex = Math.round(scrollLeft / clientWidth);
@@ -144,14 +141,13 @@ const Testimonials = () => {
         setCurrentIndex(actualIndex);
       }
     }
-  };
+  }, [totalOriginalItems]);
 
   useEffect(() => {
     checkScrollPosition();
     const handleResize = () => checkScrollPosition();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    window.addEventListener('resize', handleResize);    return () => window.removeEventListener('resize', handleResize);
+  }, [checkScrollPosition]);
 
   const scrollToIndex = (index: number) => {
     if (carouselRef.current) {
@@ -174,11 +170,14 @@ const Testimonials = () => {
     const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;
     scrollToIndex(newIndex);
   };
-
   return (
-    <section id="testimonials" className="py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+    <section id="testimonials" className="py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-black">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      
+      <div className="max-w-7xl mx-auto">{/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -190,9 +189,8 @@ const Testimonials = () => {
             <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
               {" "}Say About Me
             </span>
-          </h2>
-          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto">
-            Professional recommendations from colleagues and industry leaders I've had the privilege to work with
+          </h2>          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto">
+            Professional recommendations from colleagues and industry leaders I&apos;ve had the privilege to work with
           </p>
         </motion.div>        {/* Carousel Container */}
         <div className="relative">          {/* Navigation Buttons */}

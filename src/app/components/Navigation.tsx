@@ -1,12 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 
-interface NavItem {
-  name: string;
-  href: string;
-  isExternal?: boolean;
-}
-
 const navItems = [
   { name: 'HOME', href: '#home' },
   { name: 'ABOUT ME', href: '#about' },

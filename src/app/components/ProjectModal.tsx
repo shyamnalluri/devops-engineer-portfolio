@@ -11,26 +11,6 @@ interface ProjectModalProps {
 }
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
-  if (!project) return null;
-
-  const categoryIcons = {
-    Infrastructure: FaServer,
-    Automation: FaCode,
-    DevOps: FaLightbulb
-  };
-
-  const Icon = categoryIcons[project.category];
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      console.log('Backdrop clicked, closing modal');
-      onClose();
-    }
-  };
-  const handleCloseClick = () => {
-    console.log('Close button clicked');
-    onClose();
-  };
-
   // Handle keyboard events
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -51,6 +31,25 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
       document.body.style.overflow = 'unset';
     };
   }, [project, onClose]);
+
+  if (!project) return null;
+
+  const categoryIcons = {
+    Infrastructure: FaServer,
+    Automation: FaCode,
+    DevOps: FaLightbulb
+  };
+
+  const Icon = categoryIcons[project.category];
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      console.log('Backdrop clicked, closing modal');
+      onClose();
+    }  };
+  const handleCloseClick = () => {
+    console.log('Close button clicked');
+    onClose();
+  };
 
   return (
     <AnimatePresence>
