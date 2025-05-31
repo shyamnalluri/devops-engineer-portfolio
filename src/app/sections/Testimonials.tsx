@@ -79,8 +79,8 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
         <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-8 md:p-12 backdrop-blur-sm hover:border-red-500/30 transition-all duration-300 h-96 md:h-[450px] lg:h-[350px] flex flex-col justify-center">
           {/* Testimonial Text */}
           <div className="mb-6 flex-grow flex items-center">            <p className="text-gray-300 leading-tight text-lg md:text-xl lg:text-2xl font-normal italic text-justify tracking-wide">
-              <span className="text-orange-400 text-3xl md:text-4xl font-serif">&ldquo;</span>{testimonial.text}<span className="text-orange-400 text-3xl md:text-4xl font-serif">&rdquo;</span>
-            </p>
+            <span className="text-orange-400 text-3xl md:text-4xl font-serif">&ldquo;</span>{testimonial.text}<span className="text-orange-400 text-3xl md:text-4xl font-serif">&rdquo;</span>
+          </p>
           </div>
 
           {/* Author Info - Centered Below */}
@@ -107,7 +107,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
-  
+
   // Create infinite scroll by duplicating testimonials
   const infiniteTestimonials = [...testimonials, ...testimonials, ...testimonials];
   const totalOriginalItems = testimonials.length;
@@ -117,7 +117,7 @@ const Testimonials = () => {
   useEffect(() => {
     if (carouselRef.current) {
       const clientWidth = carouselRef.current.clientWidth;
-      carouselRef.current.scrollLeft = startIndex * clientWidth;      setCurrentIndex(0);
+      carouselRef.current.scrollLeft = startIndex * clientWidth; setCurrentIndex(0);
     }
   }, [startIndex]);
   // Check scroll position to update current index and handle infinite scroll
@@ -125,7 +125,7 @@ const Testimonials = () => {
     if (carouselRef.current) {
       const { scrollLeft, clientWidth } = carouselRef.current;
       const rawIndex = Math.round(scrollLeft / clientWidth);
-      
+
       // Handle infinite scroll wrapping
       if (rawIndex >= totalOriginalItems * 2) {
         // Scrolled to the end, jump back to beginning of middle set
@@ -146,7 +146,7 @@ const Testimonials = () => {
   useEffect(() => {
     checkScrollPosition();
     const handleResize = () => checkScrollPosition();
-    window.addEventListener('resize', handleResize);    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize); return () => window.removeEventListener('resize', handleResize);
   }, [checkScrollPosition]);
 
   const scrollToIndex = (index: number) => {
@@ -176,7 +176,7 @@ const Testimonials = () => {
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
       <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      
+
       <div className="max-w-7xl mx-auto">{/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -184,7 +184,8 @@ const Testimonials = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="text-center mb-8"
-        >          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             What Colleagues
             <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
               {" "}Say About Me
@@ -224,12 +225,11 @@ const Testimonials = () => {
           {testimonials.map((_, index) => (
             <button
               key={index}
-              onClick={() => scrollToIndex(index)}              
-              className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                index === currentIndex 
-                  ? 'bg-red-500 w-8' 
+              onClick={() => scrollToIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-200 ${index === currentIndex
+                  ? 'bg-red-500 w-8'
                   : 'bg-gray-600 hover:bg-gray-500'
-              }`}
+                }`}
             />
           ))}
         </div>
