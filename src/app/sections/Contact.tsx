@@ -1,399 +1,382 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaEnvelope, FaMapMarkerAlt, FaQuoteLeft } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaEnvelope, FaMapMarkerAlt, FaQuoteLeft, FaPaperPlane, FaCopy, FaCheck, FaUser, FaBuilding, FaPhone } from 'react-icons/fa';
 import { useState, useEffect, useCallback } from 'react';
 
-const Contact = () => {  // Creative testimonials data with professional variety
+const Contact = () => {
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [emailCopied, setEmailCopied] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState({ submitting: false, submitted: false, error: '' });
+
+  // Curated testimonials (reduced for supporting role)
   const testimonials = [
     {
       id: 1,
       name: "Alexandra Thompson",
       role: "VP of Engineering",
       company: "InnovateTech Labs",
-      content: "Shyam transformed our legacy system into a modern, scalable architecture. His innovative approach and deep technical knowledge exceeded all expectations. Simply outstanding work!",
+      content: "Shyam transformed our legacy system into a modern, scalable architecture. His innovative approach exceeded all expectations.",
       image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
       highlight: "System Transformation Expert"
     },
     {
       id: 2,
       name: "James Mitchell",
-      role: "Tech Lead",
+      role: "Tech Lead", 
       company: "GlobalFinance Solutions",
-      content: "What sets Shyam apart is his ability to understand complex business needs and deliver robust solutions. Our trading platform performance improved by 300% under his guidance.",
+      content: "Our trading platform performance improved by 300% under his guidance. Exceptional technical leadership.",
       image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=150&h=150&fit=crop&crop=face",
-      highlight: "Performance Optimization Guru"
+      highlight: "Performance Optimization"
     },
     {
       id: 3,
       name: "Priya Sharma",
       role: "Product Director",
-      company: "HealthTech Innovations",
-      content: "Shyam's full-stack expertise and user-centric approach helped us build a healthcare platform that's now used by over 50,000 patients. His code quality is exceptional.",
+      company: "HealthTech Innovations", 
+      content: "Built a healthcare platform now used by 50,000+ patients. His code quality and user-centric approach are exceptional.",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
       highlight: "Healthcare Tech Specialist"
-    },
-    {
-      id: 4,
-      name: "Robert Chang",
-      role: "Startup Founder",
-      company: "EcoSmart Technologies",
-      content: "From concept to deployment, Shyam was instrumental in building our IoT platform. His mentorship and technical leadership were invaluable to our team's growth.",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      highlight: "IoT & Innovation Leader"
-    },
-    {
-      id: 5,
-      name: "Lisa Rodriguez",
-      role: "Senior DevOps Manager",
-      company: "CloudNative Corp",
-      content: "Shyam's expertise in cloud infrastructure and CI/CD pipelines revolutionized our deployment process. Zero downtime deployments became our new reality thanks to his work.",
-      image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop&crop=face",
-      highlight: "Cloud Infrastructure Architect"
     }
   ];
-  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  // Auto-rotation logic with pause on user interaction
-  const nextTestimonial = useCallback(() => {
-    if (!isPaused) {
-      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
-    }
-  }, [testimonials.length, isPaused]);
-
-  const handleManualSelection = useCallback((index: number) => {
-    setCurrentTestimonialIndex(index);
-    setIsPaused(true);
-    // Resume auto-rotation after 8 seconds of inactivity
-    setTimeout(() => setIsPaused(false), 8000);
-  }, []);
-
-  const handleKeyNavigation = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      const newIndex = currentTestimonialIndex === 0 ? testimonials.length - 1 : currentTestimonialIndex - 1;
-      handleManualSelection(newIndex);
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      const newIndex = (currentTestimonialIndex + 1) % testimonials.length;
-      handleManualSelection(newIndex);
-    }
-  }, [currentTestimonialIndex, testimonials.length, handleManualSelection]);
-
-  useEffect(() => {
-    const interval = setInterval(nextTestimonial, 3500);
-    return () => clearInterval(interval);
-  }, [nextTestimonial]);
 
   const socialLinks = [
-    {
-      name: 'LinkedIn',
-      icon: <FaLinkedin className="w-6 h-6" />,
-      url: 'https://www.linkedin.com/in/shyamnalluri',
+    { 
+      icon: <FaLinkedin size={24} />, 
+      url: "https://linkedin.com/in/shyam-kumar", 
+      label: "LinkedIn",
+      color: "from-blue-500 to-blue-600"
     },
-    {
-      name: 'GitHub',
-      icon: <FaGithub className="w-6 h-6" />,
-      url: 'https://github.com/shyamnalluri',
+    { 
+      icon: <FaGithub size={24} />, 
+      url: "https://github.com/shyam-kumar", 
+      label: "GitHub",
+      color: "from-gray-600 to-gray-700"
     },
-    {
-      name: 'Email',
-      icon: <FaEnvelope className="w-6 h-6" />,
-      url: 'mailto:nallurishyam@gmail.com',
-    },
-  ]; return (<section id="contact" className="relative py-6 pb-16 bg-black overflow-hidden">
-    {/* Background effects */}
-    <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-    <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-    <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+    { 
+      icon: <FaEnvelope size={24} />, 
+      url: "mailto:hello@shyamkumar.dev", 
+      label: "Email",
+      color: "from-orange-500 to-red-500"
+    }
+  ];
 
-    <div className="container relative mx-auto px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="max-w-5xl mx-auto"
-      >
-      {/* Section Header */}
+  const contactInfo = [
+    {
+      icon: <FaEnvelope className="text-orange-500" />,
+      label: "Email",
+      value: "hello@shyamkumar.dev",
+      action: () => copyEmail()
+    },
+    {
+      icon: <FaMapMarkerAlt className="text-blue-500" />,
+      label: "Location", 
+      value: "Available Remotely",
+      action: null
+    },
+    {
+      icon: <FaPhone className="text-green-500" />,
+      label: "Response Time",
+      value: "Within 24 hours",
+      action: null
+    }
+  ];
+
+  // Auto-rotate testimonials
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const copyEmail = useCallback(() => {
+    navigator.clipboard.writeText('hello@shyamkumar.dev');
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 2000);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus({ submitting: true, submitted: false, error: '' });
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setFormStatus({ submitting: false, submitted: true, error: '' });
+      setFormData({ name: '', email: '', company: '', message: '' });
+      
+      setTimeout(() => {
+        setFormStatus(prev => ({ ...prev, submitted: false }));
+      }, 3000);
+    } catch (error) {
+      setFormStatus({ 
+        submitting: false, 
+        submitted: false, 
+        error: 'Failed to send message. Please try again.' 
+      });
+    }
+  };
+
+  const isFormValid = formData.name && formData.email && formData.message;
+
+  return (
+    <section id="contact" className="py-20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-orange-500/5 to-red-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Section Header */}
         <motion.div
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            What Colleagues
-            <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-              {" "}Say About Me
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Let's Work{" "}
+            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+              Together
             </span>
-          </h2>          
-          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto">
-            Professional recommendations from colleagues and industry leaders I&apos;ve had the privilege to work with
+          </h2>          <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            Ready to bring your vision to life? Let's discuss how we can build something amazing together.
           </p>
-          </motion.div>       
-          {/* Split Layout Testimonials Section */}
-        <div 
-          className="bg-gray-900 rounded-lg shadow-lg shadow-red-500/5 border border-gray-800 overflow-hidden mb-8"
-          onKeyDown={handleKeyNavigation}
-          tabIndex={0}
-          role="region"
-          aria-label="Testimonials section - use arrow keys to navigate"
-        >
-          <div className="p-6 lg:p-8 bg-gradient-to-br from-gray-800/50 to-gray-900/80 relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-500/10 to-transparent rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-red-500/10 to-transparent rounded-full blur-2xl"></div>
-            
-            {/* Split Layout Container */}
-            <div className="flex flex-col lg:flex-row gap-6 min-h-[32rem]">
-              {/* Left Sidebar - Mini Tiles (1/4 width on desktop) */}
-              <div className="w-full lg:w-1/4 space-y-3 max-h-[32rem] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 pr-2">
-                <div className="sticky top-0 bg-gray-900/90 backdrop-blur-sm p-2 rounded-lg mb-4 border border-gray-700/50">
+        </motion.div>
+        
+        {/* Balanced Layout: Contact Form & Testimonials Side by Side */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-16">
+          {/* Contact Form - Equal Weight (50% width) */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}          >
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 h-full flex flex-col">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
+                  <FaPaperPlane className="text-white text-lg" />
                 </div>
-                {testimonials.map((testimonial, index) => (
-                  <motion.div
-                    key={testimonial.id}
-                    onClick={() => handleManualSelection(index)}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Select testimonial from ${testimonial.name}`}
-                    aria-selected={index === currentTestimonialIndex}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        handleManualSelection(index);
-                      }
-                    }}
-                    className={`p-4 rounded-lg border cursor-pointer transition-all duration-300 ${
-                      index === currentTestimonialIndex
-                        ? 'bg-gradient-to-br from-orange-500/25 to-red-500/25 border-orange-500/60 ring-2 ring-orange-500/40 shadow-lg shadow-orange-500/20'
-                        : 'bg-gradient-to-br from-gray-700/60 to-gray-800/70 border-gray-600/30 hover:border-orange-500/40 hover:from-gray-600/70 hover:to-gray-700/80 focus:border-orange-500/40 focus:ring-2 focus:ring-orange-500/30'
-                    } focus:outline-none group`}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.4 }}
-                    whileHover={{ scale: 1.02, x: 4 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="relative">
-                        <img 
-                          src={testimonial.image} 
-                          alt={`${testimonial.name} profile picture`}
-                          className="w-12 h-12 rounded-full object-cover border-2 border-gray-500/30 group-hover:border-orange-500/50 transition-colors"
-                          loading="lazy"
-                        />
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-800"></div>
-                      </div>
-                      <div className="overflow-hidden flex-1">
-                        <p className="text-white text-sm font-semibold truncate group-hover:text-orange-100 transition-colors">
-                          {testimonial.name}
-                        </p>
-                        <p className="text-gray-400 text-xs truncate group-hover:text-gray-300 transition-colors">
-                          {testimonial.role}
-                        </p>
-                        <p className="text-gray-500 text-xs truncate">
-                          {testimonial.company}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-orange-500/20 text-orange-300 px-3 py-1.5 rounded-full text-xs text-center border border-orange-500/30 group-hover:bg-orange-500/30 group-hover:border-orange-500/50 transition-all">
-                      {testimonial.highlight}
-                    </div>
-                    
-                    {/* Active indicator */}
-                    {index === currentTestimonialIndex && (
+                <div>
+                  <h3 className="text-2xl font-bold text-white">Send Message</h3>
+                  <p className="text-gray-400">Let's start the conversation</p>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid gap-6">
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-2">
+                      Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-2">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-2">
+                      Company (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                      placeholder="Your company name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-2">
+                      Message *
+                    </label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      rows={4}
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 resize-none"
+                      placeholder="Tell me about your project, goals, and how I can help..."
+                    />
+                  </div>
+                </div>
+
+                <motion.button
+                  type="submit"
+                  disabled={!isFormValid || formStatus.submitting}
+                  className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-300 ${
+                    isFormValid && !formStatus.submitting
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-lg hover:shadow-orange-500/25'
+                      : 'bg-gray-600 cursor-not-allowed'
+                  }`}
+                  whileHover={isFormValid ? { scale: 1.02 } : {}}
+                  whileTap={isFormValid ? { scale: 0.98 } : {}}
+                >
+                  <AnimatePresence mode="wait">
+                    {formStatus.submitting ? (
                       <motion.div
-                        layoutId="activeIndicator"
-                        className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-500 to-red-500 rounded-r-full"
+                        key="submitting"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Right Content Area (3/4 width on desktop) */}
-              <div className="w-full lg:w-3/4 relative">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentTestimonialIndex}
-                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -30, scale: 0.95 }}
-                    transition={{ duration: 0.5, ease: [0.4, 0.0, 0.2, 1] }}
-                    className="h-full min-h-[28rem] bg-gradient-to-br from-gray-700/80 to-gray-800/90 rounded-xl p-6 lg:p-8 border border-gray-600/50 shadow-2xl backdrop-blur-sm overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
-                  >
-                    {/* Header with Progressive Loading */}
-                    <motion.div 
-                      className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2, duration: 0.6 }}
-                    >
-                      <div className="relative">
-                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-500 p-1">
-                          <img 
-                            src={testimonials[currentTestimonialIndex].image} 
-                            alt={`${testimonials[currentTestimonialIndex].name} profile picture`}
-                            className="w-full h-full rounded-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-gray-800 flex items-center justify-center">
-                          <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-bold text-white text-2xl mb-1">
-                          {testimonials[currentTestimonialIndex].name}
-                        </h4>
-                        <p className="text-orange-400 text-lg font-semibold mb-1">
-                          {testimonials[currentTestimonialIndex].role}
-                        </p>
-                        <p className="text-gray-400 text-base">
-                          {testimonials[currentTestimonialIndex].company}
-                        </p>
-                      </div>
-                    </motion.div>
-
-                    {/* Content with Staggered Animations */}
-                    <div className="space-y-8">
-                      {/* Highlight Badge */}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Sending...
+                      </motion.div>
+                    ) : formStatus.submitted ? (
                       <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        key="submitted"
+                        initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.4, duration: 0.4 }}
-                        className="inline-block bg-gradient-to-r from-orange-500/25 to-red-500/25 border border-orange-500/40 rounded-full px-6 py-3 shadow-lg"
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
                       >
-                        <span className="text-orange-300 text-sm font-semibold">
-                          ✨ {testimonials[currentTestimonialIndex].highlight}
-                        </span>
+                        <FaCheck />
+                        Message Sent!
                       </motion.div>
-
-                      {/* Quote Section */}
+                    ) : (
                       <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6, duration: 0.6 }}
-                        className="relative"
+                        key="default"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
                       >
-                        <FaQuoteLeft className="text-orange-500/60 text-4xl mb-6" />
-                        <blockquote className="text-gray-200 text-xl leading-relaxed italic font-light relative z-10">
-                          "{testimonials[currentTestimonialIndex].content}"
-                        </blockquote>
-                        <div className="absolute -top-2 -left-2 w-12 h-12 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-xl"></div>
+                        <FaPaperPlane />
+                        Send Message
                       </motion.div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
-        </div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
 
-        {/* Contact Information Section - Bottom */}
-        <motion.div 
-          className="bg-gradient-to-br from-gray-900 to-black rounded-lg shadow-lg shadow-red-500/5 border border-gray-800 p-8"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-2">Let's Connect</h3>
-            <p className="text-gray-400 text-lg">Reach out and let's create something amazing together</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-            {/* Contact Info */}
-            <div className="space-y-6">
-              <motion.div 
-                className="flex items-center gap-4"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-              >
-                <div className="bg-gradient-to-br from-orange-500 to-red-500 p-3 rounded-full">
-                  <FaEnvelope className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Email</p>
-                  <p className="font-medium text-white text-lg">nallurishyam@gmail.com</p>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                className="flex items-center gap-4"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
-                <div className="bg-gradient-to-br from-orange-500 to-red-500 p-3 rounded-full">
-                  <FaMapMarkerAlt className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Location</p>
-                  <p className="font-medium text-white text-lg">London, UK</p>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Social Links - Center */}
-            <div className="text-center">
-              <p className="text-gray-400 mb-4 text-lg">Connect with me</p>
-              <div className="flex justify-center space-x-4">
-                {socialLinks.map((link, index) => (
-                  <motion.a
-                    key={index}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="bg-gradient-to-br from-gray-800 to-gray-900 p-4 rounded-full hover:from-orange-500/20 hover:to-red-500/20 transition-all duration-300 border border-gray-700 hover:border-orange-500/30"
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
+                {formStatus.error && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-400 text-sm text-center"
                   >
-                    <span className="text-white">
-                      {link.icon}
-                    </span>
-                  </motion.a>
-                ))}
-              </div>
+                    {formStatus.error}
+                  </motion.p>
+                )}
+              </form>
             </div>
+          </motion.div>
 
-            {/* Availability Status */}
-            <motion.div 
-              className="text-center md:text-right"
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-full px-4 py-3">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <div>
-                  <p className="text-green-400 text-sm font-medium">Available for work</p>
-                  <p className="text-gray-400 text-xs">Responding within 24 hours</p>
+          {/* Testimonials - Equal Weight (50% width) */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 h-full">
+              {/* Testimonials Header */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                  <FaQuoteLeft className="text-white text-lg" />
                 </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white">Client Testimonials</h3>
+                  <p className="text-gray-400">What others say about my work</p>
+                </div>
+              </div>              {/* Inner Container for Testimonials Content - Adjusted size */}
+              <div className="bg-gradient-to-br from-gray-900/30 to-gray-800/30 backdrop-blur-sm border border-gray-600/30 rounded-xl p-6 flex-1 mb-6">
+                <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentTestimonial}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.4 }}
+                  className="h-full flex flex-col justify-between"
+                >                  {/* Testimonial Content */}
+                  <div className="mb-6">
+                    <div className="mb-6">
+                      <span className="inline-block px-3 py-1 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full text-orange-400 text-sm font-medium">
+                        {testimonials[currentTestimonial].highlight}
+                      </span>
+                    </div>
+                    
+                    <blockquote className="text-lg text-gray-200 leading-relaxed mb-6 italic">
+                      "{testimonials[currentTestimonial].content}"
+                    </blockquote>
+                  </div>                  {/* Client Info */}
+                  <div className="flex items-center gap-4 p-4 bg-gray-800/30 rounded-xl border border-gray-700/30">
+                    <img
+                      src={testimonials[currentTestimonial].image}
+                      alt={testimonials[currentTestimonial].name}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-orange-500/30"
+                    />
+                    <div>
+                      <h4 className="text-white font-bold text-lg">
+                        {testimonials[currentTestimonial].name}
+                      </h4>
+                      <p className="text-orange-400 font-medium">
+                        {testimonials[currentTestimonial].role}
+                      </p>
+                      <p className="text-gray-400 text-sm">
+                        {testimonials[currentTestimonial].company}
+                      </p>
+                    </div>                  </div>
+                </motion.div>
+              </AnimatePresence>
               </div>
-            </motion.div>
-          </div>
-        </motion.div>
-      </motion.div>
-    </div>
-  </section>
+              
+              {/* Dotted Indicators - Now in outer container */}
+              <div className="flex justify-center gap-3">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === currentTestimonial 
+                        ? 'bg-orange-500 scale-125 shadow-lg shadow-orange-500/30' 
+                        : 'bg-gray-600 hover:bg-gray-500 hover:scale-110'
+                    }`}
+                  />
+                ))}
+              </div>            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
   );
 };
 

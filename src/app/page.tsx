@@ -25,11 +25,6 @@ const Experience = dynamic(() => import("./sections/Experience"), {
   ssr: true
 });
 
-const Testimonials = dynamic(() => import("./sections/Testimonials"), {
-  loading: () => <SkeletonScreen type="testimonials" />,
-  ssr: true
-});
-
 const Certifications = dynamic(() => import("./sections/Certifications"), {
   loading: () => <SkeletonScreen type="certifications" />,
   ssr: true
@@ -40,17 +35,21 @@ const Contact = dynamic(() => import("./sections/Contact"), {
   ssr: true
 });
 
+const Footer = dynamic(() => import("./components/Footer"), {
+  loading: () => <div className="bg-gray-900 h-32"></div>,
+  ssr: true
+});
+
 export default function Home() {
   return (
     <ClientWrapper>
       <main className="bg-black text-white min-h-screen">
         {/* All sections */}        <Hero />
         <About />            <Skills />
-        <Experience />        <Testimonials />
-        <Projects />
-        <Certifications />
+        <Experience />        <Projects />        <Certifications />
         
         <Contact />
+        <Footer />
       </main>
     </ClientWrapper>
   );
