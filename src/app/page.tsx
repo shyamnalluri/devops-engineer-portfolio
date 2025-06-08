@@ -44,10 +44,13 @@ export default function Home() {
   return (
     <ClientWrapper>
       <main className="bg-black text-white min-h-screen">
-        {/* All sections */}        <Hero />
-        <About />            <Skills />
-        <Experience />        <Projects />        <Certifications />
-        
+        {/* All sections */}        
+        <Hero />
+        <About />            
+        <Skills />
+        <Experience />        
+        <Projects />        
+        <Certifications />
         <Contact />
         <Footer />
       </main>
