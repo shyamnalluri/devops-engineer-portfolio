@@ -1,118 +1,120 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { FaCode, FaCloud, FaShieldAlt, FaTools } from 'react-icons/fa';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import Image from 'next/image';
+import { aboutData } from '../../data/portfolio';
 
 const About = () => {
-  const highlights = [
-    {
-      icon: <FaCloud className="w-6 h-6" />,
-      title: "Cloud Architecture",
-      description: "Designing resilient and scalable cloud solutions"
-    },
-    {
-      icon: <FaCode className="w-6 h-6" />,
-      title: "Infrastructure as Code",
-      description: "Automating infrastructure deployment with modern tools"
-    },
-    {
-      icon: <FaShieldAlt className="w-6 h-6" />,
-      title: "Security First",
-      description: "Implementing robust security practices"
-    },
-    {
-      icon: <FaTools className="w-6 h-6" />,
-      title: "DevOps Culture",
-      description: "Fostering collaboration and continuous improvement"
-    }
-  ];
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation();
+  const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });
 
   return (
-    <section id="about" className="min-h-screen flex items-center bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-8 relative overflow-hidden">
-      {/* Subtle background pattern */}
+    <section id="about" className="min-h-screen flex items-center bg-black py-12 relative overflow-hidden">
+      {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/10 -z-0" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="max-w-5xl mx-auto"
-        >
-          <h2 className="text-4xl font-bold mb-8 text-center">
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-              About Me
-            </span>
-          </h2>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="bg-gradient-to-b from-gray-800/80 to-gray-900/80 p-10 rounded-xl backdrop-blur-xl border border-gray-700/50 shadow-[0_0_25px_-5px_rgba(59,130,246,0.1)] hover:shadow-[0_0_35px_-5px_rgba(59,130,246,0.2)] transition-shadow duration-300"
+        <div className="max-w-5xl mx-auto">
+          <div 
+            ref={headerRef}
+            className={`transition-all duration-800 ${
+              headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
+            }`}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {/* About Text Column */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="space-y-6"
+            <h2 className={`text-5xl font-bold mb-4 text-center text-white relative ${
+              headerVisible ? 'animate-hero-title' : ''
+            }`}>
+              About Me
+              <div 
+                className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-800 ${
+                  headerVisible ? 'w-24 animate-scale-in' : 'w-0'
+                }`}
+                style={{ animationDelay: '400ms' }}
+              />
+            </h2>
+          </div>
+
+          <div className="p-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              {/* Decorative image */}
+              <div
+                ref={imageRef}
+                className={`relative hidden md:block transition-all duration-1000 ${
+                  imageVisible ? 'animate-slide-up' : 'opacity-0 translate-y-12'
+                }`}
+                style={{ animationDelay: '200ms' }}
               >
-                <div className="prose prose-lg prose-invert max-w-none">
-                  <p className="text-gray-300/90 text-lg leading-relaxed text-justify first-letter:text-3xl first-letter:font-bold first-letter:text-blue-400 first-letter:mr-1">
-                    I&apos;m a passionate DevOps Engineer who thrives on transforming development processes 
-                    and building robust cloud infrastructures. In today&apos;s fast-paced tech landscape, 
-                    I serve as the bridge between development and operations, crafting solutions that 
-                    make deployment seamless and infrastructure reliable.
+                <div className="relative w-full h-[500px]">
+                  <div className={`absolute top-10 left-10 w-[280px] h-[280px] rounded-full bg-orange-500/20 transition-all duration-1000 ${
+                    imageVisible ? 'animate-pulse-slow' : 'opacity-0 scale-75'
+                  }`} style={{ animationDelay: '600ms' }} />
+                  <div className={`absolute bottom-10 right-10 w-[220px] h-[220px] rounded-full bg-purple-500/20 transition-all duration-1000 ${
+                    imageVisible ? 'animate-pulse-slow' : 'opacity-0 scale-75'
+                  }`} style={{ animationDelay: '800ms' }} />
+                  
+                  <div className={`absolute inset-0 flex items-center justify-center transition-all duration-800 ${
+                    imageVisible ? 'animate-scale-in' : 'opacity-0 scale-90'
+                  }`} style={{ animationDelay: '400ms' }}>
+                    <div className="relative w-[320px] h-[400px] overflow-hidden border-[8px] border-gray-800 bg-gray-900 shadow-xl transform rotate-3 hover:rotate-0 transition-transform duration-700 hover:scale-105 group">
+                      <Image
+                        src="/images/profile.jpg"
+                        alt="Shyam Nalluri"
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                        style={{ objectFit: 'cover', objectPosition: 'center' }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+
+                    {/* Decorative elements */}
+                    <div className={`absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-red-500 transition-all duration-600 ${
+                      imageVisible ? 'animate-scale-in' : 'opacity-0 scale-50'
+                    }`} style={{ animationDelay: '1000ms' }}></div>
+                    <div className={`absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-red-500 transition-all duration-600 ${
+                      imageVisible ? 'animate-scale-in' : 'opacity-0 scale-50'
+                    }`} style={{ animationDelay: '1200ms' }}></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* About Text Column */}
+              <div
+                ref={textRef}
+                className={`space-y-6 transition-all duration-800 ${
+                  textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ animationDelay: '400ms' }}
+              >
+                <div className="prose prose-lg max-w-none prose-invert">
+                  <p className={`text-gray-300 text-lg leading-relaxed text-justify first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1 transition-all duration-800 ${
+                    textVisible ? 'animate-fade-in' : 'opacity-0'
+                  }`} style={{ animationDelay: '600ms' }}>
+                    {aboutData.description[0]}
                   </p>
-                  <p className="text-gray-300/90 text-lg leading-relaxed text-justify">
-                    My approach combines automation-first thinking with cloud-native architectures. 
-                    I&apos;ve helped organizations reduce deployment times by <span className="text-blue-400 font-semibold">70%</span> and achieve significant 
-                    cost savings through optimized cloud infrastructure. Every challenge is an 
-                    opportunity to implement innovative solutions that scale.
+                  <p className={`text-gray-400 text-lg leading-relaxed text-justify transition-all duration-800 ${
+                    textVisible ? 'animate-fade-in' : 'opacity-0'
+                  }`} style={{ animationDelay: '800ms' }}>
+                    {aboutData.description[1]}
                   </p>
                 </div>
-              </motion.div>
 
-              {/* Highlights Grid Column */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-                className="grid grid-cols-1 gap-4"
-              >
-                {highlights.map((highlight, index) => (
-                  <motion.div
-                    key={highlight.title}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 * index }}
-                    viewport={{ once: true }}
-                    className="group flex items-start space-x-4 p-4 rounded-lg bg-gradient-to-r from-gray-800/50 to-gray-700/30 border border-gray-600/50 hover:border-blue-500/50 hover:from-blue-900/20 hover:to-gray-800/50 transition-all duration-300"
-                  >
-                    <div className="text-blue-400 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                      {highlight.icon}
+                {/* Dynamic stats from data */}
+                <div className={`grid grid-cols-2 gap-4 mt-8 transition-all duration-800 ${                textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+                }`} style={{ animationDelay: '1000ms' }}>
+                  {aboutData.stats.map((stat) => (
+                    <div key={stat.label} className="p-4 rounded-lg bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 group">
+                      <div className="text-2xl font-bold text-red-400 group-hover:text-red-300 transition-colors duration-300">{stat.value}</div>
+                      <div className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{stat.label}</div>
                     </div>
-                    <div>
-                      <h3 className="text-white font-semibold mb-1 group-hover:text-blue-400 transition-colors duration-300">
-                        {highlight.title}
-                      </h3>
-                      <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">
-                        {highlight.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

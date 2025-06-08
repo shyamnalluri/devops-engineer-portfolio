@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>cloud</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" fill="#FFCC66" cx="32" cy="32" r="29"></circle>
+        <path d="M48,36 C51.3137,36 54,38.6863 54,42 C54,45.3137 51.3137,48 48,48 L16,48 C12.6863,48 10,45.3137 10,42 C10,38.6863 12.6863,36 16,36 C16,29.3726 21.3726,24 28,24 C33.2521,24 37.7309,27.1818 39.3308,31.6604 C40.4477,31.2308 41.6859,31 43,31 C46.5936,31 49.6936,33.1283 50.9033,36.1524 C49.9659,36.0524 48.9941,36 48,36 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+    </g>
+</svg>

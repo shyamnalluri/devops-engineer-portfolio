@@ -1,141 +1,294 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { experienceData } from '../../data/portfolio';
 
 interface ExperienceData {
+  id: string;
   title: string;
   company?: string;
   institution?: string;
   period: string;
   description: string;
   technologies?: string[];
+  achievements?: string[];
+  type: 'work' | 'education';
+  icon: string;
+  phase: string; // DevOps evolution phase
 }
 
-const ExperienceCard = ({ data }: { data: ExperienceData }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5 }}
-    className="group relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 rounded-xl p-6 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/30 transition-all duration-500"
-  >
-    {/* Glowing effect on hover */}
-    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-blue-500/10 group-hover:to-blue-500/5 transition-all duration-500" />
-    
-    <div className="relative">
-      <h4 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
-        {data.title}
-      </h4>
-      <div className="flex flex-wrap items-center gap-3 mb-4 text-sm">
-        <span className="text-blue-400 font-medium">{data.company || data.institution}</span>
-        <span className="w-1.5 h-1.5 rounded-full bg-gray-600" />
-        <span className="text-gray-400">{data.period}</span>
-      </div>
-      <p className="text-gray-300 text-base mb-4 leading-relaxed">
-        {data.description}
-      </p>
-      {data.technologies && (
-        <div className="flex flex-wrap gap-2">
-          {data.technologies.map((tech, i) => (
-            <span
-              key={i}
-              className="px-3 py-1 text-sm rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  </motion.div>
-);
-
-const Experience = () => {
-  const experiences: ExperienceData[] = [
-    {
-      title: "Senior DevOps Engineer",
-      company: "Tech Solutions Inc.",
-      period: "2023 - Present",
-      description: "Lead DevOps practices and cloud infrastructure management, implementing CI/CD pipelines and Kubernetes orchestration.",
-      technologies: ["AWS", "Kubernetes", "Terraform", "Jenkins", "Docker", "Python"]
-    },
-    {
-      title: "DevOps Engineer",
-      company: "Cloud Systems Ltd.",
-      period: "2021 - 2023",
-      description: "Managed AWS infrastructure and implemented Infrastructure as Code using Terraform and CloudFormation.",
-      technologies: ["AWS", "Terraform", "CloudFormation", "Ansible", "Git"]
-    },
-    {
-      title: "Systems Administrator",
-      company: "Data Solutions Corp.",
-      period: "2020 - 2021",
-      description: "Maintained and optimized server infrastructure, implemented automation scripts, and managed backup systems.",
-      technologies: ["Linux", "Python", "Shell Scripting", "VMware"]
-    }
-  ];
-
-  const education: ExperienceData[] = [
-    {
-      title: "Master of Science in Computer Science",
-      institution: "Tech University",
-      period: "2018 - 2020",
-      description: "Specialized in Cloud Computing and Distributed Systems"
-    },
-    {
-      title: "Bachelor of Technology in Computer Science",
-      institution: "Engineering College",
-      period: "2014 - 2018",
-      description: "Focus on Software Engineering and System Architecture"
-    }
-  ];
+const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
+  data: ExperienceData;
+  index: number;
+  isActive: boolean;
+  onClick: () => void;
+}) => {
+  const { ref, isVisible } = useScrollAnimation();
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <section id="experience" className="py-20 relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-800/50 -z-0" />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}          className="max-w-6xl mx-auto space-y-16"
-        >
-          {/* Work Experience Section */}
-          <div>
-            <h2 className="text-4xl font-bold text-center mb-16">
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-                Work Experience
-              </span>
-            </h2>
-            <div className="grid gap-6">
-              {experiences.map((exp, index) => (
-                <ExperienceCard key={index} data={exp} />
-              ))}
-            </div>
-          </div>
+    <div
+      ref={ref}
+      className={`relative cursor-pointer transition-all duration-500 group ${
+        isActive ? 'mb-8' : 'mb-4'
+      } ${
+        isVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+      }`}
+      style={{ 
+        animationDelay: `${index * 150}ms`,
+        minHeight: isActive ? 'auto' : '80px'
+      }}
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      id={data.id}
+    >
+      {/* Dynamic Timeline connector */}
+      <div
+        className={`absolute left-[23px] top-0 bg-gradient-to-b from-red-500 via-orange-500 to-blue-500 rounded-full transition-all duration-500 ease-spring ${
+          isActive ? 'w-1 h-full opacity-100' : 'w-0.5 h-16 opacity-70'
+        }`}
+      />
 
-          {/* Education Section */}
-          <div>
-            <h2 className="text-4xl font-bold text-center mb-16">
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-                Education
-              </span>
-            </h2>
-            <div className="grid gap-6">
-              {education.map((edu, index) => (
-                <ExperienceCard key={index} data={edu} />
-              ))}
-            </div>
-          </div>
-        </motion.div>
+      {/* Interactive Timeline Node */}
+      <div
+        className={`absolute left-0 top-3 h-10 w-10 rounded-full border-2 flex items-center justify-center cursor-pointer z-10 transition-all duration-500 ease-spring ${
+          isActive 
+            ? 'border-red-500 bg-gray-800 scale-115 shadow-glow-red' 
+            : 'border-gray-500 bg-gray-900 scale-100 shadow-subtle'
+        } ${
+          isHovered && !isActive ? 'scale-110 shadow-glow-red-soft' : ''
+        }`}
+      >
+        <span 
+          className={`text-lg transition-transform duration-300 ${
+            isActive ? 'scale-110' : 'scale-100'
+          }`}
+        >
+          {data.icon}
+        </span>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
+      {/* Content Card */}
+      <div
+        className={`group transition-all duration-600 ease-spring ${
+          isActive 
+            ? 'bg-gray-800/90 p-8 pr-6 pl-16 rounded-xl border border-red-500/40 ml-2 shadow-glow-subtle backdrop-blur-sm' 
+            : 'bg-transparent p-2 pr-0 pl-16 rounded-lg border border-transparent ml-0'
+        }`}
+      >
+        <h4
+          className={`font-bold transition-all duration-600 ease-spring cursor-pointer ${
+            isActive 
+              ? 'text-amber-400 text-xl mb-3' 
+              : 'text-white text-lg mb-2'
+          }`}
+        >
+          {data.title}
+        </h4>
+
+        <div
+          className={`flex flex-wrap items-center gap-3 text-sm transition-all duration-500 ease-spring ${
+            isActive ? 'mb-4 opacity-100' : 'mb-2 opacity-80'
+          }`}
+        >
+          <span className="text-red-400 font-medium">
+            {data.company || data.institution}
+          </span>
+          <span className="w-1 h-1 rounded-full bg-gray-500" />
+          <span className="text-gray-400 font-medium">{data.period}</span>
+          <span className="w-1 h-1 rounded-full bg-gray-500" />
+          <span className="text-blue-400 text-xs uppercase tracking-wide font-medium bg-blue-500/10 px-2 py-1 rounded-full border border-blue-500/20">
+            {data.type}
+          </span>
+        </div>
+
+        {/* Description */}
+        <p
+          className={`text-gray-300 leading-relaxed transition-all duration-500 ease-spring ${
+            isActive 
+              ? 'text-base leading-relaxed mb-5 opacity-100' 
+              : 'text-sm leading-normal mb-3 opacity-90'
+          }`}
+        >
+          {isActive ? data.description : `${data.description.substring(0, 120)}${data.description.length > 120 ? '...' : ''}`}
+        </p>
+
+        {/* Achievements (only show when active) */}
+        {isActive && data.achievements && (
+          <div
+            className={`p-4 rounded-lg bg-gradient-to-r from-orange-500/8 to-yellow-500/8 border border-orange-500/25 mb-5 overflow-hidden transition-all duration-600 ease-spring animate-fade-in`}
+            style={{ animationDelay: '100ms' }}
+          >
+            <h5 className="text-sm font-semibold text-orange-400 mb-3 flex items-center gap-2 animate-slide-up" style={{ animationDelay: '200ms' }}>
+              <span className="text-base">🏆</span>
+              Key Achievements:
+            </h5>
+            <ul className="space-y-2">
+              {data.achievements.map((achievement, i) => (
+                <li
+                  key={i}
+                  className="text-sm text-gray-300 flex items-start gap-3 animate-slide-up"
+                  style={{ animationDelay: `${300 + (i * 50)}ms` }}
+                >
+                  <span className="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+                  <span className="leading-relaxed">{achievement}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Technologies */}
+        {data.technologies && (
+          <div className={`flex flex-wrap gap-2 transition-opacity duration-400 ${isActive ? 'opacity-100' : 'opacity-80'}`}>
+            {(isActive ? data.technologies : data.technologies.slice(0, 4)).map((tech, i) => (
+              <span
+                key={tech}
+                className={`px-2.5 py-1 text-xs rounded-full border transition-all duration-300 font-medium hover:scale-105 ${
+                  isActive 
+                    ? 'bg-red-500/12 border-red-500/60 text-amber-400 hover:bg-red-500/20 hover:border-red-500/80' 
+                    : 'bg-gray-800 border-gray-600 text-gray-300 hover:bg-red-500/12 hover:border-red-500/60'
+                } animate-scale-in`}
+                style={{ animationDelay: `${isActive ? 100 + (i * 30) : 0}ms` }}
+              >
+                {tech}
+              </span>
+            ))}
+            {!isActive && data.technologies.length > 4 && (
+              <span className="px-2.5 py-1 text-xs rounded-full border border-gray-600 bg-gray-800 text-gray-400 font-medium animate-scale-in">
+                +{data.technologies.length - 4}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Experience = () => {
+  const [activeCard, setActiveCard] = useState<string | null>('senior-devops');
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: workRef, isVisible: workVisible } = useScrollAnimation();
+  const { ref: educationRef, isVisible: educationVisible } = useScrollAnimation();
+
+  const handleCardClick = (cardId: string) => {
+    // If clicking on the active card, collapse it
+    if (activeCard === cardId) {
+      setActiveCard(null);
+    } else {
+      setActiveCard(cardId);
+      // Smooth scroll to the clicked card with reduced delay
+      setTimeout(() => {
+        const element = document.getElementById(cardId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest'
+          });
+        }
+      }, 50);
+    }
+  };
+  
+  // Use dynamic data from portfolio.ts
+  const allExperiences = experienceData;
+
+  const workExperiences = allExperiences.filter(exp => exp.type === 'work');
+  const educationExperiences = allExperiences.filter(exp => exp.type === 'education');
+  return (
+    <section id="experience" className="py-16 relative bg-black overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <div 
+            ref={headerRef}
+            className={`text-center mb-12 transition-all duration-800 ${
+              headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <h2 className={`text-5xl md:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 ${
+              headerVisible ? 'animate-hero-title' : ''
+            }`}>
+              Experience & Education
+            </h2>
+            <p className={`text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed ${
+              headerVisible ? 'animate-hero-subtitle' : ''
+            }`}>
+              A visual journey through my DevOps evolution
+              <span className="text-orange-400 font-semibold"> Click timeline nodes to expand details</span>
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-20 xl:gap-24">
+            {/* Professional Experience */}
+            <div 
+              ref={workRef}
+              className={`space-y-4 transition-all duration-800 ${
+                workVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ animationDelay: '200ms' }}
+            >
+              <h3 className="text-3xl font-bold text-white mb-10 relative">
+                Professional Journey
+                <div className="absolute -bottom-4 left-0 w-28 h-1.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-scale-in" style={{ animationDelay: '400ms' }} />
+                <div className="absolute -bottom-2 left-0 w-20 h-1 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-scale-in" style={{ animationDelay: '500ms' }} />
+              </h3>
+
+              <div className="relative">
+                {/* Background timeline */}
+                <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full" />
+                {workExperiences.map((exp, index) => (
+                  <InteractiveTimelineCard
+                    key={exp.id}
+                    data={exp}
+                    index={index}
+                    isActive={activeCard === exp.id}
+                    onClick={() => handleCardClick(exp.id)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Educational Background */}
+            <div 
+              ref={educationRef}
+              className={`space-y-4 transition-all duration-800 ${
+                educationVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ animationDelay: '400ms' }}
+            >
+              <h3 className="text-3xl font-bold text-white mb-16 relative">
+                Educational Foundation
+                <div className="absolute -bottom-4 left-0 w-28 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-scale-in" style={{ animationDelay: '600ms' }} />
+                <div className="absolute -bottom-2 left-0 w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-scale-in" style={{ animationDelay: '700ms' }} />
+              </h3>
+
+              <div className="relative">
+                {/* Background timeline */}
+                <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full" />
+                {educationExperiences.map((exp, index) => (
+                  <InteractiveTimelineCard
+                    key={exp.id}
+                    data={exp}
+                    index={index + workExperiences.length}
+                    isActive={activeCard === exp.id}
+                    onClick={() => handleCardClick(exp.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

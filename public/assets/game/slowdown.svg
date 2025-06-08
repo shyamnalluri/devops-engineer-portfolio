@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>slowdown</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" fill="#6EE7B7" cx="32" cy="32" r="29"></circle>
+        <path d="M32,12 C44.1503,12 54,21.8497 54,34 C54,46.1503 44.1503,56 32,56 C19.8497,56 10,46.1503 10,34 C10,21.8497 19.8497,12 32,12 Z M32,20 C24.268,20 18,26.268 18,34 C18,41.732 24.268,48 32,48 C39.732,48 46,41.732 46,34 C46,26.268 39.732,20 32,20 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+        <path d="M32,24 C37.5228,24 42,28.4771 42,34 C42,39.5228 37.5228,44 32,44 C26.4771,44 22,39.5228 22,34 C22,28.4771 26.4771,24 32,24 Z M32,28 C28.6863,28 26,30.6863 26,34 C26,37.3137 28.6863,40 32,40 C35.3137,40 38,37.3137 38,34 C38,30.6863 35.3137,28 32,28 Z" id="Combined-Shape" fill="#6EE7B7"></path>
+        <rect id="Rectangle" fill="#FFFFFF" transform="translate(32.000000, 34.000000) rotate(-90.000000) translate(-32.000000, -34.000000) " x="29" y="26" width="6" height="16" rx="3"></rect>
+    </g>
+</svg>

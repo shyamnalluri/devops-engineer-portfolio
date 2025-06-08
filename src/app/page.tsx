@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import Hero from "./sections/Hero";
 import ClientWrapper from "./components/ClientWrapper";
 import SkeletonScreen from './components/SkeletonScreen';
-
 // Lazy load all sections except Hero
 const About = dynamic(() => import("./sections/About"), {
   loading: () => <SkeletonScreen type="about" />,
@@ -31,18 +30,29 @@ const Certifications = dynamic(() => import("./sections/Certifications"), {
   ssr: true
 });
 
+const Contact = dynamic(() => import("./sections/Contact"), {
+  loading: () => <SkeletonScreen type="contact" />,
+  ssr: true
+});
+
+const Footer = dynamic(() => import("./components/Footer"), {
+  loading: () => <div className="bg-gray-900 h-32"></div>,
+  ssr: true
+});
+
 export default function Home() {
   return (
     <ClientWrapper>
-      <main className="bg-gray-900">
-        <div id="content">
-          <Hero />
-          <About />          
-          <Skills />
-          <Experience />
-          <Projects />
-          <Certifications />
-        </div>
+      <main className="bg-black text-white min-h-screen">
+        {/* All sections */}        
+        <Hero />
+        <About />            
+        <Skills />
+        <Experience />        
+        <Projects />        
+        <Certifications />
+        <Contact />
+        <Footer />
       </main>
     </ClientWrapper>
   );
