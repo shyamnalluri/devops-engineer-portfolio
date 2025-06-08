@@ -107,19 +107,16 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
               isOpen ? 'opacity-100' : 'opacity-0'
             }`}
             onClick={onClose}
-          />
-
-          {/* Mobile Menu Panel */}
+          />          {/* Mobile Menu Panel */}
           <div
-            className={`fixed top-0 right-0 h-full w-[300px] bg-gray-900/95 backdrop-blur-md shadow-xl z-50 flex flex-col border-l border-gray-800 transform transition-transform duration-300 ease-primary ${
-              isOpen ? 'translate-x-0' : 'translate-x-full'
+            className={`fixed top-0 left-0 h-full w-[300px] bg-gray-900/95 backdrop-blur-md shadow-xl z-50 flex flex-col border-r border-gray-800 transform transition-transform duration-300 ease-primary ${
+              isOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
-            <div className="relative p-6">
-              {/* Close Button */}
+            <div className="relative p-6">              {/* Close Button */}
               <button
                 onClick={onClose}
-                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 rounded-full hover:bg-gradient-to-r hover:from-orange-600/30 hover:to-red-600/30 transition-all duration-300 ease-primary hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 active:scale-95"
+                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-800/50 transition-all duration-300 ease-primary hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 active:scale-95"
                 aria-label="Close menu"
               >
                 <svg className="w-6 h-6 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">

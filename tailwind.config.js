@@ -4,8 +4,19 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
+  ],  theme: {
+    // Mobile-first breakpoints (Tailwind default is mobile-first)
+    screens: {
+      'xs': '375px',   // Extra small devices
+      'sm': '640px',   // Small devices
+      'md': '768px',   // Medium devices  
+      'lg': '1024px',  // Large devices
+      'xl': '1280px',  // Extra large devices
+      '2xl': '1536px', // 2X large devices
+      // Touch-specific breakpoints
+      'touch': '768px',
+      'no-touch': { 'raw': '(hover: hover) and (pointer: fine)' },
+    },
     extend: {
       // Professional Animation System - Apple/Stripe Inspired
       animation: {

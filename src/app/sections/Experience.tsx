@@ -49,11 +49,9 @@ const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
         className={`absolute left-[23px] top-0 bg-gradient-to-b from-red-500 via-orange-500 to-blue-500 rounded-full transition-all duration-500 ease-spring ${
           isActive ? 'w-1 h-full opacity-100' : 'w-0.5 h-16 opacity-70'
         }`}
-      />
-
-      {/* Interactive Timeline Node */}
+      />      {/* Interactive Timeline Node - Mobile-responsive */}
       <div
-        className={`absolute left-0 top-3 h-10 w-10 rounded-full border-2 flex items-center justify-center cursor-pointer z-10 transition-all duration-500 ease-spring ${
+        className={`absolute left-0 top-3 h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 rounded-full border-2 flex items-center justify-center cursor-pointer z-10 transition-all duration-500 ease-spring touch-button ${
           isActive 
             ? 'border-red-500 bg-gray-800 scale-115 shadow-glow-red' 
             : 'border-gray-500 bg-gray-900 scale-100 shadow-subtle'
@@ -62,7 +60,7 @@ const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
         }`}
       >
         <span 
-          className={`text-lg transition-transform duration-300 ${
+          className={`text-sm sm:text-base lg:text-lg transition-transform duration-300 ${
             isActive ? 'scale-110' : 'scale-100'
           }`}
         >
@@ -70,27 +68,26 @@ const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
         </span>
       </div>
 
-      {/* Content Card */}
+      {/* Content Card - Mobile-first responsive */}
       <div
         className={`group transition-all duration-600 ease-spring ${
           isActive 
-            ? 'bg-gray-800/90 p-8 pr-6 pl-16 rounded-xl border border-red-500/40 ml-2 shadow-glow-subtle backdrop-blur-sm' 
-            : 'bg-transparent p-2 pr-0 pl-16 rounded-lg border border-transparent ml-0'
+            ? 'bg-gray-800/90 p-3 sm:p-4 lg:p-6 xl:p-8 pr-2 sm:pr-3 lg:pr-4 xl:pr-6 pl-10 sm:pl-12 lg:pl-16 xl:pl-20 rounded-xl border border-red-500/40 ml-1 sm:ml-2 shadow-glow-subtle backdrop-blur-sm' 
+            : 'bg-transparent p-1 sm:p-2 pr-0 pl-10 sm:pl-12 lg:pl-16 xl:pl-20 rounded-lg border border-transparent ml-0'
         }`}
-      >
-        <h4
+      >        <h4
           className={`font-bold transition-all duration-600 ease-spring cursor-pointer ${
             isActive 
-              ? 'text-amber-400 text-xl mb-3' 
-              : 'text-white text-lg mb-2'
+              ? 'text-amber-400 text-base sm:text-lg lg:text-xl xl:text-2xl mb-2 sm:mb-3' 
+              : 'text-white text-sm sm:text-base lg:text-lg xl:text-xl mb-1 sm:mb-2'
           }`}
         >
           {data.title}
         </h4>
 
         <div
-          className={`flex flex-wrap items-center gap-3 text-sm transition-all duration-500 ease-spring ${
-            isActive ? 'mb-4 opacity-100' : 'mb-2 opacity-80'
+          className={`flex flex-wrap items-center gap-1 sm:gap-2 lg:gap-3 text-xs sm:text-sm transition-all duration-500 ease-spring ${
+            isActive ? 'mb-2 sm:mb-3 lg:mb-4 opacity-100' : 'mb-1 sm:mb-2 opacity-80'
           }`}
         >
           <span className="text-red-400 font-medium">
@@ -99,26 +96,26 @@ const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
           <span className="w-1 h-1 rounded-full bg-gray-500" />
           <span className="text-gray-400 font-medium">{data.period}</span>
           <span className="w-1 h-1 rounded-full bg-gray-500" />
-          <span className="text-blue-400 text-xs uppercase tracking-wide font-medium bg-blue-500/10 px-2 py-1 rounded-full border border-blue-500/20">
+          <span className="text-blue-400 text-xs uppercase tracking-wide font-medium bg-blue-500/10 px-1 sm:px-1.5 lg:px-2 py-0.5 sm:py-1 rounded-full border border-blue-500/20">
             {data.type}
           </span>
         </div>
 
-        {/* Description */}
+        {/* Description - Mobile-responsive */}
         <p
           className={`text-gray-300 leading-relaxed transition-all duration-500 ease-spring ${
             isActive 
-              ? 'text-base leading-relaxed mb-5 opacity-100' 
-              : 'text-sm leading-normal mb-3 opacity-90'
+              ? 'text-sm sm:text-base lg:text-lg leading-relaxed mb-3 sm:mb-4 lg:mb-5 opacity-100' 
+              : 'text-xs sm:text-sm leading-normal mb-2 sm:mb-3 opacity-90'
           }`}
         >
-          {isActive ? data.description : `${data.description.substring(0, 120)}${data.description.length > 120 ? '...' : ''}`}
+          {isActive ? data.description : `${data.description.substring(0, 80)}${data.description.length > 80 ? '...' : ''}`}
         </p>
 
-        {/* Achievements (only show when active) */}
+        {/* Achievements (only show when active) - Mobile-responsive */}
         {isActive && data.achievements && (
           <div
-            className={`p-4 rounded-lg bg-gradient-to-r from-orange-500/8 to-yellow-500/8 border border-orange-500/25 mb-5 overflow-hidden transition-all duration-600 ease-spring animate-fade-in`}
+            className={`p-2 sm:p-3 lg:p-4 rounded-lg bg-gradient-to-r from-orange-500/8 to-yellow-500/8 border border-orange-500/25 mb-3 sm:mb-4 lg:mb-5 overflow-hidden transition-all duration-600 ease-spring animate-fade-in`}
             style={{ animationDelay: '100ms' }}
           >
             <h5 className="text-sm font-semibold text-orange-400 mb-3 flex items-center gap-2 animate-slide-up" style={{ animationDelay: '200ms' }}>
@@ -198,53 +195,51 @@ const Experience = () => {
   const allExperiences = experienceData;
 
   const workExperiences = allExperiences.filter(exp => exp.type === 'work');
-  const educationExperiences = allExperiences.filter(exp => exp.type === 'education');
-  return (
-    <section id="experience" className="py-16 relative bg-black overflow-hidden">
-      {/* Background effects */}
+  const educationExperiences = allExperiences.filter(exp => exp.type === 'education');  return (
+    <section id="experience" className="py-8 sm:py-12 lg:py-16 relative bg-black overflow-hidden">
+      {/* Background effects - mobile-optimized */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
+          {/* Section Header - Mobile-first */}
           <div 
             ref={headerRef}
-            className={`text-center mb-12 transition-all duration-800 ${
+            className={`text-center mb-8 sm:mb-12 lg:mb-16 transition-all duration-800 ${
               headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
             }`}
           >
-            <h2 className={`text-5xl md:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 ${
+            <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
               headerVisible ? 'animate-hero-title' : ''
             }`}>
               Experience & Education
             </h2>
-            <p className={`text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed ${
+            <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
               headerVisible ? 'animate-hero-subtitle' : ''
             }`}>
               A visual journey through my DevOps evolution
-              <span className="text-orange-400 font-semibold"> Click timeline nodes to expand details</span>
+              <span className="block sm:inline text-orange-400 font-semibold mt-1 sm:mt-0"> Click timeline nodes to expand details</span>
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-20 xl:gap-24">
-            {/* Professional Experience */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-20">            {/* Professional Experience - Mobile-first */}
             <div 
               ref={workRef}
-              className={`space-y-4 transition-all duration-800 ${
+              className={`space-y-3 sm:space-y-4 transition-all duration-800 ${
                 workVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
               }`}
               style={{ animationDelay: '200ms' }}
             >
-              <h3 className="text-3xl font-bold text-white mb-10 relative">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8 lg:mb-10 relative">
                 Professional Journey
-                <div className="absolute -bottom-4 left-0 w-28 h-1.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-scale-in" style={{ animationDelay: '400ms' }} />
-                <div className="absolute -bottom-2 left-0 w-20 h-1 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-scale-in" style={{ animationDelay: '500ms' }} />
+                <div className="absolute -bottom-3 sm:-bottom-4 left-0 w-20 sm:w-24 lg:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-scale-in" style={{ animationDelay: '400ms' }} />
+                <div className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-16 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-scale-in" style={{ animationDelay: '500ms' }} />
               </h3>
 
               <div className="relative">
-                {/* Background timeline */}
+                {/* Background timeline - Mobile-responsive */}
                 <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full" />
                 {workExperiences.map((exp, index) => (
                   <InteractiveTimelineCard
@@ -258,22 +253,22 @@ const Experience = () => {
               </div>
             </div>
 
-            {/* Educational Background */}
+            {/* Educational Background - Mobile-first */}
             <div 
               ref={educationRef}
-              className={`space-y-4 transition-all duration-800 ${
+              className={`space-y-3 sm:space-y-4 transition-all duration-800 ${
                 educationVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
               }`}
               style={{ animationDelay: '400ms' }}
             >
-              <h3 className="text-3xl font-bold text-white mb-16 relative">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8 lg:mb-16 relative">
                 Educational Foundation
-                <div className="absolute -bottom-4 left-0 w-28 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-scale-in" style={{ animationDelay: '600ms' }} />
-                <div className="absolute -bottom-2 left-0 w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-scale-in" style={{ animationDelay: '700ms' }} />
+                <div className="absolute -bottom-3 sm:-bottom-4 left-0 w-20 sm:w-24 lg:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-scale-in" style={{ animationDelay: '600ms' }} />
+                <div className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-16 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-scale-in" style={{ animationDelay: '700ms' }} />
               </h3>
 
               <div className="relative">
-                {/* Background timeline */}
+                {/* Background timeline - Mobile-responsive */}
                 <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full" />
                 {educationExperiences.map((exp, index) => (
                   <InteractiveTimelineCard
