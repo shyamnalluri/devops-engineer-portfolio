@@ -41,58 +41,63 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   };
 
   const Icon = categoryIcons[project.category];
+  
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       console.log('Backdrop clicked, closing modal');
       onClose();
-    }  };
-  const handleCloseClick = () => {
+    }  
+  };
+    const handleCloseClick = () => {
     console.log('Close button clicked');
     onClose();
   };
 
   return (
-    <AnimatePresence>
-      {project && (        <motion.div
+    <AnimatePresence mode="wait">
+      {project && (
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ 
+            duration: 0.3, 
+            ease: "easeInOut",
+            opacity: { duration: 0.2 }
+          }}
           onClick={handleBackdropClick}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        >          {/* Modal */}
+          className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4"
+          style={{ backdropFilter: 'blur(8px)' }}
+        >
+          {/* Enhanced Modal with professional animations */}
           <motion.div
             initial={{ 
               opacity: 0, 
-              scale: 0.85, 
-              y: 60, 
-              rotateX: -20,
+              scale: 0.9, 
+              y: 20,
               filter: "blur(4px)"
             }}
             animate={{ 
               opacity: 1, 
               scale: 1, 
-              y: 0, 
-              rotateX: 0,
+              y: 0,
               filter: "blur(0px)"
             }}
             exit={{ 
               opacity: 0, 
-              scale: 0.9, 
-              y: 30, 
-              rotateX: -10,
+              scale: 0.95, 
+              y: 10,
               filter: "blur(2px)"
             }}
             transition={{ 
-              duration: 0.5, 
-              ease: [0.16, 1, 0.3, 1],
-              opacity: { duration: 0.4 },
-              scale: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-              y: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-              rotateX: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-              filter: { duration: 0.3 }
+              duration: 0.3,
+              ease: [0.4, 0.0, 0.2, 1], // Material Design ease
+              scale: { 
+                duration: 0.3, 
+                ease: [0.175, 0.885, 0.32, 1.275] // Spring ease
+              }
             }}
-            className="w-full max-w-4xl max-h-[90vh] overflow-y-auto hide-scrollbar relative"
+            className="w-full max-w-4xl max-h-[90vh] overflow-y-auto hide-scrollbar relative animate-modal-in"
             onClick={(e) => e.stopPropagation()}
             style={{ 
               transformStyle: 'preserve-3d',

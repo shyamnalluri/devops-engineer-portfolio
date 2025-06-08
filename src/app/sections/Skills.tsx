@@ -1,12 +1,18 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { FaDocker, FaAws, FaJenkins, FaGitAlt, FaPython, FaMicrosoft } from 'react-icons/fa';
 import { SiKubernetes, SiTerraform, SiAnsible } from 'react-icons/si';
 import { useState } from 'react';
+import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
 const Skills = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const { ref: sectionRef } = useScrollAnimation({
+    threshold: 0.1,
+    stagger: true,
+    staggerDelay: 80,
+    animationClass: 'animate-slide-up'
+  });
 
   const categories = [
     'All',
@@ -66,21 +72,18 @@ const Skills = () => {
 
   const filteredSkills = selectedCategory === 'All' 
     ? skills 
-    : skills.filter(skill => skill.category === selectedCategory);
-  return (    <section id="skills" className="py-12 bg-black relative overflow-hidden">
+    : skills.filter(skill => skill.category === selectedCategory);  return (    
+    <section 
+      id="skills" 
+      className="py-12 bg-black relative overflow-hidden"
+      ref={sectionRef}
+    >
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
       <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-16 opacity-100 animate-in">
           <h2 className="text-4xl font-bold mb-6 text-white">
             Technologies I Use
           </h2>
@@ -89,58 +92,52 @@ const Skills = () => {
             scalable, and efficient infrastructure solutions.
           </p>
 
-          {/* Category Filter */}
+          {/* Category Filter with enhanced animations */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((category) => (
-              <motion.button
+            {categories.map((category, index) => (
+              <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 
+                className={`px-4 py-2 rounded-full text-sm font-medium btn-professional focus-ring transition-all duration-200 ease-primary
                   ${selectedCategory === category 
                     ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg shadow-red-600/20' 
                     : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-white'
                   }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
                 {category}
-              </motion.button>
+              </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-5xl mx-auto"
-        >
-          {filteredSkills.map((skill, index) => (
-            <motion.div
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">          {filteredSkills.map((skill, index) => (
+            <div
               key={skill.title}
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ 
-                duration: 0.5, 
-                delay: index * 0.1,
-                type: "spring",
-                stiffness: 100
-              }}
-              viewport={{ once: true }}
-              className="group"
+              className="group opacity-100 animate-in card-hover"
+              style={{ animationDelay: `${(index + 3) * 80}ms` }}
             >
-              <div className="flex flex-col items-center justify-center p-5 bg-gray-900/80 hover:bg-gray-800 rounded-xl border border-gray-800 hover:border-red-500/50 transition-all duration-300 shadow-lg hover:shadow-red-900/20 h-full">
-                <div className="text-3xl text-gradient-primary mb-3 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+              <div className="flex flex-col items-center justify-center p-5 bg-gray-900/80 hover:bg-gray-800 rounded-xl border border-gray-800 hover:border-red-500/50 transition-all duration-300 ease-secondary shadow-lg h-full relative overflow-hidden">
+                {/* Skill icon with professional animation */}
+                <div className="text-3xl text-gradient-primary mb-3 icon-spin transition-all duration-300 ease-secondary">
                   {skill.icon}
                 </div>
-                <span className="text-base text-gray-300 font-medium group-hover:text-white transition-colors duration-300">
+                <span className="text-base text-gray-300 font-medium group-hover:text-white transition-colors duration-200 ease-primary">
                   {skill.title}
                 </span>
-                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Enhanced hover effects */}
+                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary" />
+                
+                {/* Subtle glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary rounded-xl" />
+                
+                {/* Scale animation on hover */}
+                <div className="absolute inset-0 rounded-xl border border-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary" />
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

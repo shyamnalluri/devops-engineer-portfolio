@@ -1,8 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { FaLinkedin, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface Testimonial {
   id: number;
@@ -73,28 +73,40 @@ const testimonials: Testimonial[] = [
 ];
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
+  const { ref: cardRef } = useScrollAnimation();
+  
   return (
     <div className="flex-shrink-0 w-full min-w-full">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-8 md:p-12 backdrop-blur-sm hover:border-red-500/30 transition-all duration-300 h-96 md:h-[450px] lg:h-[350px] flex flex-col justify-center">
+        <div 
+          ref={cardRef}
+          className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-8 md:p-12 backdrop-blur-sm hover:border-red-500/30 hover:bg-gradient-to-br hover:from-gray-800/70 hover:to-gray-900/70 hover:shadow-2xl hover:shadow-red-500/10 transition-all duration-500 ease-primary h-96 md:h-[450px] lg:h-[350px] flex flex-col justify-center hover:scale-[1.02] hover:-translate-y-1"
+        >
+          {/* Glow effect on hover */}
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-orange-500/5 to-red-500/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-primary"></div>
+          
+          {/* Quote decoration */}
+          <div className="absolute top-4 left-4 text-red-500/20 text-6xl font-serif opacity-50 group-hover:opacity-70 transition-opacity duration-300">&ldquo;</div>
+          
           {/* Testimonial Text */}
-          <div className="mb-6 flex-grow flex items-center">            <p className="text-gray-300 leading-tight text-lg md:text-xl lg:text-2xl font-normal italic text-justify tracking-wide">
-            <span className="text-orange-400 text-3xl md:text-4xl font-serif">&ldquo;</span>{testimonial.text}<span className="text-orange-400 text-3xl md:text-4xl font-serif">&rdquo;</span>
-          </p>
+          <div className="mb-6 flex-grow flex items-center relative z-10">
+            <p className="text-gray-300 leading-tight text-lg md:text-xl lg:text-2xl font-normal italic text-justify tracking-wide group-hover:text-gray-200 transition-colors duration-300">
+              {testimonial.text}
+            </p>
           </div>
 
           {/* Author Info - Centered Below */}
-          <div className="text-center">
-            <h4 className="text-white font-semibold text-xl md:text-2xl mb-2">
+          <div className="text-center relative z-10">
+            <h4 className="text-white font-semibold text-xl md:text-2xl mb-2 group-hover:text-red-100 transition-colors duration-300">
               {testimonial.author}
             </h4>
-            <p className="text-red-400 text-base md:text-lg font-medium mb-1">
+            <p className="text-red-400 text-base md:text-lg font-medium mb-1 group-hover:text-red-300 transition-colors duration-300">
               {testimonial.title}
             </p>
-            <p className="text-gray-400 text-sm md:text-base mb-2">
+            <p className="text-gray-400 text-sm md:text-base mb-2 group-hover:text-gray-300 transition-colors duration-300">
               {testimonial.company}
             </p>
-            <p className="text-gray-500 text-xs md:text-sm">
+            <p className="text-gray-500 text-xs md:text-sm group-hover:text-gray-400 transition-colors duration-300">
               {testimonial.relationship}
             </p>
           </div>
@@ -107,6 +119,8 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const { ref: headerRef } = useScrollAnimation();
+  const { ref: carouselContainerRef } = useScrollAnimation();
 
   // Create infinite scroll by duplicating testimonials
   const infiniteTestimonials = [...testimonials, ...testimonials, ...testimonials];
@@ -175,39 +189,44 @@ const Testimonials = () => {
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
-
-      <div className="max-w-7xl mx-auto">{/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-8"
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div
+          ref={headerRef}
+          className="text-center mb-8 animate-fade-in-up"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-hero-title">
             What Colleagues
-            <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent animate-glow">
               {" "}Say About Me
             </span>
-          </h2>          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto">
+          </h2>
+          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto animate-hero-description">
             Professional recommendations from colleagues and industry leaders I&apos;ve had the privilege to work with
           </p>
-        </motion.div>        {/* Carousel Container */}
-        <div className="relative">          {/* Navigation Buttons */}
+        </div>
+
+        {/* Carousel Container */}
+        <div 
+          ref={carouselContainerRef}
+          className="relative animate-slide-up"
+        >
+          {/* Navigation Buttons */}
           <button
             onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 flex items-center justify-center transition-all duration-200 text-white hover:bg-gray-700 hover:border-red-500/50"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 flex items-center justify-center transition-all duration-300 ease-primary text-white hover:bg-gray-700 hover:border-red-500/50 hover:scale-110 hover:shadow-lg hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-black active:scale-95"
           >
-            <FaChevronLeft className="w-5 h-5" />
+            <FaChevronLeft className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
           </button>
 
           <button
             onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 flex items-center justify-center transition-all duration-200 text-white hover:bg-gray-700 hover:border-red-500/50"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 flex items-center justify-center transition-all duration-300 ease-primary text-white hover:bg-gray-700 hover:border-red-500/50 hover:scale-110 hover:shadow-lg hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-black active:scale-95"
           >
-            <FaChevronRight className="w-5 h-5" />
-          </button>          {/* Testimonials Carousel */}
+            <FaChevronRight className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
+          </button>
+
+          {/* Testimonials Carousel */}
           <div
             ref={carouselRef}
             onScroll={checkScrollPosition}
@@ -220,42 +239,36 @@ const Testimonials = () => {
               </div>
             ))}
           </div>
-        </div>        {/* Dot Indicators */}
-        <div className="flex justify-center mt-4 gap-2">
+        </div>
+
+        {/* Dot Indicators */}
+        <div className="flex justify-center mt-8 gap-3">
           {testimonials.map((_, index) => (
             <button
               key={index}
               onClick={() => scrollToIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-200 ${index === currentIndex
-                  ? 'bg-red-500 w-8'
-                  : 'bg-gray-600 hover:bg-gray-500'
-                }`}
+              className={`h-2 rounded-full transition-all duration-300 ease-primary focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-black ${
+                index === currentIndex
+                  ? 'bg-gradient-to-r from-red-500 to-orange-500 w-8 shadow-lg shadow-red-500/30'
+                  : 'bg-gray-600 hover:bg-gray-500 w-2 hover:w-4'
+              }`}
             />
           ))}
-        </div>
-
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="text-center mt-6"
-        >
-          <p className="text-gray-400 mb-2">
+        </div>        {/* Call to Action */}
+        <div className="text-center mt-12 animate-fade-in-up animate-delay-300">
+          <p className="text-gray-400 mb-4 text-lg">
             Want to add your recommendation?
           </p>
-          <motion.a
+          <a
             href="https://linkedin.com/in/yourprofile"
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-medium rounded-lg transition-all duration-200"
+            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-medium rounded-xl transition-all duration-300 ease-primary hover:scale-105 hover:shadow-xl hover:shadow-red-500/25 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-black active:scale-95 group"
           >
-            <FaLinkedin className="w-5 h-5 mr-2" />
+            <FaLinkedin className="w-5 h-5 mr-3 transition-transform duration-200 group-hover:scale-110" />
             Connect on LinkedIn
-          </motion.a>        </motion.div>
+          </a>
+        </div>
       </div>
 
       {/* Background Elements */}

@@ -1,6 +1,5 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState, ReactElement } from 'react';
 import { FaHome, FaUser, FaCode, FaFolder, FaFileAlt, FaCertificate, FaEnvelope, FaLinkedin, FaGithub } from 'react-icons/fa';
@@ -98,50 +97,49 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
         document.body.style.overflow = '';
       }
     };
-  }, [isOpen, navItems]);
-  return (
-    <AnimatePresence mode="wait">
+  }, [isOpen, navItems]);  return (
+    <>
       {isOpen && (
         <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-md z-40"
+          {/* Backdrop */}
+          <div
+            className={`fixed inset-0 bg-black/70 backdrop-blur-md z-40 transition-opacity duration-300 ease-primary ${
+              isOpen ? 'opacity-100' : 'opacity-0'
+            }`}
             onClick={onClose}
-          /><motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ 
-              type: "spring",
-              stiffness: 300,
-              damping: 30
-            }}
-            className="fixed top-0 right-0 h-full w-[300px] bg-gray-900/95 backdrop-blur-md shadow-xl z-50 flex flex-col border-l border-gray-800"
+          />
+
+          {/* Mobile Menu Panel */}
+          <div
+            className={`fixed top-0 right-0 h-full w-[300px] bg-gray-900/95 backdrop-blur-md shadow-xl z-50 flex flex-col border-l border-gray-800 transform transition-transform duration-300 ease-primary ${
+              isOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
           >
             <div className="relative p-6">
+              {/* Close Button */}
               <button
                 onClick={onClose}
-                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 rounded-full hover:bg-gradient-to-r hover:from-orange-600/30 hover:to-red-600/30 transition-all"
+                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 rounded-full hover:bg-gradient-to-r hover:from-orange-600/30 hover:to-red-600/30 transition-all duration-300 ease-primary hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 active:scale-95"
                 aria-label="Close menu"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
               
               {/* Logo section */}
-              <div className="mb-12 mt-4">
-                <h2 className="text-3xl font-bold text-white">SN</h2>
+              <div className="mb-12 mt-4 animate-fade-in-up">
+                <h2 className="text-3xl font-bold text-white bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+                  SN
+                </h2>
               </div>
-                <div className="flex flex-col space-y-1">
-                {navItems.map((item) => (
-                  <motion.div 
+
+              {/* Navigation Items */}
+              <div className="flex flex-col space-y-1">
+                {navItems.map((item, index) => (
+                  <div 
                     key={item.name}
-                    whileHover={{ x: 5 }}
-                    whileTap={{ scale: 0.98 }}
+                    className={`animate-slide-right animate-delay-${Math.min(index * 100, 500)}`}
                   >
                     <Link
                       href={item.href}
@@ -149,67 +147,68 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                         scrollToSection(e, item.href);
                         onClose();
                       }}
-                      className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 group ${
+                      className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 ease-primary group hover:translate-x-2 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 ${
                         activeSection === item.href.substring(1)
-                          ? 'bg-gradient-to-r from-orange-600/20 to-red-600/20 text-white border-l-2 border-orange-500'
-                          : 'text-gray-400 hover:bg-gray-800/50 hover:text-white border-l-2 border-transparent'
+                          ? 'bg-gradient-to-r from-orange-600/20 to-red-600/20 text-white border-l-4 border-orange-500 shadow-lg shadow-orange-500/20'
+                          : 'text-gray-400 hover:bg-gray-800/50 hover:text-white border-l-4 border-transparent hover:border-gray-600'
                       }`}
                     >
-                      <span className={`transition-all duration-300 group-hover:scale-110 ${
-                        activeSection === item.href.substring(1) ? 'text-orange-500' : ''
+                      <span className={`transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 ${
+                        activeSection === item.href.substring(1) ? 'text-orange-500' : 'group-hover:text-red-400'
                       }`}>
                         {menuIcons[item.name]}
                       </span>
-                      <span className="text-base font-medium tracking-wide">{item.name}</span>
+                      <span className="text-base font-medium tracking-wide group-hover:text-white transition-colors duration-300">
+                        {item.name}
+                      </span>
+                      {activeSection === item.href.substring(1) && (
+                        <div className="ml-auto w-2 h-2 bg-orange-500 rounded-full animate-pulse-slow"></div>
+                      )}
                     </Link>
-                  </motion.div>
-                ))}</div>
-                {/* Social links at the bottom */}
-              <div className="mt-auto pt-8 pb-8 border-t border-gray-800 mt-8">
+                  </div>
+                ))}
+              </div>
+
+              {/* Social links at the bottom */}
+              <div className="mt-auto pt-8 pb-8 border-t border-gray-800 mt-8 animate-fade-in-up animate-delay-300">
                 <div className="flex justify-center gap-6">
-                  <motion.a 
+                  <a 
                     href="https://github.com/shyamnalluri" 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800/50"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                    className="text-gray-400 hover:text-white transition-all duration-300 ease-primary p-3 rounded-full hover:bg-gray-800/50 hover:scale-110 hover:shadow-lg hover:shadow-gray-500/20 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 active:scale-95"
                     aria-label="GitHub profile"
                   >
                     <FaGithub className="w-6 h-6" />
-                  </motion.a>
-                  <motion.a 
+                  </a>
+                  <a 
                     href="https://www.linkedin.com/in/shyamnalluri" 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800/50"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                    className="text-gray-400 hover:text-blue-400 transition-all duration-300 ease-primary p-3 rounded-full hover:bg-blue-500/10 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 active:scale-95"
                     aria-label="LinkedIn profile"
                   >
                     <FaLinkedin className="w-6 h-6" />
-                  </motion.a>
-                  <motion.a 
+                  </a>
+                  <a 
                     href="mailto:nallurishyam@gmail.com" 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800/50"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                    className="text-gray-400 hover:text-red-400 transition-all duration-300 ease-primary p-3 rounded-full hover:bg-red-500/10 hover:scale-110 hover:shadow-lg hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 active:scale-95"
                     aria-label="Email"
                   >
                     <FaEnvelope className="w-6 h-6" />
-                  </motion.a>
+                  </a>
                 </div>
-                <p className="text-center text-gray-500 text-xs mt-4">
+                <p className="text-center text-gray-500 text-xs mt-4 hover:text-gray-400 transition-colors duration-300">
                   &copy; {new Date().getFullYear()} Shyam Nalluri. All rights reserved.
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

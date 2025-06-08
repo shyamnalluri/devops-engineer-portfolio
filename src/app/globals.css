@@ -12,6 +12,29 @@
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   --safe-area-inset-left: env(safe-area-inset-left);
   --safe-area-inset-right: env(safe-area-inset-right);
+  
+  /* Professional Motion System - Apple/Stripe Inspired */
+  /* Durations */
+  --motion-duration-fast: 150ms;
+  --motion-duration-medium: 300ms;
+  --motion-duration-slow: 500ms;
+  --motion-duration-slowest: 800ms;
+  
+  /* Professional Easing Curves */
+  --ease-primary: cubic-bezier(0.4, 0.0, 0.2, 1); /* Material ease */
+  --ease-secondary: cubic-bezier(0.25, 0.1, 0.25, 1); /* Apple smooth */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Subtle bounce */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Spring effect */
+  
+  /* Motion Scale */
+  --scale-hover: 1.03;
+  --scale-press: 0.97;
+  --scale-pop: 1.05;
+  
+  /* Shadows for elevation */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 /* Apply base styles */
@@ -195,6 +218,86 @@ a, button {
 }
 
 @layer utilities {
+  /* Professional Motion Utilities */
+  
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  /* Professional Button Animations */
+  .btn-professional {
+    transition: all var(--motion-duration-fast) var(--ease-primary);
+    will-change: transform, box-shadow;
+  }
+  
+  .btn-professional:hover {
+    transform: scale(var(--scale-hover)) translateZ(0);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .btn-professional:active {
+    transform: scale(var(--scale-press)) translateZ(0);
+    transition-duration: calc(var(--motion-duration-fast) * 0.5);
+  }
+  
+  /* Card Hover Effects */
+  .card-hover {
+    transition: all var(--motion-duration-medium) var(--ease-secondary);
+    will-change: transform, box-shadow;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px) translateZ(0);
+    box-shadow: var(--shadow-strong);
+  }
+  
+  /* Icon Animations */
+  .icon-spin {
+    transition: transform var(--motion-duration-slow) var(--ease-secondary);
+  }
+  
+  .icon-spin:hover {
+    transform: rotateY(360deg);
+  }
+  
+  /* Smooth Focus Rings */
+  .focus-ring {
+    transition: all var(--motion-duration-fast) var(--ease-primary);
+  }
+  
+  .focus-ring:focus-visible {
+    outline: 2px solid #f97316;
+    outline-offset: 2px;
+  }
+  
+  /* Professional Page Transitions */
+  .page-transition {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--motion-duration-medium) var(--ease-primary),
+                transform var(--motion-duration-medium) var(--ease-primary);
+  }
+  
+  .page-transition.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Stagger Animation Support */
+  .stagger-1 { animation-delay: 50ms; }
+  .stagger-2 { animation-delay: 100ms; }
+  .stagger-3 { animation-delay: 150ms; }
+  .stagger-4 { animation-delay: 200ms; }
+  .stagger-5 { animation-delay: 250ms; }
+  
   /* Hide scrollbar utilities */
   .hide-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */

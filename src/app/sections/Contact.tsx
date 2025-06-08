@@ -1,12 +1,12 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaEnvelope, FaMapMarkerAlt, FaQuoteLeft, FaPaperPlane, FaCopy, FaCheck, FaUser, FaBuilding, FaPhone } from 'react-icons/fa';
-import { useState, useEffect, useCallback } from 'react';
+import { FaQuoteLeft, FaPaperPlane, FaCheck } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import Image from 'next/image';
 
 const Contact = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [emailCopied, setEmailCopied] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,6 +14,10 @@ const Contact = () => {
     message: ''
   });
   const [formStatus, setFormStatus] = useState({ submitting: false, submitted: false, error: '' });
+  
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: formRef, isVisible: formVisible } = useScrollAnimation();
+  const { ref: testimonialsRef, isVisible: testimonialsVisible } = useScrollAnimation();
 
   // Curated testimonials (reduced for supporting role)
   const testimonials = [
@@ -43,64 +47,14 @@ const Contact = () => {
       content: "Built a healthcare platform now used by 50,000+ patients. His code quality and user-centric approach are exceptional.",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
       highlight: "Healthcare Tech Specialist"
-    }
-  ];
-
-  const socialLinks = [
-    { 
-      icon: <FaLinkedin size={24} />, 
-      url: "https://linkedin.com/in/shyam-kumar", 
-      label: "LinkedIn",
-      color: "from-blue-500 to-blue-600"
-    },
-    { 
-      icon: <FaGithub size={24} />, 
-      url: "https://github.com/shyam-kumar", 
-      label: "GitHub",
-      color: "from-gray-600 to-gray-700"
-    },
-    { 
-      icon: <FaEnvelope size={24} />, 
-      url: "mailto:hello@shyamkumar.dev", 
-      label: "Email",
-      color: "from-orange-500 to-red-500"
-    }
-  ];
-
-  const contactInfo = [
-    {
-      icon: <FaEnvelope className="text-orange-500" />,
-      label: "Email",
-      value: "hello@shyamkumar.dev",
-      action: () => copyEmail()
-    },
-    {
-      icon: <FaMapMarkerAlt className="text-blue-500" />,
-      label: "Location", 
-      value: "Available Remotely",
-      action: null
-    },
-    {
-      icon: <FaPhone className="text-green-500" />,
-      label: "Response Time",
-      value: "Within 24 hours",
-      action: null
-    }
-  ];
+    }  ];
 
   // Auto-rotate testimonials
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const copyEmail = useCallback(() => {
-    navigator.clipboard.writeText('hello@shyamkumar.dev');
-    setEmailCopied(true);
-    setTimeout(() => setEmailCopied(false), 2000);
-  }, []);
+    return () => clearInterval(interval);  }, [testimonials.length]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -120,8 +74,7 @@ const Contact = () => {
       
       setTimeout(() => {
         setFormStatus(prev => ({ ...prev, submitted: false }));
-      }, 3000);
-    } catch (error) {
+      }, 3000);    } catch {
       setFormStatus({ 
         submitting: false, 
         submitted: false, 
@@ -131,7 +84,6 @@ const Contact = () => {
   };
 
   const isFormValid = formData.name && formData.email && formData.message;
-
   return (
     <section id="contact" className="py-20 relative overflow-hidden">
       {/* Background Elements */}
@@ -143,45 +95,52 @@ const Contact = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          ref={headerRef}
+          className={`text-center mb-16 transition-all duration-800 ${
+            headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
+          }`}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Let's Work{" "}
+          <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${
+            headerVisible ? 'animate-hero-title' : ''          }`}>
+            Let&apos;s Work{" "}
             <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
               Together
             </span>
-          </h2>          <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Ready to bring your vision to life? Let's discuss how we can build something amazing together.
+          </h2>
+          <p className={`text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed ${
+            headerVisible ? 'animate-hero-subtitle' : ''          }`}>
+            Ready to bring your vision to life? Let&apos;s discuss how we can build something amazing together.
           </p>
-        </motion.div>
+        </div>
         
         {/* Balanced Layout: Contact Form & Testimonials Side by Side */}
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
           {/* Contact Form - Equal Weight (50% width) */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}          >
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 h-full flex flex-col">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
+          <div
+            ref={formRef}
+            className={`transition-all duration-800 ${
+              formVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ animationDelay: '200ms' }}
+          >
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 h-full flex flex-col hover:border-orange-500/30 transition-all duration-500 group">
+              <div className={`flex items-center gap-3 mb-6 transition-all duration-600 ${
+                formVisible ? 'animate-fade-in' : 'opacity-0'
+              }`} style={{ animationDelay: '400ms' }}>
+                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <FaPaperPlane className="text-white text-lg" />
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-white">Send Message</h3>
-                  <p className="text-gray-400">Let's start the conversation</p>
+                <div>                  <h3 className="text-2xl font-bold text-white">Send Message</h3>
+                  <p className="text-gray-400">Let&apos;s start the conversation</p>
                 </div>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid gap-6">
-                  <div>
+                  <div className={`transition-all duration-600 ${
+                    formVisible ? 'animate-slide-up' : 'opacity-0 translate-y-4'
+                  }`} style={{ animationDelay: '600ms' }}>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Name *
                     </label>
@@ -191,11 +150,13 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-500 hover:border-gray-500/70 focus:scale-[1.02] focus:shadow-glow-subtle"
                       placeholder="Your full name"
                     />
                   </div>
-                  <div>
+                  <div className={`transition-all duration-600 ${
+                    formVisible ? 'animate-slide-up' : 'opacity-0 translate-y-4'
+                  }`} style={{ animationDelay: '700ms' }}>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Email *
                     </label>
@@ -205,11 +166,13 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-500 hover:border-gray-500/70 focus:scale-[1.02] focus:shadow-glow-subtle"
                       placeholder="your.email@example.com"
                     />
                   </div>
-                  <div>
+                  <div className={`transition-all duration-600 ${
+                    formVisible ? 'animate-slide-up' : 'opacity-0 translate-y-4'
+                  }`} style={{ animationDelay: '800ms' }}>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Company (Optional)
                     </label>
@@ -218,11 +181,13 @@ const Contact = () => {
                       name="company"
                       value={formData.company}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-500 hover:border-gray-500/70 focus:scale-[1.02] focus:shadow-glow-subtle"
                       placeholder="Your company name"
                     />
                   </div>
-                  <div>
+                  <div className={`transition-all duration-600 ${
+                    formVisible ? 'animate-slide-up' : 'opacity-0 translate-y-4'
+                  }`} style={{ animationDelay: '900ms' }}>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Message *
                     </label>
@@ -232,117 +197,99 @@ const Contact = () => {
                       onChange={handleInputChange}
                       required
                       rows={4}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 resize-none"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-500 resize-none hover:border-gray-500/70 focus:scale-[1.02] focus:shadow-glow-subtle"
                       placeholder="Tell me about your project, goals, and how I can help..."
                     />
                   </div>
                 </div>
 
-                <motion.button
+                <button
                   type="submit"
                   disabled={!isFormValid || formStatus.submitting}
-                  className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-300 ${
+                  className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-500 ${
                     isFormValid && !formStatus.submitting
-                      ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-lg hover:shadow-orange-500/25'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-glow-red hover:scale-[1.02] active:scale-[0.98]'
                       : 'bg-gray-600 cursor-not-allowed'
+                  } ${
+                    formVisible ? 'animate-slide-up' : 'opacity-0 translate-y-4'
                   }`}
-                  whileHover={isFormValid ? { scale: 1.02 } : {}}
-                  whileTap={isFormValid ? { scale: 0.98 } : {}}
+                  style={{ animationDelay: '1000ms' }}
                 >
-                  <AnimatePresence mode="wait">
-                    {formStatus.submitting ? (
-                      <motion.div
-                        key="submitting"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex items-center justify-center gap-2"
-                      >
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        Sending...
-                      </motion.div>
-                    ) : formStatus.submitted ? (
-                      <motion.div
-                        key="submitted"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex items-center justify-center gap-2"
-                      >
-                        <FaCheck />
-                        Message Sent!
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="default"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex items-center justify-center gap-2"
-                      >
-                        <FaPaperPlane />
-                        Send Message
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.button>
+                  {formStatus.submitting ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Sending...
+                    </div>
+                  ) : formStatus.submitted ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <FaCheck />
+                      Message Sent!
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center gap-2">
+                      <FaPaperPlane />
+                      Send Message
+                    </div>
+                  )}
+                </button>
 
                 {formStatus.error && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-red-400 text-sm text-center"
-                  >
+                  <p className="text-red-400 text-sm text-center animate-fade-in">
                     {formStatus.error}
-                  </motion.p>
+                  </p>
                 )}
               </form>
             </div>
-          </motion.div>
+          </div>
 
           {/* Testimonials - Equal Weight (50% width) */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 h-full">
+          <div
+            ref={testimonialsRef}
+            className={`transition-all duration-800 ${
+              testimonialsVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ animationDelay: '400ms' }}
+          >
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 h-full hover:border-blue-500/30 transition-all duration-500 group">
               {/* Testimonials Header */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+              <div className={`flex items-center gap-3 mb-6 transition-all duration-600 ${
+                testimonialsVisible ? 'animate-fade-in' : 'opacity-0'
+              }`} style={{ animationDelay: '600ms' }}>
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <FaQuoteLeft className="text-white text-lg" />
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-white">Client Testimonials</h3>
+                <div>                  <h3 className="text-2xl font-bold text-white">Client Testimonials</h3>
                   <p className="text-gray-400">What others say about my work</p>
                 </div>
-              </div>              {/* Inner Container for Testimonials Content - Adjusted size */}
-              <div className="bg-gradient-to-br from-gray-900/30 to-gray-800/30 backdrop-blur-sm border border-gray-600/30 rounded-xl p-6 flex-1 mb-6">
-                <AnimatePresence mode="wait">
-                <motion.div
+              </div>
+
+              {/* Inner Container for Testimonials Content */}
+              <div className={`bg-gradient-to-br from-gray-900/30 to-gray-800/30 backdrop-blur-sm border border-gray-600/30 rounded-xl p-6 flex-1 mb-6 transition-all duration-600 ${
+                testimonialsVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
+              }`} style={{ animationDelay: '800ms' }}>
+                <div
                   key={currentTestimonial}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -30 }}
-                  transition={{ duration: 0.4 }}
-                  className="h-full flex flex-col justify-between"
-                >                  {/* Testimonial Content */}
+                  className="h-full flex flex-col justify-between animate-fade-in"
+                >
+                  {/* Testimonial Content */}
                   <div className="mb-6">
                     <div className="mb-6">
                       <span className="inline-block px-3 py-1 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full text-orange-400 text-sm font-medium">
                         {testimonials[currentTestimonial].highlight}
                       </span>
                     </div>
-                    
-                    <blockquote className="text-lg text-gray-200 leading-relaxed mb-6 italic">
-                      "{testimonials[currentTestimonial].content}"
+                      <blockquote className="text-lg text-gray-200 leading-relaxed mb-6 italic">
+                      &ldquo;{testimonials[currentTestimonial].content}&rdquo;
                     </blockquote>
-                  </div>                  {/* Client Info */}
-                  <div className="flex items-center gap-4 p-4 bg-gray-800/30 rounded-xl border border-gray-700/30">
-                    <img
+                  </div>
+
+                  {/* Client Info */}                  <div className="flex items-center gap-4 p-4 bg-gray-800/30 rounded-xl border border-gray-700/30 hover:border-gray-600/50 transition-all duration-300">
+                    <Image
                       src={testimonials[currentTestimonial].image}
                       alt={testimonials[currentTestimonial].name}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-orange-500/30"
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover border-2 border-orange-500/30 hover:border-orange-500/60 transition-all duration-300"
                     />
                     <div>
                       <h4 className="text-white font-bold text-lg">
@@ -354,26 +301,29 @@ const Contact = () => {
                       <p className="text-gray-400 text-sm">
                         {testimonials[currentTestimonial].company}
                       </p>
-                    </div>                  </div>
-                </motion.div>
-              </AnimatePresence>
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              {/* Dotted Indicators - Now in outer container */}
-              <div className="flex justify-center gap-3">
+              {/* Dotted Indicators */}
+              <div className={`flex justify-center gap-3 transition-all duration-600 ${
+                testimonialsVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
+              }`} style={{ animationDelay: '1000ms' }}>
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    className={`w-3 h-3 rounded-full transition-all duration-500 hover:scale-125 ${
                       index === currentTestimonial 
-                        ? 'bg-orange-500 scale-125 shadow-lg shadow-orange-500/30' 
-                        : 'bg-gray-600 hover:bg-gray-500 hover:scale-110'
+                        ? 'bg-orange-500 scale-125 shadow-glow-orange' 
+                        : 'bg-gray-600 hover:bg-gray-500'
                     }`}
                   />
                 ))}
-              </div>            </div>
-          </motion.div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

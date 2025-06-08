@@ -1,10 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import ProjectModal from '../components/ProjectModal';
 import DottedNavButton from '../components/DottedNavButton';
+import { useScrollAnimation, useCardAnimation } from '../../hooks/useScrollAnimation';
 
 export interface Project {
   title: string;
@@ -216,40 +216,51 @@ const projects: Project[] = [
 ];
 
 const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
+  const { cardRef } = useCardAnimation();
+  
   return (
-    <motion.div
-      className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-6 backdrop-blur-sm hover:border-red-500/30 transition-all duration-300 h-96 cursor-pointer flex flex-col"
+    <div
+      ref={cardRef}
+      className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-6 backdrop-blur-sm hover:border-red-500/30 h-96 cursor-pointer flex flex-col card-hover btn-professional focus-ring overflow-hidden"
       onClick={onClick}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      onKeyDown={(e) => e.key === 'Enter' && onClick()}
+      tabIndex={0}
+      role="button"
+      aria-label={`View details for ${project.title}`}
     >
+      {/* Hover glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary rounded-2xl" />
+      
       {/* Category Badge */}
-      <div className="flex items-center gap-2 mb-4">
-        <span className="px-3 py-1 bg-red-500/20 text-red-400 text-xs rounded-full font-medium">
+      <div className="flex items-center gap-2 mb-4 relative z-10">
+        <span className="px-3 py-1 bg-red-500/20 text-red-400 text-xs rounded-full font-medium transition-all duration-200 group-hover:bg-red-500/30 group-hover:text-red-300">
           {project.category}
         </span>
       </div>
 
       {/* Content Area - Dynamic space distribution */}
-      <div className="flex-grow flex flex-col mb-4">
+      <div className="flex-grow flex flex-col mb-4 relative z-10">
         {/* Project Title - Dynamic */}
         <div className="mb-3">
-          <h3 className="text-lg font-semibold text-white group-hover:text-red-400 transition-colors leading-6">
+          <h3 className="text-lg font-semibold text-white group-hover:text-red-400 transition-colors duration-200 ease-primary leading-6">
             {project.title}
           </h3>
-        </div>        {/* Project Description - Dynamic */}
+        </div>
+        
+        {/* Project Description - Dynamic */}
         <div className="flex-grow mb-4">
-          <p className="text-gray-300 text-sm leading-relaxed">
+          <p className="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-200 ease-primary">
             {project.description}
           </p>
         </div>
-          {/* Technologies - Dynamic */}
+        
+        {/* Technologies - Dynamic */}
         <div className="flex items-center">
           <div className="flex flex-wrap gap-1">
             {project.technologies.map((tech, i) => (
               <span
                 key={i}
-                className="px-2 py-1 text-xs rounded-md bg-gray-800/60 text-gray-300 border border-gray-700/50 whitespace-nowrap"
+                className="px-2 py-1 text-xs rounded-md bg-gray-800/60 text-gray-300 border border-gray-700/50 whitespace-nowrap transition-all duration-200 ease-primary group-hover:bg-gray-700/60 group-hover:text-gray-200 group-hover:border-gray-600/50"
               >
                 {tech}
               </span>
@@ -259,24 +270,28 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
       </div>
 
       {/* Footer - View Details (Fixed at bottom) */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-700/50">
+      <div className="flex items-center justify-between pt-4 border-t border-gray-700/50 group-hover:border-gray-600/50 transition-colors duration-200 ease-primary relative z-10">
         <div className="flex items-center gap-2 text-white text-sm">
-          <FaExternalLinkAlt className="w-3 h-3 text-red-400" />
-          <span>View Details</span>
+          <FaExternalLinkAlt className="w-3 h-3 text-red-400 transition-transform duration-200 group-hover:translate-x-1" />
+          <span className="transition-colors duration-200 group-hover:text-red-400">View Details</span>
         </div>
         {project.githubUrl && (
           <a 
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-full bg-gray-800/60 hover:bg-gray-700 text-gray-200 transition-colors border border-gray-700/50"
+            className="p-2 rounded-full bg-gray-800/60 hover:bg-gray-700 text-gray-200 transition-all duration-200 ease-primary border border-gray-700/50 btn-professional hover:scale-110 focus-ring"
             onClick={(e) => e.stopPropagation()}
+            aria-label={`View ${project.title} on GitHub`}
           >
             <FaGithub className="w-4 h-4" />
           </a>
         )}
       </div>
-    </motion.div>
+      
+      {/* Subtle border glow on hover */}
+      <div className="absolute inset-0 rounded-2xl border border-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary pointer-events-none" />
+    </div>
   );
 };
 
@@ -285,6 +300,14 @@ const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+  
+  // Professional scroll animation hooks
+  const { ref: sectionRef } = useScrollAnimation({
+    threshold: 0.1,
+    stagger: true,
+    staggerDelay: 100,
+    animationClass: 'animate-slide-up'
+  });
   
   const categories = ['All', ...Array.from(new Set(projects.map((project) => project.category)))];
   
@@ -365,27 +388,25 @@ const Projects = () => {
   };
 
   const scrollRight = () => {
-    const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;
-    scrollToIndex(newIndex);
+    const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;    scrollToIndex(newIndex);
   };
-    const openProjectModal = (project: Project) => {
+
+  const openProjectModal = (project: Project) => {
     setSelectedProject(project);
   };
 
-  return (    <section id="projects" className="py-12 bg-black relative overflow-hidden">
+  return (
+    <section 
+      id="projects" 
+      className="py-12 bg-black relative overflow-hidden"
+      ref={sectionRef}
+    >
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
       <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
       <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
+        <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-12 opacity-100 animate-in">
           <h2 className="text-4xl font-bold mb-4 text-white relative inline-block">
             Recent Projects
             <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto"></div>
@@ -393,24 +414,25 @@ const Projects = () => {
           <p className="text-gray-400 max-w-2xl mx-auto text-lg mt-6 mb-10">
           </p>
           
-          {/* Category filters */}
+          {/* Category filters with professional animations */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((category) => (
-              <motion.button
+            {categories.map((category, index) => (
+              <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
+                className={`px-4 py-2 rounded-full text-sm font-medium btn-professional focus-ring transition-all duration-200 ease-primary
                   ${selectedCategory === category 
                     ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg shadow-red-600/20' 
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+                    : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-white'
                   }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
                 {category}
-              </motion.button>
-            ))}          </div>
-        </motion.div>        {/* Projects Carousel */}
+              </button>
+            ))}
+          </div>        </div>
+
+        {/* Projects Carousel */}
         <div className="relative max-w-7xl mx-auto px-20">
           {/* Navigation Arrows - Stylish Dotted Buttons */}
           <DottedNavButton
