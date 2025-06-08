@@ -36,7 +36,7 @@ import {
 } from 'react-icons/fa';
 
 // Icon mapping object
-export const iconMap: Record<string, React.ComponentType<any>> = {
+export const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   // FontAwesome icons
   FaDocker,
   FaAws,

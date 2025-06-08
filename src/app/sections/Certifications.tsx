@@ -5,17 +5,6 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import OptimizedImage from '../components/OptimizedImage';
 import { certificationsData } from '../../data/portfolio';
 
-interface Certification {
-  name: string;
-  credentialId: string;
-  credentialUrl: string;
-  logo: string;
-  issuer: string;
-  issueDate: string;
-  validUntil: string;
-  category: 'cloud' | 'devops' | 'security';
-}
-
 // Use dynamic data from portfolio.ts
 const certifications = certificationsData;
 

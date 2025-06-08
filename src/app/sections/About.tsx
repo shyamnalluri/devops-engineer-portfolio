@@ -102,10 +102,9 @@ const About = () => {
                 </div>
 
                 {/* Dynamic stats from data */}
-                <div className={`grid grid-cols-2 gap-4 mt-8 transition-all duration-800 ${
-                  textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+                <div className={`grid grid-cols-2 gap-4 mt-8 transition-all duration-800 ${                textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`} style={{ animationDelay: '1000ms' }}>
-                  {aboutData.stats.map((stat, index) => (
+                  {aboutData.stats.map((stat) => (
                     <div key={stat.label} className="p-4 rounded-lg bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 group">
                       <div className="text-2xl font-bold text-red-400 group-hover:text-red-300 transition-colors duration-300">{stat.value}</div>
                       <div className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{stat.label}</div>
