@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="240px" viewBox="0 0 200 240" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>devops-engineer</title>
+    <g id="DevOps-Engineer" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Body -->
+        <rect id="Body" fill="#3B82F6" x="60" y="100" width="80" height="100" rx="10"></rect>
+        
+        <!-- Head -->
+        <circle id="Head" fill="#FFD7B0" cx="100" cy="70" r="40"></circle>
+        
+        <!-- Hair -->
+        <path d="M100,30 C78,30 60,48 60,70 L60,80 C80,75 120,75 140,80 L140,70 C140,48 122,30 100,30" fill="#4B3021"></path>
+        
+        <!-- Eyes -->
+        <circle id="Left-Eye" fill="#FFFFFF" cx="85" cy="65" r="8"></circle>
+        <circle id="Right-Eye" fill="#FFFFFF" cx="115" cy="65" r="8"></circle>
+        
+        <!-- Pupils -->
+        <circle id="Left-Pupil" fill="#333333" cx="85" cy="65" r="4"></circle>
+        <circle id="Right-Pupil" fill="#333333" cx="115" cy="65" r="4"></circle>
+        
+        <!-- Mouth -->
+        <path d="M90,85 Q100,95 110,85" stroke="#333333" stroke-width="3" fill="none"></path>
+        
+        <!-- DevOps Logo on Shirt -->
+        <circle id="Logo-BG" fill="#FFFFFF" cx="100" cy="130" r="15"></circle>
+        <text id="Logo-Text" font-family="Arial" font-size="12" font-weight="bold" fill="#3B82F6" text-anchor="middle" x="100" y="135">DevOps</text>
+        
+        <!-- Arms -->
+        <rect id="Left-Arm" fill="#FFD7B0" x="40" y="100" width="20" height="70" rx="10"></rect>
+        <rect id="Right-Arm" fill="#FFD7B0" x="140" y="100" width="20" height="70" rx="10"></rect>
+        
+        <!-- Legs -->
+        <rect id="Left-Leg" fill="#1E40AF" x="65" y="200" width="25" height="40" rx="5"></rect>
+        <rect id="Right-Leg" fill="#1E40AF" x="110" y="200" width="25" height="40" rx="5"></rect>
+        
+        <!-- Shoes -->
+        <path id="Left-Shoe" d="M65,240 L90,240 L90,230 L65,230 C62.2385763,230 60,232.238576 60,235 C60,237.761424 62.2385763,240 65,240 Z" fill="#333333"></path>
+        <path id="Right-Shoe" d="M110,240 L135,240 C137.761424,240 140,237.761424 140,235 C140,232.238576 137.761424,230 135,230 L110,230 L110,240 Z" fill="#333333"></path>
+    </g>
+</svg>

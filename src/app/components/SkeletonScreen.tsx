@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 
 interface SkeletonScreenProps {
-  type: 'about' | 'skills' | 'projects' | 'contact' | 'experience' | 'certifications' | 'achievements';
+  type: 'about' | 'skills' | 'projects' | 'contact' | 'experience' | 'certifications' | 'achievements' | 'testimonials';
 }
 
 const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
@@ -70,7 +70,8 @@ const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
               <div className="h-12 bg-gray-800 rounded w-1/4 mx-auto animate-pulse" />
             </div>
           </div>
-        );      case 'experience':
+        );      
+        case 'experience':
         return (
           <div className="space-y-8">
             {[...Array(3)].map((_, index) => (
@@ -106,6 +107,26 @@ const SkeletonScreen = ({ type }: SkeletonScreenProps) => {
                 <div className="h-12 bg-gray-700 rounded mb-4" />
                 <div className="h-4 bg-gray-700 rounded w-full mb-2" />
                 <div className="h-4 bg-gray-700 rounded w-3/4" />
+              </div>
+            ))}
+          </div>        );
+
+      case 'testimonials':
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="p-6 bg-gray-800 rounded-xl animate-pulse">
+                <div className="h-4 bg-gray-700 rounded w-full mb-4" />
+                <div className="h-4 bg-gray-700 rounded w-5/6 mb-4" />
+                <div className="h-4 bg-gray-700 rounded w-4/6 mb-6" />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="h-4 bg-gray-700 rounded w-32 mb-2" />
+                    <div className="h-3 bg-gray-700 rounded w-24 mb-1" />
+                    <div className="h-3 bg-gray-700 rounded w-28" />
+                  </div>
+                  <div className="w-10 h-10 bg-gray-700 rounded-full" />
+                </div>
               </div>
             ))}
           </div>

@@ -1,17 +1,15 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useRef } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaServer, FaCode, FaLightbulb } from 'react-icons/fa';
-import OptimizedImage from '../components/OptimizedImage';
+import { useState, useRef, useEffect } from 'react';
+import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import ProjectModal from '../components/ProjectModal';
+import DottedNavButton from '../components/DottedNavButton';
+import { useScrollAnimation, useCardAnimation } from '../../hooks/useScrollAnimation';
 
 export interface Project {
   title: string;
   description: string;
   detailedDescription: string;
-  image: string;
-  images?: string[];
   category: 'Infrastructure' | 'Automation' | 'DevOps';
   tags: string[];
   technologies: string[];
@@ -27,7 +25,6 @@ const projects: Project[] = [
     title: "Cloud Infrastructure Migration",
     description: "Enterprise-scale on-premise to AWS cloud migration with zero downtime",
     detailedDescription: "Architected and executed a comprehensive cloud migration strategy for a mission-critical infrastructure supporting 100+ microservices.",
-    image: "/projects/cloud-migration.jpg",
     category: 'Infrastructure',
     tags: ["Cloud Migration", "High Availability", "Cost Optimization"],
     technologies: ["AWS", "Terraform", "Docker", "Route53", "EKS", "RDS"],
@@ -52,7 +49,6 @@ const projects: Project[] = [
     title: "Kubernetes Platform Engineering",
     description: "Production-grade Kubernetes platform with automated scaling and self-healing",
     detailedDescription: "Designed and implemented a robust Kubernetes platform supporting multiple development teams and environments.",
-    image: "/projects/kubernetes.jpg",
     category: 'Infrastructure',
     tags: ["Container Orchestration", "Platform Engineering"],
     technologies: ["Kubernetes", "Helm", "Prometheus", "Grafana", "ArgoCD", "Istio"],
@@ -77,7 +73,6 @@ const projects: Project[] = [
     title: "GitOps CI/CD Pipeline",
     description: "Fully automated GitOps pipeline with advanced deployment strategies",
     detailedDescription: "End-to-end CI/CD automation implementing GitOps principles for a microservices architecture.",
-    image: "/projects/cicd.jpg",
     category: 'Automation',
     tags: ["CI/CD", "GitOps", "Automation"],
     technologies: ["ArgoCD", "GitHub Actions", "Terraform", "Docker"],
@@ -102,7 +97,6 @@ const projects: Project[] = [
     title: "Multi-Region Disaster Recovery",
     description: "Designed and implemented a comprehensive DR strategy with automated failover across multiple regions",
     detailedDescription: "Enterprise-grade disaster recovery solution ensuring business continuity with minimal data loss and downtime.",
-    image: "/projects/disaster-recovery.jpg",
     category: 'Infrastructure',
     tags: ["Disaster Recovery", "High Availability", "Cloud Architecture"],
     technologies: ["Azure Site Recovery", "Traffic Manager", "PowerShell", "Terraform"],
@@ -127,7 +121,6 @@ const projects: Project[] = [
     title: "DevSecOps Pipeline Enhancement",
     description: "Integrated security scanning and compliance checks into the CI/CD pipeline",
     detailedDescription: "Advanced DevSecOps implementation with automated security testing, vulnerability scanning, and compliance verification.",
-    image: "/projects/devsecops.jpg",
     category: 'Automation',
     tags: ["Security", "Compliance", "CI/CD"],
     technologies: ["SonarQube", "Snyk", "OWASP", "Jenkins", "Artifactory"],
@@ -152,7 +145,6 @@ const projects: Project[] = [
     title: "Container Platform Optimization",
     description: "Optimized Kubernetes cluster performance and resource utilization",
     detailedDescription: "Comprehensive Kubernetes platform optimization project focusing on cost efficiency and performance.",
-    image: "/projects/kubernetes-opt.jpg",
     category: 'DevOps',
     tags: ["Kubernetes", "Performance", "Cost Optimization"],
     technologies: ["Kubernetes", "Prometheus", "Grafana", "Horizontal Pod Autoscaling"],
@@ -177,7 +169,6 @@ const projects: Project[] = [
     title: "Zero-Trust Security Implementation",
     description: "Implemented zero-trust architecture across cloud infrastructure",
     detailedDescription: "Complete zero-trust security model implementation with identity-based access control and network segmentation.",
-    image: "/projects/zero-trust.jpg",
     category: 'Infrastructure',
     tags: ["Security", "Zero-Trust", "IAM"],
     technologies: ["Azure AD", "NSGs", "Service Endpoints", "Private Link"],
@@ -202,7 +193,6 @@ const projects: Project[] = [
     title: "Infrastructure as Code Migration",
     description: "Migrated manual infrastructure provisioning to Infrastructure as Code",
     detailedDescription: "Large-scale migration of manually provisioned infrastructure to Terraform with state management and modular design.",
-    image: "/projects/iac.jpg",
     category: 'Automation',
     tags: ["IaC", "Terraform", "Automation"],
     technologies: ["Terraform", "Azure DevOps", "Python", "Go"],
@@ -226,296 +216,269 @@ const projects: Project[] = [
 ];
 
 const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
-  const categoryColors = {
-    Infrastructure: {
-      gradient: 'from-blue-600/20 via-blue-500/10 to-transparent',
-      hover: 'group-hover/card:from-blue-500/30 group-hover/card:via-blue-400/20',
-      border: 'border-blue-500/20',
-      text: 'text-blue-400',
-      glow: 'group-hover/card:shadow-blue-500/25'
-    },
-    Automation: {
-      gradient: 'from-emerald-600/20 via-emerald-500/10 to-transparent',
-      hover: 'group-hover/card:from-emerald-500/30 group-hover/card:via-emerald-400/20',
-      border: 'border-emerald-500/20',
-      text: 'text-emerald-400',
-      glow: 'group-hover/card:shadow-emerald-500/25'
-    },
-    DevOps: {
-      gradient: 'from-purple-600/20 via-purple-500/10 to-transparent',
-      hover: 'group-hover/card:from-purple-500/30 group-hover/card:via-purple-400/20',
-      border: 'border-purple-500/20',
-      text: 'text-purple-400',
-      glow: 'group-hover/card:shadow-purple-500/25'
-    }
-  };
-
-  const categoryIcons = {
-    Infrastructure: FaServer,
-    Automation: FaCode,
-    DevOps: FaLightbulb
-  };
-
-  const Icon = categoryIcons[project.category];
-  const colors = categoryColors[project.category];
-
+  const { cardRef } = useCardAnimation();
+  
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.3 }}
-      className="h-full group/card"
+    <div
+      ref={cardRef}
+      className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl p-6 backdrop-blur-sm hover:border-red-500/30 h-96 cursor-pointer flex flex-col card-hover btn-professional focus-ring overflow-hidden"
       onClick={onClick}
+      onKeyDown={(e) => e.key === 'Enter' && onClick()}
+      tabIndex={0}
+      role="button"
+      aria-label={`View details for ${project.title}`}
     >
-      <div 
-        className={`relative h-full rounded-2xl border bg-gradient-to-br backdrop-blur-sm cursor-pointer
-          transition-all duration-500 ${colors.border} hover:border-opacity-50
-          bg-gray-900/40 overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-1
-          ${colors.glow}`}
-      >
-        {/* Hero Section with Image */}
-        <div className="relative h-48 overflow-hidden rounded-t-2xl">
-          <div className={`absolute inset-0 bg-gradient-to-br ${colors.gradient} ${colors.hover} 
-            transition-all duration-500 z-20 opacity-80`} />
-          <div className="absolute inset-0 bg-gradient-to-b from-gray-900/90 via-gray-900/50 to-transparent z-10" />
-          <OptimizedImage
-            src={project.image}
-            alt={project.title}
-            width={400}
-            height={300}
-            className="w-full h-full object-cover object-center scale-105 group-hover/card:scale-110 
-              transition-all duration-700 brightness-[0.8] group-hover/card:brightness-[0.9]"
-          />
+      {/* Hover glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary rounded-2xl" />
+      
+      {/* Category Badge */}
+      <div className="flex items-center gap-2 mb-4 relative z-10">
+        <span className="px-3 py-1 bg-red-500/20 text-red-400 text-xs rounded-full font-medium transition-all duration-200 group-hover:bg-red-500/30 group-hover:text-red-300">
+          {project.category}
+        </span>
+      </div>
+
+      {/* Content Area - Dynamic space distribution */}
+      <div className="flex-grow flex flex-col mb-4 relative z-10">
+        {/* Project Title - Dynamic */}
+        <div className="mb-3">
+          <h3 className="text-lg font-semibold text-white group-hover:text-red-400 transition-colors duration-200 ease-primary leading-6">
+            {project.title}
+          </h3>
         </div>
-
-        {/* Content Section */}
-        <div className="p-6 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/80 to-gray-900 opacity-80" />
-          <div className="relative z-10">
-            <div className="flex items-start justify-between mb-4">
-              <h3 className={`text-xl font-bold group-hover/card:${colors.text} transition-colors duration-300 
-                flex-1 pr-4 tracking-wide`}>
-                {project.title}
-              </h3>
-              <Icon className={`w-6 h-6 ${colors.text} mt-1 transform transition-transform duration-300 
-                group-hover/card:scale-110 group-hover/card:rotate-[-8deg]`} />
-            </div>
-
-            <p className="text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed group-hover/card:text-gray-300 
-              transition-colors duration-300">
-              {project.description}
-            </p>
-
-            <div className="space-y-4">
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {project.tags.slice(0, 3).map((tag, index) => (
-                  <span
-                    key={index}
-                    className={`px-2.5 py-1 text-xs rounded-full ${colors.text} bg-gray-800/50 
-                      border ${colors.border} backdrop-blur-sm transform transition-transform duration-200 
-                      hover:scale-105 hover:border-opacity-75`}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* View Project Link */}
-              <div className="flex items-center justify-between pt-4 border-t border-gray-800/50">
-                <button
-                  className={`text-sm ${colors.text} hover:opacity-90 transition-all duration-300 
-                    flex items-center gap-1.5 group/btn relative px-2 py-1 rounded-lg
-                    hover:bg-gray-800/30`}
-                >
-                  <span>View Project</span>
-                  <svg
-                    className="w-4 h-4 transform transition-all duration-300 group-hover/btn:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </button>
-                
-                <div className="flex gap-3">
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-white transition-all duration-300 p-1.5 
-                        hover:bg-gray-800/50 rounded-full transform hover:scale-110 hover:rotate-[-8deg]"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <FaGithub className="w-4 h-4" />
-                    </a>
-                  )}
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-white transition-all duration-300 p-1.5 
-                        hover:bg-gray-800/50 rounded-full transform hover:scale-110 hover:rotate-[-8deg]"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <FaExternalLinkAlt className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
+        
+        {/* Project Description - Dynamic */}
+        <div className="flex-grow mb-4">
+          <p className="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-200 ease-primary">
+            {project.description}
+          </p>
+        </div>
+        
+        {/* Technologies - Dynamic */}
+        <div className="flex items-center">
+          <div className="flex flex-wrap gap-1">
+            {project.technologies.map((tech, i) => (
+              <span
+                key={i}
+                className="px-2 py-1 text-xs rounded-md bg-gray-800/60 text-gray-300 border border-gray-700/50 whitespace-nowrap transition-all duration-200 ease-primary group-hover:bg-gray-700/60 group-hover:text-gray-200 group-hover:border-gray-600/50"
+              >
+                {tech}
+              </span>
+            ))}
           </div>
         </div>
       </div>
-    </motion.div>
+
+      {/* Footer - View Details (Fixed at bottom) */}
+      <div className="flex items-center justify-between pt-4 border-t border-gray-700/50 group-hover:border-gray-600/50 transition-colors duration-200 ease-primary relative z-10">
+        <div className="flex items-center gap-2 text-white text-sm">
+          <FaExternalLinkAlt className="w-3 h-3 text-red-400 transition-transform duration-200 group-hover:translate-x-1" />
+          <span className="transition-colors duration-200 group-hover:text-red-400">View Details</span>
+        </div>
+        {project.githubUrl && (
+          <a 
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-full bg-gray-800/60 hover:bg-gray-700 text-gray-200 transition-all duration-200 ease-primary border border-gray-700/50 btn-professional hover:scale-110 focus-ring"
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`View ${project.title} on GitHub`}
+          >
+            <FaGithub className="w-4 h-4" />
+          </a>
+        )}
+      </div>
+      
+      {/* Subtle border glow on hover */}
+      <div className="absolute inset-0 rounded-2xl border border-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary pointer-events-none" />
+    </div>
   );
 };
 
 const Projects = () => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  
+  // Professional scroll animation hooks
+  const { ref: sectionRef } = useScrollAnimation({
+    threshold: 0.1,
+    stagger: true,
+    staggerDelay: 100,
+    animationClass: 'animate-slide-up'
+  });
+  
+  const categories = ['All', ...Array.from(new Set(projects.map((project) => project.category)))];
+  
+  const filteredProjects = selectedCategory === 'All'
+    ? projects
+    : projects.filter((project) => project.category === selectedCategory);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    });
+  // Create infinite scroll by duplicating projects
+  const infiniteProjects = [...filteredProjects, ...filteredProjects, ...filteredProjects];
+  const totalOriginalItems = filteredProjects.length;
+  const startIndex = totalOriginalItems;
+
+  // Calculate how many projects can fit in view (3 for desktop, 1 for mobile)
+  const getProjectsPerView = () => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768 ? 3 : 1;
+    }
+    return 3;
   };
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 380;
-      const targetScroll = scrollContainerRef.current.scrollLeft + 
-        (direction === 'left' ? -scrollAmount : scrollAmount);
-      scrollContainerRef.current.scrollTo({
-        left: targetScroll,
-        behavior: 'smooth'
-      });
+  const [projectsPerView, setProjectsPerView] = useState(getProjectsPerView());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setProjectsPerView(getProjectsPerView());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  // Initialize scroll position to middle set
+  useEffect(() => {
+    if (carouselRef.current) {
+      const containerWidth = carouselRef.current.clientWidth;
+      const scrollPosition = startIndex * (containerWidth / projectsPerView);
+      carouselRef.current.scrollLeft = scrollPosition;
+      setCurrentIndex(0);
+    }
+  }, [selectedCategory, projectsPerView, startIndex]);
+
+  // Check scroll position and handle infinite scroll
+  const checkScrollPosition = () => {
+    if (carouselRef.current) {
+      const { scrollLeft, clientWidth } = carouselRef.current;
+      const itemWidth = clientWidth / projectsPerView;
+      const rawIndex = Math.round(scrollLeft / itemWidth);
+      
+      // Handle infinite scroll wrapping
+      if (rawIndex >= totalOriginalItems * 2) {
+        carouselRef.current.scrollLeft = totalOriginalItems * itemWidth;
+        setCurrentIndex(0);
+      } else if (rawIndex < totalOriginalItems) {
+        carouselRef.current.scrollLeft = (totalOriginalItems * 2 - 1) * itemWidth;
+        setCurrentIndex(totalOriginalItems - 1);
+      } else {
+        const actualIndex = rawIndex - totalOriginalItems;
+        setCurrentIndex(actualIndex);
+      }
     }
   };
 
+  const scrollToIndex = (index: number) => {
+    if (carouselRef.current) {
+      const containerWidth = carouselRef.current.clientWidth;
+      const itemWidth = containerWidth / projectsPerView;
+      const scrollPosition = (startIndex + index) * itemWidth;
+      carouselRef.current.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+      setCurrentIndex(index);
+    }
+  };
+
+  const scrollLeft = () => {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : totalOriginalItems - 1;
+    scrollToIndex(newIndex);
+  };
+
+  const scrollRight = () => {
+    const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;    scrollToIndex(newIndex);
+  };
+
+  const openProjectModal = (project: Project) => {
+    setSelectedProject(project);
+  };
+
   return (
-    <>
-      <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
-      
-      <section 
-        id="projects" 
-        className="py-20 relative overflow-hidden"
-        onMouseMove={handleMouseMove}
-      >
+    <section 
+      id="projects" 
+      className="py-12 bg-black relative overflow-hidden"
+      ref={sectionRef}
+    >
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
+      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
         <div className="container mx-auto px-4 relative z-10">
-          {/* Title Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
-                Featured Projects
-              </span>
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Showcasing enterprise-scale infrastructure solutions and automation projects,
-              demonstrating expertise in cloud architecture, DevOps practices, and scalable systems.
-            </p>
-          </motion.div>
+        <div className="text-center mb-12 opacity-100 animate-in">
+          <h2 className="text-4xl font-bold mb-4 text-white relative inline-block">
+            Recent Projects
+            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto"></div>
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg mt-6 mb-10">
+          </p>
+          
+          {/* Category filters with professional animations */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {categories.map((category, index) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium btn-professional focus-ring transition-all duration-200 ease-primary
+                  ${selectedCategory === category 
+                    ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg shadow-red-600/20' 
+                    : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-white'
+                  }`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {category}
+              </button>
+            ))}
+          </div>        </div>
 
-          {/* Projects Slider */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="relative max-w-[1170px] mx-auto mt-8"
+        {/* Projects Carousel */}
+        <div className="relative max-w-7xl mx-auto px-20">
+          {/* Navigation Arrows - Stylish Dotted Buttons */}
+          <DottedNavButton
+            direction="left"
+            onClick={scrollLeft}
+            className="absolute -left-8 top-1/2 -translate-y-1/2 z-20"
+          />
+
+          <DottedNavButton
+            direction="right"
+            onClick={scrollRight}
+            className="absolute -right-8 top-1/2 -translate-y-1/2 z-20"
+          />{/* Carousel Container */}
+          <div
+            ref={carouselRef}
+            onScroll={checkScrollPosition}
+            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {/* Scroll Container */}
-            <div 
-              ref={scrollContainerRef}
-              className="overflow-x-auto hide-scrollbar relative pb-4"
-              style={{
-                maskImage: 'linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent, black 150px, black calc(100% - 150px), transparent)'
-              }}
-            >
-              <div className="flex gap-[30px] px-[100px]">
-                <AnimatePresence mode="popLayout">
-                  {projects.map((project) => (
-                    <div key={project.title} className="w-[350px] flex-shrink-0">
-                      <ProjectCard 
-                        project={project} 
-                        onClick={() => setSelectedProject(project)}
-                      />
-                    </div>
-                  ))}
-                </AnimatePresence>
+            {infiniteProjects.map((project, index) => (
+              <div key={`${project.title}-${Math.floor(index / totalOriginalItems)}`} className="flex-shrink-0 w-full md:w-1/3 px-3 snap-center">
+                <ProjectCard project={project} onClick={() => openProjectModal(project)} />
               </div>
-            </div>
-
-            {/* Gradient Masks and Navigation */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-900 via-gray-900/95 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-900 via-gray-900/95 to-transparent z-10 pointer-events-none" />
-
-            <button
-              onClick={() => scroll('left')}
-              className="absolute left-[-20px] top-1/2 transform -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700/90 
-                text-gray-300 hover:text-white p-3 rounded-full z-20 backdrop-blur-sm transition-all duration-300
-                shadow-lg shadow-black/20 hover:shadow-xl hover:scale-110 hover:-translate-x-1"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <button
-              onClick={() => scroll('right')}
-              className="absolute right-[-20px] top-1/2 transform -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700/90 
-                text-gray-300 hover:text-white p-3 rounded-full z-20 backdrop-blur-sm transition-all duration-300
-                shadow-lg shadow-black/20 hover:shadow-xl hover:scale-110 hover:translate-x-1"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </motion.div>
+            ))}
+          </div>          {/* Dot Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {filteredProjects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  currentIndex === index
+                    ? 'bg-red-500 w-8'
+                    : 'bg-gray-600 hover:bg-gray-500'
+                }`}
+              />
+            ))}
+          </div>
         </div>
-
-        {/* Beam Effect */}
-        <motion.div
-          className="hidden lg:block absolute pointer-events-none"
-          animate={{
-            x: mousePosition.x - 200,
-            y: mousePosition.y - 200,
-          }}
-          transition={{ type: "spring", damping: 30, stiffness: 200 }}
-          style={{
-            width: '400px',
-            height: '400px',
-            background: 'radial-gradient(circle, rgba(56, 189, 248, 0.03) 0%, rgba(56, 189, 248, 0.01) 40%, transparent 70%)',
-            borderRadius: '50%',
-            zIndex: 1
-          }}
-        />
-
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800/50 to-gray-900 -z-10" />
-        <div className="absolute inset-0 bg-grid-white/[0.02] -z-10" />
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] 
-          bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-teal-500/5 rounded-full blur-[120px] -z-10 animate-slowly-rotate" />
-      </section>
-    </>
+      </div>        {/* Project Modal */}      <ProjectModal
+        project={selectedProject}
+        onClose={() => {
+          setSelectedProject(null);
+        }}
+      />
+    </section>
   );
 };
 

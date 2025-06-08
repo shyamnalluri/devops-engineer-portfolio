@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="240px" viewBox="0 0 200 240" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ai-robot</title>
+    <g id="AI-Robot" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Robot Body -->
+        <rect id="Body" fill="#6C2BD9" x="60" y="100" width="80" height="100" rx="5"></rect>
+        
+        <!-- Head -->
+        <rect id="Head" fill="#9333EA" x="65" y="35" width="70" height="65" rx="15"></rect>
+        
+        <!-- Antenna -->
+        <rect id="Antenna-Base" fill="#9333EA" x="95" y="20" width="10" height="15"></rect>
+        <circle id="Antenna-Top" fill="#FF5733" cx="100" cy="15" r="8"></circle>
+        
+        <!-- Eyes -->
+        <circle id="Left-Eye" fill="#1DD1A1" cx="85" cy="65" r="10"></circle>
+        <circle id="Left-Eye-Glow" fill="#FFFFFF" cx="82" cy="62" r="3"></circle>
+        
+        <circle id="Right-Eye" fill="#1DD1A1" cx="115" cy="65" r="10"></circle>
+        <circle id="Right-Eye-Glow" fill="#FFFFFF" cx="112" cy="62" r="3"></circle>
+        
+        <!-- Mouth -->
+        <rect id="Mouth" fill="#1DD1A1" x="80" y="85" width="40" height="5" rx="2.5"></rect>
+        
+        <!-- Circuit Pattern -->
+        <path d="M75,110 L95,110 L95,120 L125,120 L125,140" stroke="#C084FC" stroke-width="2" fill="none"></path>
+        <path d="M125,140 L105,140 L105,160 L75,160" stroke="#C084FC" stroke-width="2" fill="none"></path>
+        <circle fill="#C084FC" cx="75" cy="110" r="3"></circle>
+        <circle fill="#C084FC" cx="95" cy="110" r="3"></circle>
+        <circle fill="#C084FC" cx="95" cy="120" r="3"></circle>
+        <circle fill="#C084FC" cx="125" cy="120" r="3"></circle>
+        <circle fill="#C084FC" cx="125" cy="140" r="3"></circle>
+        <circle fill="#C084FC" cx="105" cy="140" r="3"></circle>
+        <circle fill="#C084FC" cx="105" cy="160" r="3"></circle>
+        <circle fill="#C084FC" cx="75" cy="160" r="3"></circle>
+        
+        <!-- AI Text -->
+        <rect id="AI-Label-BG" fill="#FFFFFF" x="85" y="170" width="30" height="20" rx="5"></rect>
+        <text id="AI-Text" font-family="Arial" font-size="14" font-weight="bold" fill="#6C2BD9" text-anchor="middle" x="100" y="185">AI</text>
+        
+        <!-- Arms -->
+        <rect id="Left-Arm" fill="#9333EA" x="40" y="110" width="20" height="60" rx="10"></rect>
+        <rect id="Left-Hand" fill="#9333EA" x="30" y="170" width="30" height="15" rx="7.5"></rect>
+        
+        <rect id="Right-Arm" fill="#9333EA" x="140" y="110" width="20" height="60" rx="10"></rect>
+        <rect id="Right-Hand" fill="#9333EA" x="140" y="170" width="30" height="15" rx="7.5"></rect>
+        
+        <!-- Legs -->
+        <rect id="Left-Leg" fill="#7C3AED" x="70" y="200" width="20" height="35" rx="5"></rect>
+        <rect id="Right-Leg" fill="#7C3AED" x="110" y="200" width="20" height="35" rx="5"></rect>
+        
+        <!-- Feet -->
+        <rect id="Left-Foot" fill="#4C1D95" x="65" y="235" width="30" height="5" rx="2.5"></rect>
+        <rect id="Right-Foot" fill="#4C1D95" x="105" y="235" width="30" height="5" rx="2.5"></rect>
+    </g>
+</svg>

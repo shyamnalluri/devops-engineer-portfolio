@@ -39,10 +39,9 @@ const ScrollProgressBar = () => {
 
   if (!mounted) return null;
   if (!isVisible) return null;
-
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-1 bg-blue-500 origin-left z-[9999]"
+      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-red-600 origin-left z-[9999]"
       style={{ scaleX }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
