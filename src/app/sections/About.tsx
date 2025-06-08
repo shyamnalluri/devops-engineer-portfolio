@@ -2,6 +2,7 @@
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
+import { aboutData } from '../../data/portfolio';
 
 const About = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
@@ -91,33 +92,25 @@ const About = () => {
                   <p className={`text-gray-300 text-lg leading-relaxed text-justify first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1 transition-all duration-800 ${
                     textVisible ? 'animate-fade-in' : 'opacity-0'
                   }`} style={{ animationDelay: '600ms' }}>
-                    I&apos;m a passionate DevOps Engineer with 5 years of experience streamlining
-                    development processes and optimizing infrastructure. My expertise lies in
-                    bridging the gap between development and operations, creating robust,
-                    scalable, and highly available systems that empower development teams.
+                    {aboutData.description[0]}
                   </p>
                   <p className={`text-gray-400 text-lg leading-relaxed text-justify transition-all duration-800 ${
                     textVisible ? 'animate-fade-in' : 'opacity-0'
                   }`} style={{ animationDelay: '800ms' }}>
-                    My approach combines automation with security best practices.
-                    I&apos;ve helped organizations reduce deployment time by <span className="text-red-500 font-semibold hover:text-orange-400 transition-colors duration-300">75%</span> through
-                    implementing efficient CI/CD pipelines and infrastructure as code solutions. Every project is an
-                    opportunity to improve reliability and accelerate software delivery.
+                    {aboutData.description[1]}
                   </p>
                 </div>
 
-                {/* Additional stats or highlights */}
+                {/* Dynamic stats from data */}
                 <div className={`grid grid-cols-2 gap-4 mt-8 transition-all duration-800 ${
                   textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`} style={{ animationDelay: '1000ms' }}>
-                  <div className="p-4 rounded-lg bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 group">
-                    <div className="text-2xl font-bold text-red-400 group-hover:text-red-300 transition-colors duration-300">5+</div>
-                    <div className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">Years Experience</div>
-                  </div>
-                  <div className="p-4 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 group">
-                    <div className="text-2xl font-bold text-blue-400 group-hover:text-blue-300 transition-colors duration-300">50+</div>
-                    <div className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">Projects Delivered</div>
-                  </div>
+                  {aboutData.stats.map((stat, index) => (
+                    <div key={stat.label} className="p-4 rounded-lg bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 group">
+                      <div className="text-2xl font-bold text-red-400 group-hover:text-red-300 transition-colors duration-300">{stat.value}</div>
+                      <div className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{stat.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

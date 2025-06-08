@@ -1,9 +1,9 @@
 'use client';
 
-import { FaDocker, FaAws, FaJenkins, FaGitAlt, FaPython, FaMicrosoft } from 'react-icons/fa';
-import { SiKubernetes, SiTerraform, SiAnsible } from 'react-icons/si';
 import { useState } from 'react';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
+import { skillsData } from '../../data/portfolio';
+import { getIcon } from '../../utils/iconMap';
 
 const Skills = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -14,65 +14,20 @@ const Skills = () => {
     animationClass: 'animate-slide-up'
   });
 
-  const categories = [
-    'All',
-    'Cloud & Infrastructure',
-    'DevOps Tools',
-    'Programming',
-    'Containerization'
-  ];
+  // Generate categories dynamically from data
+  const categories = ['All', ...skillsData.map(category => category.name)];
 
-  const skills = [
-    {
-      title: "Terraform",
-      icon: <SiTerraform className="w-5 h-5" />,
-      category: "DevOps Tools"
-    },
-    {
-      title: "Python",
-      icon: <FaPython className="w-5 h-5" />,
-      category: "Programming"
-    },
-    {
-      title: "AWS",
-      icon: <FaAws className="w-5 h-5" />,
-      category: "Cloud & Infrastructure"
-    },
-    {
-      title: "Azure",
-      icon: <FaMicrosoft className="w-5 h-5" />,
-      category: "Cloud & Infrastructure"
-    },
-    {
-      title: "Git",
-      icon: <FaGitAlt className="w-5 h-5" />,
-      category: "DevOps Tools"
-    },
-    {
-      title: "Kubernetes",
-      icon: <SiKubernetes className="w-5 h-5" />,
-      category: "Containerization"
-    },
-    {
-      title: "Docker",
-      icon: <FaDocker className="w-5 h-5" />,
-      category: "Containerization"
-    },
-    {
-      title: "Jenkins",
-      icon: <FaJenkins className="w-5 h-5" />,
-      category: "DevOps Tools"
-    },
-    {
-      title: "Ansible",
-      icon: <SiAnsible className="w-5 h-5" />,
-      category: "DevOps Tools"
-    }
-  ];
+  // Flatten skills for filtering
+  const allSkills = skillsData.flatMap(category => 
+    category.skills.map(skill => ({
+      ...skill,
+      category: category.name
+    }))
+  );
 
   const filteredSkills = selectedCategory === 'All' 
-    ? skills 
-    : skills.filter(skill => skill.category === selectedCategory);  return (    
+    ? allSkills 
+    : allSkills.filter(skill => skill.category === selectedCategory);return (    
     <section 
       id="skills" 
       className="py-12 bg-black relative overflow-hidden"
@@ -109,22 +64,31 @@ const Skills = () => {
               </button>
             ))}
           </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">          {filteredSkills.map((skill, index) => (
+        </div>        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
+          {filteredSkills.map((skill, index) => (
             <div
               key={skill.title}
               className="group opacity-100 animate-in card-hover"
               style={{ animationDelay: `${(index + 3) * 80}ms` }}
             >
               <div className="flex flex-col items-center justify-center p-5 bg-gray-900/80 hover:bg-gray-800 rounded-xl border border-gray-800 hover:border-red-500/50 transition-all duration-300 ease-secondary shadow-lg h-full relative overflow-hidden">
-                {/* Skill icon with professional animation */}
+                {/* Skill icon with dynamic rendering */}
                 <div className="text-3xl text-gradient-primary mb-3 icon-spin transition-all duration-300 ease-secondary">
-                  {skill.icon}
+                  {getIcon(skill.icon, "w-5 h-5")}
                 </div>
                 <span className="text-base text-gray-300 font-medium group-hover:text-white transition-colors duration-200 ease-primary">
                   {skill.title}
                 </span>
+                
+                {/* Proficiency indicator (optional) */}
+                {skill.proficiency && (
+                  <div className="w-full mt-2 h-1 bg-gray-700 rounded-full overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div 
+                      className="h-full bg-gradient-to-r from-red-500 to-orange-500 rounded-full transition-all duration-500"
+                      style={{ width: `${skill.proficiency}%` }}
+                    />
+                  </div>
+                )}
                 
                 {/* Enhanced hover effects */}
                 <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary" />

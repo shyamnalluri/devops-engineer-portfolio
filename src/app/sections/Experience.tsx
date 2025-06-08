@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { experienceData } from '../../data/portfolio';
 
 interface ExperienceData {
   id: string;
@@ -192,92 +193,9 @@ const Experience = () => {
       }, 50);
     }
   };
-
-  const allExperiences: ExperienceData[] = [
-    {
-      id: 'senior-devops',
-      title: "Senior DevOps Engineer",
-      company: "Tech Solutions Inc.",
-      period: "2023 - Present",
-      description: "Leading enterprise-scale DevOps transformation initiatives, architecting cloud-native solutions, and mentoring development teams on best practices.",
-      phase: "Optimization & Innovation",
-      type: 'work',
-      icon: '🚀',
-      technologies: ["AWS", "Kubernetes", "Terraform", "Jenkins", "Docker", "Python", "Helm", "ArgoCD"],
-      achievements: [
-        "Reduced deployment time by 70% through advanced CI/CD pipeline optimization",
-        "Implemented GitOps workflows serving 50+ microservices",
-        "Led cloud migration reducing infrastructure costs by 40%",
-        "Mentored 5 junior engineers in DevOps practices"
-      ]
-    },
-    {
-      id: 'devops-engineer',
-      title: "DevOps Engineer",
-      company: "Cloud Systems Ltd.",
-      period: "2021 - 2023",
-      description: "Spearheaded Infrastructure as Code initiatives and automated deployment pipelines across multiple cloud environments.",
-      phase: "Automation & Scaling",
-      type: 'work',
-      icon: '⚙️',
-      technologies: ["AWS", "Terraform", "CloudFormation", "Ansible", "Git", "Prometheus", "Grafana"],
-      achievements: [
-        "Automated 90% of infrastructure provisioning using Terraform",
-        "Implemented comprehensive monitoring reducing downtime by 60%",
-        "Standardized deployment processes across 10+ applications",
-        "Achieved 99.9% uptime SLA for critical services"
-      ]
-    },
-    {
-      id: 'systems-admin',
-      title: "Systems Administrator",
-      company: "Data Solutions Corp.",
-      period: "2020 - 2021",
-      description: "Foundation building phase focusing on system reliability, automation scripting, and infrastructure management fundamentals.",
-      phase: "Foundation & Learning",
-      type: 'work',
-      icon: '🔧',
-      technologies: ["Linux", "Python", "Shell Scripting", "VMware", "Docker", "Git"],
-      achievements: [
-        "Automated backup systems reducing manual effort by 80%",
-        "Improved server performance through optimization techniques",
-        "Implemented monitoring solutions for 20+ servers",
-        "Created documentation standards for team processes"
-      ]
-    },
-    {
-      id: 'msc-cs',
-      title: "Master of Science in Computer Science",
-      institution: "Tech University",
-      period: "2018 - 2020",
-      description: "Advanced studies in Cloud Computing, Distributed Systems, and Software Architecture with focus on scalable system design.",
-      phase: "Academic Excellence",
-      type: 'education',
-      icon: '🎓',
-      achievements: [
-        "Thesis: 'Microservices Architecture Patterns for Cloud-Native Applications'",
-        "Research published in IEEE Cloud Computing Conference",
-        "Teaching Assistant for DevOps and Cloud Computing courses",
-        "GPA: 3.8/4.0"
-      ]
-    },
-    {
-      id: 'btech-cs',
-      title: "Bachelor of Technology in Computer Science",
-      institution: "Engineering College",
-      period: "2014 - 2018",
-      description: "Comprehensive foundation in Computer Science with emphasis on Software Engineering, System Architecture, and Programming.",
-      phase: "Core Learning",
-      type: 'education',
-      icon: '📚',
-      achievements: [
-        "Graduated Magna Cum Laude with 3.7/4.0 GPA",
-        "Led final year project on 'Automated Deployment Systems'",
-        "Active member of Computer Science Society",
-        "Internship at local tech startup focusing on web development"
-      ]
-    }
-  ];
+  
+  // Use dynamic data from portfolio.ts
+  const allExperiences = experienceData;
 
   const workExperiences = allExperiences.filter(exp => exp.type === 'work');
   const educationExperiences = allExperiences.filter(exp => exp.type === 'education');

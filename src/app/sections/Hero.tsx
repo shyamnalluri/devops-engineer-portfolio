@@ -6,6 +6,7 @@ import { FaEnvelope, FaLinkedin, FaGithub, FaArrowRight } from "react-icons/fa";
 import OptimizedImage from "../components/OptimizedImage";
 import LiveTerminal from "../components/LiveTerminal";
 import { useHeroAnimation, useButtonAnimation } from "../../hooks/useScrollAnimation";
+import { personalInfo } from "../../data/portfolio";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -133,20 +134,18 @@ const Hero = () => {
                   aria-hidden="true"
                 ></div>
                 
-                {/* Hero title with staggered animation */}
-                <h1 
+                {/* Hero title with staggered animation */}                <h1 
                   ref={titleRef}
                   className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-2 sm:mb-4 relative z-10 opacity-100"
                 >
-                  <span className="inline-block">Shyam</span> <span className="font-bold text-red-500 inline-block">Nalluri</span>
+                  <span className="inline-block">{personalInfo.name.split(' ')[0]}</span> <span className="font-bold text-red-500 inline-block">{personalInfo.name.split(' ')[1]}</span>
                 </h1>
-                
-                {/* Hero subtitle with staggered animation */}
+                  {/* Hero subtitle with staggered animation */}
                 <h2 
                   ref={subtitleRef}
                   className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 mb-1 sm:mb-2 relative z-10 opacity-100"
                 >
-                  DevOps and Platform Engineer
+                  {personalInfo.subtitle}
                 </h2>
                 
                 {/* Hero description with staggered animation */}
@@ -155,7 +154,7 @@ const Hero = () => {
                   className="text-base sm:text-lg md:text-xl text-gray-400 mx-auto lg:mx-0 max-w-md mb-3 sm:mb-4 relative z-10 opacity-100" 
                   aria-label="Professional summary"
                 >
-                  Delivering scalable infrastructure solutions & automated workflows for modern enterprises
+                  {personalInfo.description}
                 </p>
               </div>              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 font-medium mt-4 sm:mt-6 opacity-100 animate-stagger-4">
                 <span className="relative inline-block border-b-2 border-red-500/70 pb-1 hover:text-white transition-colors focus-visible:outline-offset-2 focus-visible:outline-2 focus-visible:outline-red-500" tabIndex={0} role="text">Specialized in cloud infrastructure</span> & automation
@@ -181,31 +180,30 @@ const Hero = () => {
                 className="flex items-center justify-center lg:justify-start gap-4 sm:gap-5 pt-4 opacity-100 animate-stagger-5" 
                 role="navigation" 
                 aria-label="Social media links"
-              >
-                <a
-                  href="https://www.linkedin.com/in/shyamnalluri"
+              >                <a
+                  href={personalInfo.socialLinks.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center btn-professional hover:shadow-blue-600/30 focus-ring touch-manipulation"
-                  aria-label="Visit Shyam Nalluri's LinkedIn profile"
+                  aria-label={`Visit ${personalInfo.name}'s LinkedIn profile`}
                 >
                   <FaLinkedin className="w-5 h-5 sm:w-6 sm:h-6 text-black transition-transform duration-150" aria-hidden="true" />
                 </a>
                 <a
-                  href="https://github.com/shyamnalluri"
+                  href={personalInfo.socialLinks.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center btn-professional hover:shadow-gray-600/30 focus-ring touch-manipulation"
-                  aria-label="Visit Shyam Nalluri's GitHub profile"
+                  aria-label={`Visit ${personalInfo.name}'s GitHub profile`}
                 >
                   <FaGithub className="w-5 h-5 sm:w-6 sm:h-6 text-black transition-transform duration-150" aria-hidden="true" />
                 </a>
                 <a
-                  href="mailto:nallurishyam@gmail.com"
+                  href={`mailto:${personalInfo.email}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center btn-professional hover:shadow-red-500/30 focus-ring touch-manipulation"
-                  aria-label="Send email to Shyam Nalluri"
+                  aria-label={`Send email to ${personalInfo.name}`}
                 >
                   <FaEnvelope className="w-5 h-5 sm:w-6 sm:h-6 text-black transition-transform duration-150" aria-hidden="true" />
                 </a>

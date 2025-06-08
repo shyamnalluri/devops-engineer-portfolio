@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import OptimizedImage from '../components/OptimizedImage';
+import { certificationsData } from '../../data/portfolio';
 
 interface Certification {
   name: string;
@@ -15,48 +16,8 @@ interface Certification {
   category: 'cloud' | 'devops' | 'security';
 }
 
-const certifications: Certification[] = [
-  {
-    name: "AWS Certified Solutions Architect - Associate",
-    credentialId: "AWS-SAA-PLACEHOLDER",
-    credentialUrl: "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
-    logo: "/certifications/aws-cert.svg",
-    issuer: "Amazon Web Services",
-    issueDate: "Mar 2024",
-    validUntil: "Mar 2027",
-    category: 'cloud'
-  },
-  {
-    name: "Microsoft Azure Administrator Associate",
-    credentialId: "AZ-104-PLACEHOLDER",
-    credentialUrl: "https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/",
-    logo: "/certifications/azure-cert.svg",
-    issuer: "Microsoft",
-    issueDate: "Jan 2024",
-    validUntil: "Jan 2026",
-    category: 'cloud'
-  },
-  {
-    name: "Certified Kubernetes Administrator (CKA)",
-    credentialId: "CKA-PLACEHOLDER",
-    credentialUrl: "https://www.cncf.io/certification/cka/",
-    logo: "/certifications/kubernetes-cert.svg",
-    issuer: "Cloud Native Computing Foundation",
-    issueDate: "Apr 2024",
-    validUntil: "Apr 2026",
-    category: 'devops'
-  },
-  {
-    name: "HashiCorp Certified: Terraform Associate",
-    credentialId: "TERRAFORM-PLACEHOLDER",
-    credentialUrl: "https://www.hashicorp.com/certification/terraform-associate",
-    logo: "/certifications/terraform-cert.svg",
-    issuer: "HashiCorp",
-    issueDate: "Feb 2024",
-    validUntil: "Feb 2026",
-    category: 'devops'
-  }
-];
+// Use dynamic data from portfolio.ts
+const certifications = certificationsData;
 
 const Certifications = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
