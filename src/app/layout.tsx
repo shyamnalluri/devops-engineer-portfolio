@@ -76,11 +76,13 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth overscroll-none">
       <body
         className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}
-      >
-        <ClientWrapper>
+      >        <ClientWrapper>
           <div className="overflow-x-hidden w-full">
-            <Navigation />
-            <main className="relative z-10 lg:ml-[214px]">{children}</main>
+            <Navigation />            
+            {/* Mobile-first main content with responsive margin */}
+            <main className="relative z-10 pt-14 lg:pt-0 lg:ml-[214px] min-h-screen">
+              {children}
+            </main>
           </div>
         </ClientWrapper>
       </body>

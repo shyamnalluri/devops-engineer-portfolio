@@ -8,41 +8,70 @@ const About = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
   const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation();
   const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });
-
   return (
-    <section id="about" className="min-h-screen flex items-center bg-black py-12 relative overflow-hidden">
-      {/* Background effects */}
+    <section id="about" className="min-h-screen flex items-center bg-black py-8 sm:py-12 lg:py-16 relative overflow-hidden">
+      {/* Background effects - mobile-optimized */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-[300px] h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
+      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto">
+      <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
           <div 
             ref={headerRef}
             className={`transition-all duration-800 ${
               headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
             }`}
-          >
-            <h2 className={`text-5xl font-bold mb-4 text-center text-white relative ${
+          >            <h2 className={`text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-center text-white relative ${
               headerVisible ? 'animate-hero-title' : ''
             }`}>
               About Me
               <div 
-                className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-800 ${
-                  headerVisible ? 'w-24 animate-scale-in' : 'w-0'
+                className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-800 rounded-full ${
+                  headerVisible ? 'w-16 sm:w-20 lg:w-24 animate-scale-in' : 'w-0'
                 }`}
                 style={{ animationDelay: '400ms' }}
               />
             </h2>
-          </div>
-
-          <div className="p-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-              {/* Decorative image */}
+          </div>          <div className="p-4 sm:p-6 lg:p-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">{/* Mobile Profile Image - Show on mobile first, hide on large screens */}
               <div
                 ref={imageRef}
-                className={`relative hidden md:block transition-all duration-1000 ${
+                className={`relative lg:hidden mb-8 transition-all duration-1000 ${
+                  imageVisible ? 'animate-slide-up' : 'opacity-0 translate-y-12'
+                }`}
+                style={{ animationDelay: '200ms' }}
+              >
+                <div className="flex justify-center">
+                  <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+                    {/* Mobile background effects */}
+                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-orange-500/20 to-red-500/20 transition-all duration-1000 ${
+                      imageVisible ? 'animate-pulse-slow' : 'opacity-0 scale-75'
+                    }`} style={{ animationDelay: '600ms' }} />
+                    
+                    <div className={`absolute inset-2 transition-all duration-800 ${
+                      imageVisible ? 'animate-scale-in' : 'opacity-0 scale-90'
+                    }`} style={{ animationDelay: '400ms' }}>
+                      <div className="relative w-full h-full overflow-hidden rounded-full border-4 border-gray-800 bg-gray-900 shadow-xl mobile-card">
+                        <Image
+                          src="/images/profile.jpg"
+                          alt="Shyam Nalluri"
+                          fill
+                          className="object-cover"
+                          style={{ objectFit: 'cover', objectPosition: 'center' }}
+                          priority
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop decorative image - hidden on mobile */}
+              <div
+                ref={imageRef}
+                className={`relative hidden lg:block transition-all duration-1000 ${
                   imageVisible ? 'animate-slide-up' : 'opacity-0 translate-y-12'
                 }`}
                 style={{ animationDelay: '200ms' }}
@@ -78,36 +107,38 @@ const About = () => {
                     }`} style={{ animationDelay: '1200ms' }}></div>
                   </div>
                 </div>
-              </div>
-
-              {/* About Text Column */}
+              </div>              {/* About Text Column - Mobile-first responsive */}
               <div
                 ref={textRef}
-                className={`space-y-6 transition-all duration-800 ${
+                className={`space-y-4 sm:space-y-6 transition-all duration-800 ${
                   textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ animationDelay: '400ms' }}
-              >
-                <div className="prose prose-lg max-w-none prose-invert">
-                  <p className={`text-gray-300 text-lg leading-relaxed text-justify first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1 transition-all duration-800 ${
+              >                <div className="prose prose-base sm:prose-lg max-w-none prose-invert">
+                  <p className={`text-gray-300 text-mobile-base sm:text-lg leading-relaxed text-left sm:text-justify first-letter:text-2xl sm:first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1 transition-all duration-800 ${
                     textVisible ? 'animate-fade-in' : 'opacity-0'
                   }`} style={{ animationDelay: '600ms' }}>
                     {aboutData.description[0]}
                   </p>
-                  <p className={`text-gray-400 text-lg leading-relaxed text-justify transition-all duration-800 ${
+                  <p className={`text-gray-400 text-mobile-base sm:text-lg leading-relaxed text-left sm:text-justify mt-4 sm:mt-6 transition-all duration-800 ${
                     textVisible ? 'animate-fade-in' : 'opacity-0'
                   }`} style={{ animationDelay: '800ms' }}>
                     {aboutData.description[1]}
                   </p>
-                </div>
-
-                {/* Dynamic stats from data */}
-                <div className={`grid grid-cols-2 gap-4 mt-8 transition-all duration-800 ${                textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
+                </div>                {/* Dynamic stats from data - Mobile-first grid */}
+                <div className={`grid grid-cols-2 gap-3 sm:gap-4 mt-6 sm:mt-8 transition-all duration-800 ${
+                  textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`} style={{ animationDelay: '1000ms' }}>
-                  {aboutData.stats.map((stat) => (
-                    <div key={stat.label} className="p-4 rounded-lg bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 group">
-                      <div className="text-2xl font-bold text-red-400 group-hover:text-red-300 transition-colors duration-300">{stat.value}</div>
-                      <div className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{stat.label}</div>
+                  {aboutData.stats.map((stat, index) => (
+                    <div 
+                      key={stat.label} 
+                      className={`mobile-card p-3 sm:p-4 rounded-xl bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 group hover:scale-105 ${
+                        textVisible ? 'animate-scale-in' : 'opacity-0 scale-90'
+                      }`}
+                      style={{ animationDelay: `${1200 + (index * 100)}ms` }}
+                    >
+                      <div className="text-lg sm:text-2xl font-bold text-red-400 group-hover:text-red-300 transition-colors duration-300">{stat.value}</div>
+                      <div className="text-xs sm:text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300 leading-tight">{stat.label}</div>
                     </div>
                   ))}
                 </div>
