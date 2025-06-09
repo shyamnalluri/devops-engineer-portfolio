@@ -22,10 +22,21 @@ const Skills = () => {
     category.skills.map(skill => ({
       ...skill,
       category: category.name
-    }))
-  );  // Get random card size variant with beautiful distribution for mobile
-  const getCardSize = (index: number) => {
-    const variants = [
+    }))  );
+  // Define the card size types
+  type CardSize = 'tiny' | 'small' | 'medium' | 'large' | 'extra';
+
+  // Define the skill type with category added
+  type SkillWithCategory = {
+    title: string;
+    icon: string;
+    proficiency?: number;
+    category: string;
+  };
+
+  // Get random card size variant with beautiful distribution for mobile
+  const getCardSize = (index: number): CardSize => {
+    const variants: CardSize[] = [
       'tiny',     // 25% - New super small size
       'small',    // 30%
       'medium',   // 25% 
@@ -96,11 +107,10 @@ const Skills = () => {
     return () => {
       container.removeEventListener('scroll', handleScroll);
     };
-  }, [allSkills.length]);
-  // Skill card component with random sizes and scroll animations
-  const SkillCard = ({ skill, index }: { skill: any; index: number }) => {
-    const size = getCardSize(index);
-    const isVisible = visibleCards.has(index);    const sizeStyles = {
+  }, [allSkills.length]);  // Skill card component with random sizes and scroll animations
+  const SkillCard = ({ skill, index }: { skill: SkillWithCategory; index: number }) => {
+    const size: CardSize = getCardSize(index);
+    const isVisible = visibleCards.has(index);const sizeStyles = {
       tiny: {
         container: "h-12 sm:h-20",
         icon: "w-3 h-3 sm:w-6 sm:h-6",

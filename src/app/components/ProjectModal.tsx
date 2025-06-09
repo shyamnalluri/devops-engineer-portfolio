@@ -147,15 +147,13 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 </div>
               </div>
 
-              {/* Mobile-first Content Section */}
-              <motion.div 
+              {/* Mobile-first Content Section */}              <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
                 className="p-4 sm:p-6 space-y-6 sm:space-y-8"
               >
-                className="p-6 space-y-8"
-              >                {/* Overview */}
+                {/* Overview */}
                 <div>
                   <h4 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">Project Overview</h4>
                   <p className="text-gray-300 text-sm sm:text-base leading-relaxed">{project.detailedDescription}</p>

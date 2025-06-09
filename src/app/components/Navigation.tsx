@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import MobileMenu from './MobileMenu';
 
-const navItems = [
+type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT';
+
+const navItems: Array<{ name: MenuIconKey; href: string }> = [
   { name: 'HOME', href: '#home' },
   { name: 'ABOUT ME', href: '#about' },
   { name: 'SKILLS', href: '#skills' },
@@ -15,43 +17,39 @@ const navItems = [
 ];
 
 const Navigation: React.FC = () => {
-  const [activeSection, setActiveSection] = useState('home');
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');  const [isLoaded, setIsLoaded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
   useEffect(() => {
     setIsLoaded(true);
     
     // Enhanced scroll spy with professional intersection observer
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
+        // Sort entries by intersection ratio to get the most visible section
+        const sortedEntries = entries
+          .filter(entry => entry.intersectionRatio > 0)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (sortedEntries.length > 0) {
+          const mostVisibleEntry = sortedEntries[0];
+          setActiveSection(mostVisibleEntry.target.id);
+        }
       },
       {
-        threshold: 0.3,
-        rootMargin: '-20% 0px -50% 0px'
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0],
+        rootMargin: '-80px 0px -20% 0px'
       }
     );
 
-    // Observe all sections
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach((section) => observer.observe(section));
+    // Observe all sections with a slight delay to ensure DOM is ready
+    setTimeout(() => {
+      const sections = document.querySelectorAll('section[id]');
+      sections.forEach((section) => observer.observe(section));
+    }, 100);
 
-    // Handle scroll for mobile header background
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-
+    // Handle scroll for mobile header background    
     return () => {
       observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 

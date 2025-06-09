@@ -230,7 +230,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <p className="text-green-400 font-semibold text-sm">Message sent successfully!</p>
-                        <p className="text-green-300/80 text-xs">I'll get back to you as soon as possible.</p>
+                        <p className="text-green-300/80 text-xs">I&apos;ll get back to you as soon as possible.</p>
                       </div>
                     </div>
                   </div>
