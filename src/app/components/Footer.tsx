@@ -55,7 +55,7 @@ const Footer = () => {
               >
                 <FaEnvelope className="text-orange-500 group-hover:scale-110 transition-transform duration-200" />
                 <span className="text-sm group-hover:translate-x-1 transition-transform duration-200">
-                  hello@shyamkumar.dev
+                  nallurishyam@gmail.com
                 </span>
                 <div className="ml-auto transition-all duration-200">
                   {emailCopied ? (
@@ -118,7 +118,7 @@ const Footer = () => {
                   Available for work
                 </p>
                 <p className="text-gray-400 text-xs group-hover:text-gray-300 transition-colors duration-200">
-                  Full-time & Projects
+                  Full-time
                 </p>
               </div>
             </div>
@@ -128,7 +128,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 animate-fade-in-up animate-delay-400">
           <p className="text-gray-400 text-sm flex items-center gap-2 hover:text-gray-300 transition-colors duration-300">
-            © 2025 Shyam Kumar. Built with 
+            © 2025 Shyam Nalluri. Built with 
             <FaHeart className="text-red-500 text-xs animate-pulse-slow hover:scale-125 transition-transform duration-200" />
             using Next.js & Tailwind CSS
           </p>
