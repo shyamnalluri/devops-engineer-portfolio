@@ -467,18 +467,16 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
       <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
       <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
-      <div className="mobile-container sm:container mx-auto px-4 relative z-10">
-        <div className="text-center mb-8 sm:mb-12 opacity-100 animate-in">
-          <h2 className="text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-white relative inline-block">
+      <div className="mobile-container sm:container mx-auto px-4 relative z-10">        <div className="text-center mb-8 sm:mb-12 opacity-100 animate-in">
+          <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
             Recent Projects
-            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 w-16 sm:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto"></div>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-lg mt-4 sm:mt-6 mb-6 sm:mb-10 px-4">
+          <p className="text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
             Infrastructure solutions, automation pipelines, and DevOps implementations
           </p>
           
           {/* Mobile-first category filters */}
-          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-8 sm:mb-12">
+          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-8 sm:mb-12 mt-4 sm:mt-6">
             <div className="flex gap-2 sm:gap-3 px-4 sm:px-0 sm:justify-center min-w-max sm:min-w-0">
               {categories.map((category, index) => (
                 <button

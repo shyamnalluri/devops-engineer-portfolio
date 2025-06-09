@@ -22,17 +22,16 @@ const About = () => {
             className={`transition-all duration-800 ${
               headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
             }`}
-          >            <h2 className={`text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-center text-white relative ${
+          >            <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 text-center ${
               headerVisible ? 'animate-hero-title' : ''
             }`}>
               About Me
-              <div 
-                className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-800 rounded-full ${
-                  headerVisible ? 'w-16 sm:w-20 lg:w-24 animate-scale-in' : 'w-0'
-                }`}
-                style={{ animationDelay: '400ms' }}
-              />
             </h2>
+            <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 text-center ${
+              headerVisible ? 'animate-hero-subtitle' : ''
+            }`}>
+              Get to know the person behind the code
+            </p>
           </div>          <div className="p-4 sm:p-6 lg:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">{/* Mobile Profile Image - Show on mobile first, hide on large screens */}
               <div

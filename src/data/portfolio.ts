@@ -74,11 +74,10 @@ export interface ProjectItem {
 }
 
 // Personal Information
-export const personalInfo: PersonalInfo = {
-  name: "Shyam Nalluri",
+export const personalInfo: PersonalInfo = {  name: "Shyam Nalluri",
   title: "Senior DevOps Engineer",
-  subtitle: "DevSecOps and Platform Engineer",
-  description: "5+ years of experience delivering scalable, secure infrastructure and platform automation across AWS and Azure",
+  subtitle: "DevSecOps & Platform Engineer",
+  description: "Architecting enterprise-grade cloud infrastructure with 5+ years of expertise in DevSecOps and platform automation",
   location: "India",
   email: "shyam.nalluri@example.com", // Update with your actual email
   phone: "+91-XXXXXXXXXX", // Update with your actual phone

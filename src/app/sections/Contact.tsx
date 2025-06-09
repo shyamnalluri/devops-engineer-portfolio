@@ -185,19 +185,15 @@ const Contact = () => {
           className={`text-center mb-8 sm:mb-12 lg:mb-16 transition-all duration-800 ${
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}
-        >
-          <h2 className={`text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 ${
+        >          <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
             headerVisible ? 'animate-hero-title' : ''
           }`}>
-            Let&apos;s Work{" "}
-            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-              Together
-            </span>
+            Let&apos;s Work Together
           </h2>
-          <p className={`text-sm sm:text-lg lg:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed px-4 ${
+          <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
             headerVisible ? 'animate-hero-subtitle' : ''
           }`}>
-            Ready to bring your vision to life? Let&apos;s discuss how we can build something amazing together.
+            Ready to bring your vision to life? Let&apos;s discuss how we can build something amazing together
           </p>
         </div>
           {/* Mobile-first Layout: Stack on mobile, side-by-side on larger screens */}

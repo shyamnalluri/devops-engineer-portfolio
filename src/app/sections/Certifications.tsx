@@ -38,16 +38,12 @@ const Certifications = () => {
           className={`text-center mb-6 sm:mb-8 transition-all duration-800 ${
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}
-        >
-          <h2 className={`text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-white relative inline-block ${
+        >          <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
             headerVisible ? 'animate-hero-title' : ''
           }`}>
             Professional Certifications
-            <div className={`absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 w-16 sm:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-orange-500 to-red-500 ${
-              headerVisible ? 'animate-scale-in' : 'scale-x-0'
-            }`} style={{ animationDelay: '400ms' }}></div>
           </h2>
-          <p className={`text-gray-400 max-w-2xl mx-auto text-sm sm:text-lg mt-3 sm:mt-4 px-4 ${
+          <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
             headerVisible ? 'animate-hero-subtitle' : ''
           }`}>
             Industry-recognized certifications demonstrating expertise in cloud architecture,

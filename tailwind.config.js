@@ -15,9 +15,14 @@ module.exports = {
       '2xl': '1536px', // 2X large devices
       // Touch-specific breakpoints
       'touch': '768px',
-      'no-touch': { 'raw': '(hover: hover) and (pointer: fine)' },
-    },
-    extend: {
+      'no-touch': { 'raw': '(hover: hover) and (pointer: fine)' },    },    extend: {
+      // Font families
+      fontFamily: {
+        'dancing-script': ['var(--font-dancing-script)', 'cursive'],
+        'oswald': ['var(--font-oswald)', 'sans-serif'],
+        'widia': ['Widia', 'Arial Black', 'sans-serif'],
+      },
+      
       // Professional Animation System - Apple/Stripe Inspired
       animation: {
         // Existing animations
