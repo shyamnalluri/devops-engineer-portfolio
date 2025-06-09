@@ -224,12 +224,12 @@ const Skills = () => {
             scalable, and efficient infrastructure solutions.
           </p>
         </div>        {/* Enhanced Masonry Skills Layout with Scroll Animations */}
-        <div className="w-full max-w-6xl mx-auto">          <div 
+        <div className="w-full max-w-6xl mx-auto relative">          <div 
             ref={containerRef}
-            className="h-[65vh] overflow-y-auto sm:scrollbar-thin sm:scrollbar-track-gray-900/50 sm:scrollbar-thumb-orange-500/60 sm:hover:scrollbar-thumb-orange-400/80 sm:pr-3 py-2 scroll-smooth scrollbar-none"
+            className="h-[65vh] overflow-y-auto skills-scrollbar sm:pr-3 py-2 scroll-smooth scrollbar-none"
             style={{
-              scrollbarWidth: 'none',
-              scrollbarColor: 'rgba(249, 115, 22, 0.6) rgba(17, 24, 39, 0.5)'
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(249, 115, 22, 0.6) transparent'
             }}
           >
             <div className="columns-3 sm:columns-3 lg:columns-4 xl:columns-5 gap-1.5 sm:gap-4 space-y-0" style={{ orphans: 1, widows: 1 }}>
@@ -241,6 +241,9 @@ const Skills = () => {
             {/* Spacer to ensure scrolling works properly */}
             <div className="h-4"></div>
           </div>
+          
+          {/* Scroll hint gradient overlay */}
+          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-gray-900/100 to-transparent pointer-events-none"></div>
         </div>
       </div>
     </section>

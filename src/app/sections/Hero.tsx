@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useRef, useEffect } from "react";
-import { FaEnvelope, FaLinkedin, FaGithub, FaArrowRight } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 import OptimizedImage from "../components/OptimizedImage";
 import LiveTerminal from "../components/LiveTerminal";
 import { useHeroAnimation, useButtonAnimation } from "../../hooks/useScrollAnimation";
@@ -107,53 +107,16 @@ const Hero = () => {
                 </span> & automation
               </p>
                 {/* CTA Button - touch-optimized */}
-              <div className="pt-4 sm:pt-6 lg:pt-8 opacity-100 animate-stagger-5">
-                <a
+              <div className="pt-4 sm:pt-6 lg:pt-8 opacity-100 animate-stagger-5">                <a
                   ref={buttonRef}
                   href="#projects"
                   {...buttonProps}
-                  className={`${buttonProps.className} touch-button inline-flex items-center justify-center px-6 py-2 bg-orange-500 text-white rounded-full hover:shadow-lg transition-all duration-300 font-medium`}
+                  className={`${buttonProps.className} touch-button inline-flex items-center justify-center px-6 py-3 min-h-[48px] bg-orange-500 text-white rounded-full hover:shadow-lg transition-all duration-300 font-medium`}
                   aria-label="View my projects"
                 >
                   <span>View My Work</span>
                   <FaArrowRight className="ml-2 text-sm transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true" />
-                </a>
-              </div>
-
-              {/* Social Links - touch-optimized */}
-              <div 
-                className="flex items-center justify-center lg:justify-start gap-3 sm:gap-4 lg:gap-5 pt-3 sm:pt-4 opacity-100 animate-stagger-5" 
-                role="navigation" 
-                aria-label="Social media links"
-              >
-                <a
-                  href={personalInfo.socialLinks.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="touch-button w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center btn-professional hover:shadow-blue-600/30 focus-ring"
-                  aria-label={`Visit ${personalInfo.name}'s LinkedIn profile`}
-                >
-                  <FaLinkedin className="w-5 h-5 sm:w-6 sm:h-6 text-black transition-transform duration-150" aria-hidden="true" />
-                </a>
-                <a
-                  href={personalInfo.socialLinks.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="touch-button w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center btn-professional hover:shadow-gray-600/30 focus-ring"
-                  aria-label={`Visit ${personalInfo.name}'s GitHub profile`}
-                >
-                  <FaGithub className="w-5 h-5 sm:w-6 sm:h-6 text-black transition-transform duration-150" aria-hidden="true" />
-                </a>
-                <a
-                  href={`mailto:${personalInfo.email}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="touch-button w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center btn-professional hover:shadow-red-500/30 focus-ring"
-                  aria-label={`Send email to ${personalInfo.name}`}
-                >
-                  <FaEnvelope className="w-5 h-5 sm:w-6 sm:h-6 text-black transition-transform duration-150" aria-hidden="true" />
-                </a>
-              </div>
+                </a>              </div>
             </div>
           </div>
 

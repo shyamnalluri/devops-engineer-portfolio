@@ -469,14 +469,14 @@ const Contact = () => {
                   </div>
 
                   {/* Client Info */}
-                  <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-800/30 rounded-lg border border-gray-700/30 hover:border-gray-600/50 transition-all duration-300">
-                    <Image
+                  <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-800/30 rounded-lg border border-gray-700/30 hover:border-gray-600/50 transition-all duration-300">                    <Image
                       src={testimonials[currentTestimonial].image}
                       alt={testimonials[currentTestimonial].name}
                       width={40}
                       height={40}
+                      loading="lazy"
                       className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-orange-500/30 hover:border-orange-500/60 transition-all duration-300"
-                    />                    <div>
+                    /><div>
                       <h4 className="text-white font-bold text-xs sm:text-sm">
                         {testimonials[currentTestimonial].name}
                       </h4>

@@ -13,22 +13,24 @@ const Footer = () => {
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2000);
   }, []);
-
   const socialLinks = [
     { 
-      icon: <FaLinkedin size={20} />, 
+      icon: <FaLinkedin size={24} />, 
       url: "https://linkedin.com/in/shyam-kumar", 
-      color: "hover:text-blue-500"
+      color: "hover:text-blue-500",
+      label: "LinkedIn"
     },
     { 
-      icon: <FaGithub size={20} />, 
+      icon: <FaGithub size={24} />, 
       url: "https://github.com/shyam-kumar", 
-      color: "hover:text-gray-300"
+      color: "hover:text-white",
+      label: "GitHub"
     },
     { 
-      icon: <FaEnvelope size={20} />, 
+      icon: <FaEnvelope size={24} />, 
       url: "mailto:hello@shyamkumar.dev", 
-      color: "hover:text-orange-500"
+      color: "hover:text-orange-500",
+      label: "Email"
     }
   ];
   return (
@@ -84,16 +86,16 @@ const Footer = () => {
           <div className="animate-slide-up animate-delay-200">
             <h3 className="text-white font-bold mb-6 text-lg bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
               Connect
-            </h3>
-            <div className="flex gap-6">
+            </h3>            <div className="flex gap-4">
               {socialLinks.map((link, index) => (
                 <a
                   key={index}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`text-gray-400 transition-all duration-300 ease-primary p-3 rounded-xl hover:bg-gray-800/50 hover:scale-110 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-black active:scale-95 ${link.color}`}
+                  className={`text-gray-400 transition-all duration-300 ease-primary p-3 min-w-[48px] min-h-[48px] flex items-center justify-center rounded-xl hover:bg-gray-800/50 hover:scale-110 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 focus:ring-offset-black active:scale-95 ${link.color}`}
                   style={{ animationDelay: `${index * 100}ms` }}
+                  aria-label={link.label}
                 >
                   <div className="hover:rotate-12 transition-transform duration-200">
                     {link.icon}
