@@ -299,13 +299,17 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
   );
 };
 
-const Projects = () => {  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+const Projects = () => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);  const [isInitializing, setIsInitializing] = useState(true);
+  const [startX, setStartX] = useState(0);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false); // Prevent flickering during programmatic scrolling
   const carouselRef = useRef<HTMLDivElement>(null);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Professional scroll animation hooks
   const { ref: sectionRef } = useScrollAnimation({
@@ -314,11 +318,16 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
     staggerDelay: 100,
     animationClass: 'animate-slide-up'
   });
-  
-  // Set initial ready state when component mounts
+    // Set initial ready state when component mounts
   useEffect(() => {
     const timer = setTimeout(() => setIsReady(true), 100);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      // Cleanup scroll timeout on unmount
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, []);
   
   const categories = ['All', ...Array.from(new Set(projects.map((project) => project.category)))];
@@ -329,13 +338,16 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
   // Create infinite scroll by duplicating projects
   const infiniteProjects = [...filteredProjects, ...filteredProjects, ...filteredProjects];
   const totalOriginalItems = filteredProjects.length;
-  const startIndex = totalOriginalItems;
-    // Additional safety: Reset to first project when category changes
+  const startIndex = totalOriginalItems;    // Additional safety: Reset to first project when category changes
   useEffect(() => {
     setCurrentIndex(0);
     setIsReady(false);
+    setIsInitializing(true);
     // Give time for DOM to update before setting ready
-    setTimeout(() => setIsReady(true), 100);
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 150);
+    return () => clearTimeout(timer);
   }, [selectedCategory]);
   // Calculate how many projects can fit in view (mobile-first approach)
   const getProjectsPerView = () => {
@@ -389,29 +401,35 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
     }
   };  // Initialize scroll position to middle set
   useEffect(() => {
-    if (carouselRef.current && isReady) {
+    if (carouselRef.current && isReady && totalOriginalItems > 0) {
       setIsInitializing(true);
-      // Force current index to 0 first
-      setCurrentIndex(0);
       
       // Use requestAnimationFrame to ensure DOM is ready
       requestAnimationFrame(() => {
         if (carouselRef.current) {
           const containerWidth = carouselRef.current.clientWidth;
-          const scrollPosition = startIndex * (containerWidth / projectsPerView);
-          carouselRef.current.scrollLeft = scrollPosition;
+          const itemWidth = containerWidth / projectsPerView;
+          const scrollPosition = startIndex * itemWidth;
           
-          // Allow normal scroll checking after a longer delay to ensure everything is settled
+          // Set scroll position without triggering scroll events
+          carouselRef.current.style.scrollBehavior = 'auto';
+          carouselRef.current.scrollLeft = scrollPosition;
+          carouselRef.current.style.scrollBehavior = 'smooth';
+          
+          // Ensure currentIndex starts at 0
+          setCurrentIndex(0);
+          
+          // Allow normal scroll checking after everything is settled
           setTimeout(() => {
             setIsInitializing(false);
-          }, 200);
+          }, 300);
         }
       });
     }
-  }, [selectedCategory, projectsPerView, startIndex, isReady]);  // Check scroll position and handle infinite scroll
+  }, [selectedCategory, projectsPerView, startIndex, isReady, totalOriginalItems]);  // Check scroll position and handle infinite scroll
   const checkScrollPosition = () => {
-    // Don't update position during initialization or if not ready to prevent jumping
-    if (isInitializing || !isReady || !carouselRef.current) return;
+    // Don't update position during initialization, scrolling animation, or if not ready
+    if (isInitializing || isScrolling || !isReady || !carouselRef.current || totalOriginalItems === 0) return;
     
     const { scrollLeft, clientWidth } = carouselRef.current;
     const itemWidth = clientWidth / projectsPerView;
@@ -419,38 +437,75 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
     
     // Handle infinite scroll wrapping
     if (rawIndex >= totalOriginalItems * 2) {
+      // Jumped to end, wrap to beginning
+      carouselRef.current.style.scrollBehavior = 'auto';
       carouselRef.current.scrollLeft = totalOriginalItems * itemWidth;
+      carouselRef.current.style.scrollBehavior = 'smooth';
       setCurrentIndex(0);
     } else if (rawIndex < totalOriginalItems) {
+      // Jumped to beginning, wrap to end
+      carouselRef.current.style.scrollBehavior = 'auto';
       carouselRef.current.scrollLeft = (totalOriginalItems * 2 - 1) * itemWidth;
+      carouselRef.current.style.scrollBehavior = 'smooth';
       setCurrentIndex(totalOriginalItems - 1);
     } else {
+      // Normal position within middle set
       const actualIndex = rawIndex - totalOriginalItems;
-      setCurrentIndex(actualIndex);
+      // Only update if the index actually changed
+      if (actualIndex !== currentIndex && actualIndex >= 0 && actualIndex < totalOriginalItems) {
+        setCurrentIndex(actualIndex);
+      }
     }
+  };
+
+  // Debounced scroll handler to prevent flickering
+  const handleScroll = () => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      checkScrollPosition();
+    }, 100); // 100ms debounce
   };const scrollToIndex = (index: number) => {
-    if (carouselRef.current) {
+    if (carouselRef.current && totalOriginalItems > 0) {
+      // Set scrolling flag to prevent checkScrollPosition from interfering
+      setIsScrolling(true);
+      
       const containerWidth = carouselRef.current.clientWidth;
       const itemWidth = containerWidth / projectsPerView;
       const scrollPosition = (startIndex + index) * itemWidth;
+      
+      // Update currentIndex immediately for better UX
+      setCurrentIndex(index);
+      
       carouselRef.current.scrollTo({
         left: scrollPosition,
         behavior: 'smooth'
       });
-      // Update state after smooth scroll animation completes (typically 300-500ms)
+      
+      // Clear scrolling flag after animation completes
       setTimeout(() => {
-        setCurrentIndex(index);
-      }, 400);
+        setIsScrolling(false);
+      }, 500); // Match smooth scroll duration
     }
   };
-
   const scrollLeft = () => {
-    const newIndex = currentIndex > 0 ? currentIndex - 1 : totalOriginalItems - 1;
+    // Calculate current page and navigate to previous page
+    const currentPageIndex = Math.floor(currentIndex / projectsPerView);
+    const totalPages = Math.ceil(totalOriginalItems / projectsPerView);
+    const previousPageIndex = currentPageIndex > 0 ? currentPageIndex - 1 : totalPages - 1;
+    const newIndex = previousPageIndex * projectsPerView;
     scrollToIndex(newIndex);
   };
 
   const scrollRight = () => {
-    const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;    scrollToIndex(newIndex);
+    // Calculate current page and navigate to next page
+    const currentPageIndex = Math.floor(currentIndex / projectsPerView);
+    const totalPages = Math.ceil(totalOriginalItems / projectsPerView);
+    const nextPageIndex = currentPageIndex < totalPages - 1 ? currentPageIndex + 1 : 0;
+    const newIndex = nextPageIndex * projectsPerView;
+    scrollToIndex(newIndex);
   };
 
   const openProjectModal = (project: Project) => {
@@ -496,10 +551,9 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
           </div>
         </div>        {/* Mobile-first Projects Carousel */}
         <div className="relative max-w-7xl mx-auto">
-          {/* Carousel Container - Mobile-first */}
-          <div
+          {/* Carousel Container - Mobile-first */}          <div
             ref={carouselRef}
-            onScroll={checkScrollPosition}
+            onScroll={handleScroll}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -512,34 +566,30 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
               </div>
             ))}
           </div>          {/* Arrow Navigation */}
-          <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-6">
-            <button
+          <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-6">            <button
               onClick={scrollLeft}
-              disabled={currentIndex === 0}
-              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-black/20 disabled:hover:border-white/10 touch-button group"
+              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 touch-button group"
               aria-label="Previous project"
             >
               <svg 
-                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200 group-disabled:text-white" 
+                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-            </button>            {/* Numeric Counter */}
+            </button>            {/* Page Counter */}
             <div className="text-sm font-medium text-gray-300 min-w-[3rem] text-center">
-              {!isReady ? 1 : (currentIndex % totalOriginalItems) + 1} / {totalOriginalItems}
+              {Math.floor(currentIndex / projectsPerView) + 1} / {Math.ceil(totalOriginalItems / projectsPerView)}
             </div>
-            
-            <button
+              <button
               onClick={scrollRight}
-              disabled={currentIndex === totalOriginalItems - 1}
-              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-black/20 disabled:hover:border-white/10 touch-button group"
+              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 touch-button group"
               aria-label="Next project"
             >
               <svg 
-                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200 group-disabled:text-white" 
+                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
