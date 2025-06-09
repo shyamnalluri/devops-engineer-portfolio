@@ -25,136 +25,128 @@ const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
   onClick: () => void;
 }) => {
   const { ref, isVisible } = useScrollAnimation();
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
+  const [isHovered, setIsHovered] = useState(false);  return (
     <div
       ref={ref}
-      className={`relative cursor-pointer transition-all duration-500 group ${
-        isActive ? 'mb-8' : 'mb-4'
+      className={`relative cursor-pointer transition-all duration-300 group ${
+        isActive ? 'mb-6' : 'mb-3'
       } ${
         isVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
       }`}
       style={{ 
-        animationDelay: `${index * 150}ms`,
-        minHeight: isActive ? 'auto' : '80px'
+        animationDelay: `${index * 100}ms`,
+        minHeight: isActive ? 'auto' : '60px'
       }}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       id={data.id}
-    >
-      {/* Dynamic Timeline connector */}
+    >{/* Dynamic Timeline connector - Subtle and professional */}
       <div
-        className={`absolute left-[23px] top-0 bg-gradient-to-b from-red-500 via-orange-500 to-blue-500 rounded-full transition-all duration-500 ease-spring ${
-          isActive ? 'w-1 h-full opacity-100' : 'w-0.5 h-16 opacity-70'
+        className={`absolute left-[11px] top-0 bg-gradient-to-b from-red-500/60 via-orange-500/40 to-blue-500/60 rounded-full transition-all duration-400 ${
+          isActive ? 'w-0.5 h-full opacity-80' : 'w-px h-12 opacity-50'
         }`}
-      />      {/* Interactive Timeline Node - Mobile-responsive */}
+      />{/* Interactive Timeline Node - Compact and professional */}
       <div
-        className={`absolute left-0 top-3 h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 rounded-full border-2 flex items-center justify-center cursor-pointer z-10 transition-all duration-500 ease-spring touch-button ${
+        className={`absolute left-0 top-2 h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 rounded-full border flex items-center justify-center cursor-pointer z-10 transition-all duration-300 ${
           isActive 
-            ? 'border-red-500 bg-gray-800 scale-115 shadow-glow-red' 
-            : 'border-gray-500 bg-gray-900 scale-100 shadow-subtle'
+            ? 'border-red-500 bg-gray-800 scale-110 shadow-md shadow-red-500/30' 
+            : 'border-gray-500 bg-gray-900 scale-100 shadow-sm'
         } ${
-          isHovered && !isActive ? 'scale-110 shadow-glow-red-soft' : ''
+          isHovered && !isActive ? 'scale-105 shadow-md shadow-red-500/20' : ''
         }`}
       >
         <span 
-          className={`text-sm sm:text-base lg:text-lg transition-transform duration-300 ${
+          className={`text-xs sm:text-sm transition-transform duration-200 ${
             isActive ? 'scale-110' : 'scale-100'
           }`}
         >
           {data.icon}
         </span>
-      </div>
-
-      {/* Content Card - Mobile-first responsive */}
+      </div>      {/* Content Card - Professional and compact styling */}
       <div
-        className={`group transition-all duration-600 ease-spring ${
+        className={`group transition-all duration-300 ease-out ${
           isActive 
-            ? 'bg-gray-800/90 p-3 sm:p-4 lg:p-6 xl:p-8 pr-2 sm:pr-3 lg:pr-4 xl:pr-6 pl-10 sm:pl-12 lg:pl-16 xl:pl-20 rounded-xl border border-red-500/40 ml-1 sm:ml-2 shadow-glow-subtle backdrop-blur-sm' 
-            : 'bg-transparent p-1 sm:p-2 pr-0 pl-10 sm:pl-12 lg:pl-16 xl:pl-20 rounded-lg border border-transparent ml-0'
+            ? 'bg-gray-800/70 backdrop-blur-sm p-3 sm:p-4 lg:p-5 pr-2 sm:pr-3 lg:pr-4 pl-8 sm:pl-10 lg:pl-12 rounded-lg border border-red-500/30 ml-1 shadow-lg shadow-red-500/10 hover:shadow-red-500/15 hover:border-red-500/40' 
+            : 'bg-gray-800/20 hover:bg-gray-800/40 p-2 sm:p-3 pr-2 sm:pr-3 pl-8 sm:pl-10 lg:pl-12 rounded-lg border border-gray-700/20 hover:border-orange-500/30 ml-0 shadow-sm hover:shadow-md transition-all duration-200'
         }`}
-      >        <h4
-          className={`font-bold transition-all duration-600 ease-spring cursor-pointer ${
+      ><h4
+          className={`font-semibold transition-all duration-300 cursor-pointer ${
             isActive 
-              ? 'text-amber-400 text-base sm:text-lg lg:text-xl xl:text-2xl mb-2 sm:mb-3' 
-              : 'text-white text-sm sm:text-base lg:text-lg xl:text-xl mb-1 sm:mb-2'
+              ? 'text-orange-300 text-base sm:text-lg lg:text-xl mb-2 sm:mb-3' 
+              : 'text-white text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 hover:text-orange-400'
           }`}
         >
           {data.title}
         </h4>
 
         <div
-          className={`flex flex-wrap items-center gap-1 sm:gap-2 lg:gap-3 text-xs sm:text-sm transition-all duration-500 ease-spring ${
-            isActive ? 'mb-2 sm:mb-3 lg:mb-4 opacity-100' : 'mb-1 sm:mb-2 opacity-80'
+          className={`flex flex-wrap items-center gap-1 sm:gap-2 text-xs transition-all duration-300 ${
+            isActive ? 'mb-2 sm:mb-3 opacity-100' : 'mb-1 sm:mb-2 opacity-80'
           }`}
-        >
-          <span className="text-red-400 font-medium">
+        >          <span className="text-red-400 font-medium text-xs sm:text-sm">
             {data.company || data.institution}
           </span>
           <span className="w-1 h-1 rounded-full bg-gray-500" />
-          <span className="text-gray-400 font-medium">{data.period}</span>
+          <span className="text-gray-400 text-xs sm:text-sm">{data.period}</span>
           <span className="w-1 h-1 rounded-full bg-gray-500" />
-          <span className="text-blue-400 text-xs uppercase tracking-wide font-medium bg-blue-500/10 px-1 sm:px-1.5 lg:px-2 py-0.5 sm:py-1 rounded-full border border-blue-500/20">
+          <span className={`text-xs uppercase tracking-wide font-medium px-2 py-0.5 rounded border transition-all duration-200 ${
+            data.type === 'work' 
+              ? 'text-blue-300 bg-blue-500/10 border-blue-500/20 hover:bg-blue-500/15'
+              : 'text-purple-300 bg-purple-500/10 border-purple-500/20 hover:bg-purple-500/15'
+          }`}>
             {data.type}
           </span>
-        </div>
-
-        {/* Description - Mobile-responsive */}
+        </div>        {/* Description - Compact and professional */}
         <p
-          className={`text-gray-300 leading-relaxed transition-all duration-500 ease-spring ${
+          className={`text-gray-300 leading-normal transition-all duration-300 ${
             isActive 
-              ? 'text-sm sm:text-base lg:text-lg leading-relaxed mb-3 sm:mb-4 lg:mb-5 opacity-100' 
-              : 'text-xs sm:text-sm leading-normal mb-2 sm:mb-3 opacity-90'
+              ? 'text-sm sm:text-base leading-relaxed mb-3 sm:mb-4 opacity-100' 
+              : 'text-xs sm:text-sm leading-snug mb-2 sm:mb-3 opacity-85 line-clamp-2'
           }`}
         >
           {isActive ? data.description : `${data.description.substring(0, 80)}${data.description.length > 80 ? '...' : ''}`}
-        </p>
-
-        {/* Achievements (only show when active) - Mobile-responsive */}
+        </p>        {/* Achievements (only show when active) - Compact design */}
         {isActive && data.achievements && (
           <div
-            className={`p-2 sm:p-3 lg:p-4 rounded-lg bg-gradient-to-r from-orange-500/8 to-yellow-500/8 border border-orange-500/25 mb-3 sm:mb-4 lg:mb-5 overflow-hidden transition-all duration-600 ease-spring animate-fade-in`}
+            className={`p-2 sm:p-3 rounded-lg bg-orange-500/5 border border-orange-500/20 mb-3 sm:mb-4 overflow-hidden transition-all duration-400 animate-fade-in`}
             style={{ animationDelay: '100ms' }}
           >
-            <h5 className="text-sm font-semibold text-orange-400 mb-3 flex items-center gap-2 animate-slide-up" style={{ animationDelay: '200ms' }}>
-              <span className="text-base">🏆</span>
+            <h5 className="text-xs sm:text-sm font-medium text-orange-400 mb-2 flex items-center gap-2 animate-slide-up" style={{ animationDelay: '200ms' }}>
+              <span className="text-sm">🏆</span>
               Key Achievements:
             </h5>
-            <ul className="space-y-2">
+            <ul className="space-y-1 sm:space-y-2">
               {data.achievements.map((achievement, i) => (
                 <li
                   key={i}
-                  className="text-sm text-gray-300 flex items-start gap-3 animate-slide-up"
+                  className="text-xs sm:text-sm text-gray-300 flex items-start gap-2 animate-slide-up leading-relaxed"
                   style={{ animationDelay: `${300 + (i * 50)}ms` }}
                 >
-                  <span className="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+                  <span className="text-green-400 mt-0.5 flex-shrink-0 text-xs">✓</span>
                   <span className="leading-relaxed">{achievement}</span>
                 </li>
               ))}
             </ul>
           </div>
-        )}
-
-        {/* Technologies */}
+        )}        {/* Technologies - Compact and refined */}
         {data.technologies && (
-          <div className={`flex flex-wrap gap-2 transition-opacity duration-400 ${isActive ? 'opacity-100' : 'opacity-80'}`}>
+          <div className={`flex flex-wrap gap-1 sm:gap-2 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-75'}`}>
             {(isActive ? data.technologies : data.technologies.slice(0, 4)).map((tech, i) => (
               <span
                 key={tech}
-                className={`px-2.5 py-1 text-xs rounded-full border transition-all duration-300 font-medium hover:scale-105 ${
+                className={`px-2 py-1 text-xs rounded border transition-all duration-200 font-medium ${
                   isActive 
-                    ? 'bg-red-500/12 border-red-500/60 text-amber-400 hover:bg-red-500/20 hover:border-red-500/80' 
-                    : 'bg-gray-800 border-gray-600 text-gray-300 hover:bg-red-500/12 hover:border-red-500/60'
+                    ? 'bg-red-500/10 border-red-500/30 text-orange-300 hover:bg-red-500/15 hover:border-red-500/40' 
+                    : 'bg-gray-800/50 border-gray-600/30 text-gray-400 hover:bg-orange-500/10 hover:border-orange-500/30 hover:text-orange-300'
                 } animate-scale-in`}
-                style={{ animationDelay: `${isActive ? 100 + (i * 30) : 0}ms` }}
+                style={{ animationDelay: `${isActive ? 100 + (i * 20) : 0}ms` }}
               >
                 {tech}
               </span>
             ))}
             {!isActive && data.technologies.length > 4 && (
-              <span className="px-2.5 py-1 text-xs rounded-full border border-gray-600 bg-gray-800 text-gray-400 font-medium animate-scale-in">
+              <span className="px-2 py-1 text-xs rounded border border-gray-600/30 bg-gray-800/50 text-gray-500 font-medium animate-scale-in hover:text-orange-300 hover:border-orange-500/20 transition-all duration-200">
                 +{data.technologies.length - 4}
               </span>
             )}
@@ -222,12 +214,11 @@ const Experience = () => {
               A visual journey through my DevOps evolution
               <span className="block sm:inline text-orange-400 font-semibold mt-1 sm:mt-0"> Click timeline nodes to expand details</span>
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-20">            {/* Professional Experience - Mobile-first */}
+          </div>          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-20">
+            {/* Professional Experience - Mobile-first */}
             <div 
               ref={workRef}
-              className={`space-y-3 sm:space-y-4 transition-all duration-800 ${
+              className={`space-y-4 sm:space-y-5 transition-all duration-800 ${
                 workVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
               }`}
               style={{ animationDelay: '200ms' }}
@@ -236,11 +227,9 @@ const Experience = () => {
                 Professional Journey
                 <div className="absolute -bottom-3 sm:-bottom-4 left-0 w-20 sm:w-24 lg:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-scale-in" style={{ animationDelay: '400ms' }} />
                 <div className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-16 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-scale-in" style={{ animationDelay: '500ms' }} />
-              </h3>
-
-              <div className="relative">
-                {/* Background timeline - Mobile-responsive */}
-                <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full" />
+              </h3>              <div className="relative">
+                {/* Background timeline - Subtle and professional */}
+                <div className="absolute left-[11px] top-0 bottom-0 w-px bg-gradient-to-b from-gray-600 to-gray-800 rounded-full opacity-60" />
                 {workExperiences.map((exp, index) => (
                   <InteractiveTimelineCard
                     key={exp.id}
@@ -256,20 +245,18 @@ const Experience = () => {
             {/* Educational Background - Mobile-first */}
             <div 
               ref={educationRef}
-              className={`space-y-3 sm:space-y-4 transition-all duration-800 ${
+              className={`space-y-4 sm:space-y-5 transition-all duration-800 ${
                 educationVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
               }`}
               style={{ animationDelay: '400ms' }}
             >
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8 lg:mb-16 relative">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8 lg:mb-10 relative">
                 Educational Foundation
                 <div className="absolute -bottom-3 sm:-bottom-4 left-0 w-20 sm:w-24 lg:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-scale-in" style={{ animationDelay: '600ms' }} />
                 <div className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-16 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-scale-in" style={{ animationDelay: '700ms' }} />
-              </h3>
-
-              <div className="relative">
-                {/* Background timeline - Mobile-responsive */}
-                <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full" />
+              </h3>              <div className="relative">
+                {/* Background timeline - Subtle and professional */}
+                <div className="absolute left-[11px] top-0 bottom-0 w-px bg-gradient-to-b from-gray-600 to-gray-800 rounded-full opacity-60" />
                 {educationExperiences.map((exp, index) => (
                   <InteractiveTimelineCard
                     key={exp.id}
