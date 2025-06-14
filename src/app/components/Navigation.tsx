@@ -125,8 +125,8 @@ const Navigation: React.FC = () => {
   return (
     <>      {/* Mobile Header - Visible on mobile/tablet */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden transition-all duration-300 ease-primary bg-black/60 backdrop-blur-md">        <div className="container mx-auto">
-          <div className="flex items-center justify-start py-2 px-4 sm:px-6">
-            {/* Mobile menu toggle */}
+          <div className="flex items-center justify-start py-2 pl-2 pr-4 sm:pl-3 sm:pr-6">
+            {/* Mobile menu toggle - moved further left */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="touch-button flex items-center justify-center w-12 h-12 min-w-[48px] min-h-[48px] text-white hover:bg-gray-800/50 rounded-lg transition-all duration-300 focus-ring relative"

@@ -391,5 +391,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: []
 }

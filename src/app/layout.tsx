@@ -87,9 +87,8 @@ export default function RootLayout({
         className={`${inter.className} ${dancingScript.variable} ${oswald.variable} min-h-screen antialiased overscroll-none touch-manipulation`}
       ><ClientWrapper>
           <div className="overflow-x-hidden w-full">
-            <Navigation />            
-            {/* Mobile-first main content with responsive margin */}
-            <main className="relative z-10 pt-14 lg:pt-0 lg:ml-[214px] min-h-screen">
+            <Navigation />              {/* Mobile-first main content with responsive margin */}
+            <main className="relative z-10 lg:ml-[214px]">
               {children}
             </main>
           </div>

@@ -300,14 +300,14 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
 };
 
 const Projects = () => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayIndex, setDisplayIndex] = useState(0); // Separate state for UI display to prevent flickering
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [isInitializing, setIsInitializing] = useState(true);
-  const [isReady, setIsReady] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false); // Prevent flickering during programmatic scrolling
+  const [isReady, setIsReady] = useState(false);  const [isScrolling, setIsScrolling] = useState(false); // Prevent flickering during programmatic scrolling
+  const [buttonPressed, setButtonPressed] = useState<'left' | 'right' | null>(null); // Track button press for immediate feedback
   const carouselRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
@@ -338,9 +338,10 @@ const Projects = () => {
   // Create infinite scroll by duplicating projects
   const infiniteProjects = [...filteredProjects, ...filteredProjects, ...filteredProjects];
   const totalOriginalItems = filteredProjects.length;
-  const startIndex = totalOriginalItems;    // Additional safety: Reset to first project when category changes
+  const startIndex = totalOriginalItems;  // Additional safety: Reset to first project when category changes
   useEffect(() => {
     setCurrentIndex(0);
+    setDisplayIndex(0); // Also reset display index
     setIsReady(false);
     setIsInitializing(true);
     // Give time for DOM to update before setting ready
@@ -367,22 +368,34 @@ const Projects = () => {
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Touch gesture handlers for mobile
+  }, []);  // Enhanced touch gesture handlers for smooth mobile scrolling
   const handleTouchStart = (e: React.TouchEvent) => {
     if (typeof window !== 'undefined' && window.innerWidth < 640) {
       setIsDragging(true);
       setStartX(e.touches[0].clientX);
+      // Temporarily disable automatic scroll checking during touch
+      setIsScrolling(true);
+      
+      // Clear any pending scroll timeout during touch
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
     }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging || typeof window === 'undefined' || window.innerWidth >= 640) return;
-    e.preventDefault();
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
+    // Allow native scrolling behavior for smooth experience
+    // Only prevent if we need to stop bounce effects
+    if (carouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      // Prevent overscroll at boundaries
+      if ((scrollLeft <= 0 && e.touches[0].clientX > startX) || 
+          (scrollLeft >= scrollWidth - clientWidth && e.touches[0].clientX < startX)) {
+        e.preventDefault();
+      }
+    }
+  };  const handleTouchEnd = (e: React.TouchEvent) => {
     if (!isDragging || typeof window === 'undefined' || window.innerWidth >= 640) return;
     
     setIsDragging(false);
@@ -390,6 +403,7 @@ const Projects = () => {
     const diffX = startX - endX;
     const threshold = 50; // Minimum swipe distance
 
+    // Only trigger programmatic scroll for significant swipes
     if (Math.abs(diffX) > threshold) {
       if (diffX > 0) {
         // Swipe left - next project
@@ -398,114 +412,223 @@ const Projects = () => {
         // Swipe right - previous project
         scrollLeft();
       }
+    } else {
+      // For small movements, re-enable scroll checking with a longer delay to ensure stability
+      setTimeout(() => {
+        setIsScrolling(false);
+        
+        // Update currentIndex based on final scroll position after touch with enhanced stability
+        if (carouselRef.current && totalOriginalItems > 0) {
+          const { scrollLeft, clientWidth } = carouselRef.current;
+          const itemWidth = clientWidth / projectsPerView;
+          const rawIndex = Math.round(scrollLeft / itemWidth);
+          
+          let displayIndex = rawIndex - totalOriginalItems;
+          if (displayIndex < 0) displayIndex = totalOriginalItems - 1;
+          if (displayIndex >= totalOriginalItems) displayIndex = 0;            // Only update if the position is stable and different
+            if (displayIndex >= 0 && displayIndex < totalOriginalItems && displayIndex !== currentIndex) {
+              // Verify position stability before updating
+              setTimeout(() => {
+                if (carouselRef.current) {
+                  const { scrollLeft: finalScrollLeft } = carouselRef.current;
+                  const finalRawIndex = Math.round(finalScrollLeft / itemWidth);
+                  const finalDisplayIndex = finalRawIndex - totalOriginalItems;
+                  
+                  if (finalDisplayIndex === displayIndex) {
+                    setCurrentIndex(displayIndex);
+                    setDisplayIndex(displayIndex);
+                  }
+                }
+              }, 100);
+            }
+        }
+      }, 400); // Increased delay for better stability after touch
     }
-  };  // Initialize scroll position to middle set
+  };// Initialize scroll position to middle set with improved stability
   useEffect(() => {
     if (carouselRef.current && isReady && totalOriginalItems > 0) {
       setIsInitializing(true);
       
-      // Use requestAnimationFrame to ensure DOM is ready
+      // Use double requestAnimationFrame for better DOM stability
       requestAnimationFrame(() => {
-        if (carouselRef.current) {
-          const containerWidth = carouselRef.current.clientWidth;
-          const itemWidth = containerWidth / projectsPerView;
-          const scrollPosition = startIndex * itemWidth;
-          
-          // Set scroll position without triggering scroll events
-          carouselRef.current.style.scrollBehavior = 'auto';
-          carouselRef.current.scrollLeft = scrollPosition;
-          carouselRef.current.style.scrollBehavior = 'smooth';
-          
-          // Ensure currentIndex starts at 0
-          setCurrentIndex(0);
-          
-          // Allow normal scroll checking after everything is settled
-          setTimeout(() => {
-            setIsInitializing(false);
-          }, 300);
-        }
+        requestAnimationFrame(() => {
+          if (carouselRef.current) {
+            const containerWidth = carouselRef.current.clientWidth;
+            const itemWidth = containerWidth / projectsPerView;
+            const scrollPosition = startIndex * itemWidth;
+            
+            // Set scroll position without triggering scroll events
+            carouselRef.current.style.scrollBehavior = 'auto';
+            carouselRef.current.scrollLeft = scrollPosition;
+            carouselRef.current.style.scrollBehavior = 'smooth';
+              // Ensure currentIndex starts at 0
+            setCurrentIndex(0);
+            setDisplayIndex(0); // Also reset display index
+            
+            // Allow normal scroll checking after everything is properly settled
+            setTimeout(() => {
+              setIsInitializing(false);
+            }, 400); // Increased timeout for better stability
+          }
+        });
       });
     }
-  }, [selectedCategory, projectsPerView, startIndex, isReady, totalOriginalItems]);  // Check scroll position and handle infinite scroll
-  const checkScrollPosition = () => {
-    // Don't update position during initialization, scrolling animation, or if not ready
-    if (isInitializing || isScrolling || !isReady || !carouselRef.current || totalOriginalItems === 0) return;
+  }, [selectedCategory, projectsPerView, startIndex, isReady, totalOriginalItems]);  // Enhanced scroll position checking with debouncing - only for infinite scroll wrapping
+  const checkScrollPositionForWrapping = () => {
+    // Don't update position during initialization, scrolling animation, touch dragging, or if not ready
+    if (isInitializing || isScrolling || isDragging || !isReady || !carouselRef.current || totalOriginalItems === 0) return;
     
     const { scrollLeft, clientWidth } = carouselRef.current;
     const itemWidth = clientWidth / projectsPerView;
     const rawIndex = Math.round(scrollLeft / itemWidth);
     
-    // Handle infinite scroll wrapping
+    // Handle infinite scroll wrapping only when necessary
     if (rawIndex >= totalOriginalItems * 2) {
       // Jumped to end, wrap to beginning
       carouselRef.current.style.scrollBehavior = 'auto';
       carouselRef.current.scrollLeft = totalOriginalItems * itemWidth;
       carouselRef.current.style.scrollBehavior = 'smooth';
-      setCurrentIndex(0);
+        // Only update currentIndex if it's actually different
+      if (currentIndex !== 0) {
+        setCurrentIndex(0);
+        setDisplayIndex(0);
+      }
     } else if (rawIndex < totalOriginalItems) {
       // Jumped to beginning, wrap to end
       carouselRef.current.style.scrollBehavior = 'auto';
       carouselRef.current.scrollLeft = (totalOriginalItems * 2 - 1) * itemWidth;
       carouselRef.current.style.scrollBehavior = 'smooth';
-      setCurrentIndex(totalOriginalItems - 1);
-    } else {
-      // Normal position within middle set
-      const actualIndex = rawIndex - totalOriginalItems;
-      // Only update if the index actually changed
-      if (actualIndex !== currentIndex && actualIndex >= 0 && actualIndex < totalOriginalItems) {
-        setCurrentIndex(actualIndex);
+        // Only update currentIndex if it's actually different
+      const lastIndex = totalOriginalItems - 1;
+      if (currentIndex !== lastIndex) {
+        setCurrentIndex(lastIndex);
+        setDisplayIndex(lastIndex);
       }
     }
-  };
-
-  // Debounced scroll handler to prevent flickering
-  const handleScroll = () => {
+  };  // Enhanced scroll handler to prevent flickering during navigation
+  const handleScroll = () => {    // Skip index updates during programmatic scrolling and initialization, but allow during natural touch scrolling
+    if (isScrolling || isInitializing) return;
+    
+    // Only update currentIndex from natural user scrolling with additional stability checks
+    if (carouselRef.current && totalOriginalItems > 0) {
+      const { scrollLeft, clientWidth } = carouselRef.current;
+      const itemWidth = clientWidth / projectsPerView;
+      const rawIndex = Math.round(scrollLeft / itemWidth);
+      
+      // Calculate the display index for page counter
+      let displayIndex = rawIndex - totalOriginalItems;
+      if (displayIndex < 0) displayIndex = totalOriginalItems - 1;
+      if (displayIndex >= totalOriginalItems) displayIndex = 0;
+      
+      // Extra validation: only update if position has stabilized
+      const tolerance = 0.1; // Allow small scroll variations
+      const expectedScrollPosition = (totalOriginalItems + displayIndex) * itemWidth;
+      const scrollDifference = Math.abs(scrollLeft - expectedScrollPosition);
+        // Only update if we have a valid, different index AND scroll position is stable
+      if (displayIndex !== currentIndex && 
+          displayIndex >= 0 && 
+          displayIndex < totalOriginalItems &&
+          scrollDifference < (itemWidth * tolerance)) {
+        setCurrentIndex(displayIndex);
+        // Update display index only after validation to prevent flickering
+        setDisplayIndex(displayIndex);
+      }
+    }
+    
+    // Handle infinite scroll wrapping with debouncing
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
     
     scrollTimeoutRef.current = setTimeout(() => {
-      checkScrollPosition();
-    }, 100); // 100ms debounce
-  };const scrollToIndex = (index: number) => {
-    if (carouselRef.current && totalOriginalItems > 0) {
-      // Set scrolling flag to prevent checkScrollPosition from interfering
+      checkScrollPositionForWrapping();
+    }, 200); // Slightly increased timeout for better stability
+  };  const scrollToIndex = (index: number) => {
+    if (carouselRef.current && totalOriginalItems > 0 && !isScrolling) {
+      // Prevent multiple simultaneous scrolls
       setIsScrolling(true);
       
       const containerWidth = carouselRef.current.clientWidth;
       const itemWidth = containerWidth / projectsPerView;
       const scrollPosition = (startIndex + index) * itemWidth;
-      
-      // Update currentIndex immediately for better UX
+        // Update currentIndex immediately for instant UI feedback AND lock it
       setCurrentIndex(index);
+      setDisplayIndex(index); // Update display index immediately for stable UI
       
+      // Use smooth scroll with proper cleanup
       carouselRef.current.scrollTo({
         left: scrollPosition,
         behavior: 'smooth'
       });
       
-      // Clear scrolling flag after animation completes
+      // Clear scrolling flag with extended delay to prevent any premature scroll detection
       setTimeout(() => {
-        setIsScrolling(false);
-      }, 500); // Match smooth scroll duration
+        // Verify the scroll actually reached the intended position
+        if (carouselRef.current) {
+          const { scrollLeft, clientWidth } = carouselRef.current;
+          const itemWidth = clientWidth / projectsPerView;
+          const finalRawIndex = Math.round(scrollLeft / itemWidth);
+          const finalDisplayIndex = finalRawIndex - totalOriginalItems;
+          
+          // Ensure the final position matches our intention
+          if (Math.abs(finalDisplayIndex - index) <= 1) {
+            // Position is correct, safely clear scrolling flag
+            setIsScrolling(false);
+            
+            // Double-check and correct the currentIndex if needed
+            if (finalDisplayIndex >= 0 && finalDisplayIndex < totalOriginalItems && finalDisplayIndex !== index) {
+              setCurrentIndex(finalDisplayIndex);
+            }
+          } else {
+            // Position is off, try one more correction
+            const correctedPosition = (startIndex + index) * itemWidth;
+            carouselRef.current.scrollLeft = correctedPosition;
+            setIsScrolling(false);
+          }
+        } else {
+          // Fallback: just clear the flag
+          setIsScrolling(false);
+        }
+      }, 1000); // Extended timeout to ensure scroll animation completes fully
     }
-  };
-  const scrollLeft = () => {
-    // Calculate current page and navigate to previous page
+  };  const scrollLeft = () => {
+    // Prevent rapid clicking and ensure stable state
+    if (isScrolling || !isReady) return;
+    
+    // Provide immediate visual feedback
+    setButtonPressed('left');
+    setTimeout(() => setButtonPressed(null), 200);
+    
+    // Calculate current page and navigate to previous page with extra stability
     const currentPageIndex = Math.floor(currentIndex / projectsPerView);
     const totalPages = Math.ceil(totalOriginalItems / projectsPerView);
     const previousPageIndex = currentPageIndex > 0 ? currentPageIndex - 1 : totalPages - 1;
-    const newIndex = previousPageIndex * projectsPerView;
-    scrollToIndex(newIndex);
+    const newIndex = Math.max(0, Math.min(previousPageIndex * projectsPerView, totalOriginalItems - 1));
+    
+    // Only proceed if the index is actually different
+    if (newIndex !== currentIndex) {
+      scrollToIndex(newIndex);
+    }
   };
 
   const scrollRight = () => {
-    // Calculate current page and navigate to next page
+    // Prevent rapid clicking and ensure stable state
+    if (isScrolling || !isReady) return;
+    
+    // Provide immediate visual feedback
+    setButtonPressed('right');
+    setTimeout(() => setButtonPressed(null), 200);
+    
+    // Calculate current page and navigate to next page with extra stability
     const currentPageIndex = Math.floor(currentIndex / projectsPerView);
     const totalPages = Math.ceil(totalOriginalItems / projectsPerView);
     const nextPageIndex = currentPageIndex < totalPages - 1 ? currentPageIndex + 1 : 0;
-    const newIndex = nextPageIndex * projectsPerView;
-    scrollToIndex(newIndex);
+    const newIndex = Math.max(0, Math.min(nextPageIndex * projectsPerView, totalOriginalItems - 1));
+    
+    // Only proceed if the index is actually different
+    if (newIndex !== currentIndex) {
+      scrollToIndex(newIndex);
+    }
   };
 
   const openProjectModal = (project: Project) => {
@@ -525,8 +648,7 @@ const Projects = () => {
       <div className="mobile-container sm:container mx-auto px-4 relative z-10">        <div className="text-center mb-8 sm:mb-12 opacity-100 animate-in">
           <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
             Recent Projects
-          </h2>
-          <p className="text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
+          </h2>          <p className="hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
             Infrastructure solutions, automation pipelines, and DevOps implementations
           </p>
           
@@ -557,43 +679,78 @@ const Projects = () => {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory gap-4 sm:gap-0"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {infiniteProjects.map((project, index) => (
-              <div key={`${project.title}-${Math.floor(index / totalOriginalItems)}`} className="flex-shrink-0 w-[85vw] sm:w-full md:w-1/2 lg:w-1/3 px-0 sm:px-3 snap-center">
+            className="mobile-carousel carousel-container flex overflow-x-auto scrollbar-hide scroll-smooth snap-x gap-4 sm:gap-0 sm:snap-mandatory"
+            style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none'
+            }}
+          >            {infiniteProjects.map((project, index) => (
+              <div key={`${project.title}-${Math.floor(index / totalOriginalItems)}`} className="project-tile flex-shrink-0 w-[85vw] sm:w-full md:w-1/2 lg:w-1/3 px-0 sm:px-3 snap-start sm:snap-center">
                 <ProjectCard project={project} onClick={() => openProjectModal(project)} />
               </div>
             ))}
-          </div>          {/* Arrow Navigation */}
-          <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-6">            <button
+          </div>          {/* Arrow Navigation - Enhanced with better UX */}
+          <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-6">
+            <button
               onClick={scrollLeft}
-              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 touch-button group"
+              className={`w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 touch-button group ${
+                isScrolling 
+                  ? 'pointer-events-none opacity-60' 
+                  : 'hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95'
+              } ${
+                buttonPressed === 'left' 
+                  ? 'bg-red-500/30 border-red-500/50 scale-95' 
+                  : ''
+              }`}
               aria-label="Previous project"
             >
               <svg 
-                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200" 
+                className={`w-5 h-5 text-white transition-colors duration-200 ${
+                  !isScrolling && 'group-hover:text-red-300 group-active:text-red-200'
+                } ${
+                  buttonPressed === 'left' ? 'text-red-200' : ''
+                }`}
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-            </button>            {/* Page Counter */}
-            <div className="text-sm font-medium text-gray-300 min-w-[3rem] text-center">
-              {Math.floor(currentIndex / projectsPerView) + 1} / {Math.ceil(totalOriginalItems / projectsPerView)}
+            </button>
+
+            {/* Page Counter - Enhanced to prevent flickering */}
+            <div className="text-sm font-medium text-gray-300 min-w-[3rem] text-center select-none">
+              <span className="tabular-nums">
+                {Math.floor(displayIndex / projectsPerView) + 1}
+              </span>
+              <span className="mx-1">/</span>
+              <span className="tabular-nums">
+                {Math.ceil(totalOriginalItems / projectsPerView)}
+              </span>
             </div>
-              <button
+
+            <button
               onClick={scrollRight}
-              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 touch-button group"
+              className={`w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 touch-button group ${
+                isScrolling 
+                  ? 'pointer-events-none opacity-60' 
+                  : 'hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95'
+              } ${
+                buttonPressed === 'right' 
+                  ? 'bg-red-500/30 border-red-500/50 scale-95' 
+                  : ''
+              }`}
               aria-label="Next project"
             >
               <svg 
-                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200" 
+                className={`w-5 h-5 text-white transition-colors duration-200 ${
+                  !isScrolling && 'group-hover:text-red-300 group-active:text-red-200'
+                } ${
+                  buttonPressed === 'right' ? 'text-red-200' : ''
+                }`}
                 fill="none" 
                 stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
+                viewBox="0 0 24 24"              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>

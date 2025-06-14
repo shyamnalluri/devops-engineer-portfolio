@@ -25,7 +25,7 @@ const Button = ({ href, variant = 'primary', children, onClick, className }: But
     transition-all duration-300 relative overflow-hidden
     ${
       variant === 'primary'
-        ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600'
+        ? 'bg-gradient-to-r from-orange-600 to-red-500 text-white hover:from-orange-700 hover:to-red-600'
         : 'bg-gray-800 text-gray-100 hover:bg-gray-700'
     }
     ${className || ''}

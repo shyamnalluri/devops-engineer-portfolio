@@ -42,8 +42,7 @@ const Certifications = () => {
             headerVisible ? 'animate-hero-title' : ''
           }`}>
             Professional Certifications
-          </h2>
-          <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
+          </h2>          <p className={`hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
             headerVisible ? 'animate-hero-subtitle' : ''
           }`}>
             Industry-recognized certifications demonstrating expertise in cloud architecture,

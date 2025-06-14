@@ -217,8 +217,7 @@ const Skills = () => {
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">        <div className="text-center mb-8 sm:mb-12 lg:mb-16 opacity-100 animate-in">
           <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
             Skills & Technologies
-          </h2>
-          <p className="text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
+          </h2>          <p className="hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
             Over the years, I have mastered various technologies that enable me to build robust, 
             scalable, and efficient infrastructure solutions
           </p>

@@ -589,9 +589,17 @@ a, button {
     transition: all var(--motion-duration-fast) var(--ease-primary);
     transform: translateZ(0);
   }
-
   .touch-button:active {
     transform: scale(0.95) translateZ(0);
+  }
+
+  /* Page counter stabilization to prevent number flickering */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    width: 1.2em;
+    display: inline-block;
+    text-align: center;
   }
 
   /* Mobile-Optimized Cards */
@@ -760,4 +768,96 @@ a, button {
 .masonry-item {
   transition: all 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
   will-change: opacity, transform;
+}
+
+/* Hero Section Centering Fix */
+#home {
+  /* Ensure full viewport height minus navigation */
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Mobile: Account for fixed navigation */
+@media (max-width: 1023px) {
+  #home {
+    /* Subtract navigation height on mobile */
+    height: calc(100vh - 56px);
+    height: calc(100dvh - 56px);
+    margin-top: 56px;
+  }
+}
+
+/* Desktop: Full height without navigation adjustment */
+@media (min-width: 1024px) {
+  #home {
+    height: 100vh;
+    height: 100dvh;
+    margin-top: 0;
+  }
+}
+
+/* Touch-optimized carousel styles for mobile */
+@media (max-width: 639px) {
+  .mobile-carousel {
+    /* Optimize for touch scrolling */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    
+    /* Reduce scroll snap aggressiveness on mobile */
+    scroll-snap-type: x proximity !important;
+    
+    /* Better momentum scrolling */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .mobile-carousel::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Smooth project card transitions during touch */
+  .mobile-carousel .project-card {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+}
+
+/* Desktop maintains strict snap behavior */
+@media (min-width: 640px) {
+  .mobile-carousel {
+    scroll-snap-type: x mandatory !important;
+  }
+}
+
+/* Better touch performance for project tiles */
+.project-tile {
+  /* Hardware acceleration for smooth scrolling */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  
+  /* Prevent flickering during touch scroll */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
+  /* Smooth transitions */
+  transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Optimize scroll performance */
+.carousel-container {
+  /* Enable hardware acceleration */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  
+  /* Better scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  
+  /* Prevent overscroll bounce at boundaries */
+  overscroll-behavior-x: contain;
 }

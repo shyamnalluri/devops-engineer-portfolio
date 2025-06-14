@@ -189,8 +189,7 @@ const Contact = () => {
             headerVisible ? 'animate-hero-title' : ''
           }`}>
             Let&apos;s Work Together
-          </h2>
-          <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
+          </h2>          <p className={`hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
             headerVisible ? 'animate-hero-subtitle' : ''
           }`}>
             Ready to bring your vision to life? Let&apos;s discuss how we can build something amazing together

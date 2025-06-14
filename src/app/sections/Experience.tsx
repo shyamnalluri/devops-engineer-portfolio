@@ -207,12 +207,11 @@ const Experience = () => {
               headerVisible ? 'animate-hero-title' : ''
             }`}>
               Experience & Education
-            </h2>
-            <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
+            </h2>            <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
               headerVisible ? 'animate-hero-subtitle' : ''
             }`}>
-              A visual journey through my DevOps evolution
-              <span className="block sm:inline text-orange-400 font-semibold mt-1 sm:mt-0"> Click timeline nodes to expand details</span>
+              <span className="hidden sm:inline">A visual journey through my DevOps evolution</span>
+              <span className="block sm:inline text-amber-100 sm:text-orange-400 font-semibold mt-1 sm:mt-0"> Click timeline nodes to expand details</span>
             </p>
           </div>          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-20">
             {/* Professional Experience - Mobile-first */}
