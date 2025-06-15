@@ -193,10 +193,13 @@ const Testimonials = () => {
         {/* Section Header */}
         <div
           ref={headerRef}
-          className="text-center mb-8 animate-fade-in-up"
-        >          <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
-            What Colleagues Say About Me
-          </h2>
+          className="text-center mb-8 animate-fade-in-up"        >          <div className="w-full flex flex-col items-center">
+            <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
+              What Colleagues Say About Me
+            </h2>
+            {/* Full-width decorative underline */}
+            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
+          </div>
           <p className="text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
             Professional recommendations from colleagues and industry leaders I&apos;ve had the privilege to work with
           </p>

@@ -24,12 +24,12 @@ const Navigation: React.FC = () => {
   const [targetSection, setTargetSection] = useState<string | null>(null);
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);  useEffect(() => {
     setIsLoaded(true);
-      // Enhanced scroll spy with navigation state awareness
+      // Enhanced scroll spy with better navigation state management
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       // If we're currently navigating, only update to target section
       if (isNavigating && targetSection) {
         const targetEntry = entries.find(entry => entry.target.id === targetSection);
-        if (targetEntry && targetEntry.isIntersecting && targetEntry.intersectionRatio > 0.5) {
+        if (targetEntry && targetEntry.isIntersecting && targetEntry.intersectionRatio > 0.3) {
           setActiveSection(targetSection);
           setIsNavigating(false);
           setTargetSection(null);
@@ -51,9 +51,18 @@ const Navigation: React.FC = () => {
             const visibleHeight = Math.max(0, visibleBottom - visibleTop);
             const visibilityRatio = visibleHeight / Math.min(rect.height, viewportHeight);
             
-            // Prefer sections near the top of the viewport
-            const topBonus = rect.top <= 100 ? 0.4 : 0;
-            const score = visibilityRatio + topBonus;
+            // Enhanced scoring: prefer sections at the top and give more weight to visibility
+            let score = visibilityRatio;
+            
+            // Strong preference for sections starting near the top
+            if (rect.top <= 150 && rect.top >= -100) {
+              score += 0.5;
+            }
+            
+            // Additional bonus for sections that are prominently visible
+            if (visibilityRatio > 0.6) {
+              score += 0.3;
+            }
             
             if (score > maxScore) {
               maxScore = score;
@@ -62,18 +71,17 @@ const Navigation: React.FC = () => {
           }
         });
 
-        if (bestSectionId && maxScore > 0.3) {
+        // Update active section if we have a clear winner and we're not in a navigation state
+        if (bestSectionId && maxScore > 0.4) {
           setActiveSection(bestSectionId);
         }
       }
-    };
-
-    const observer = new IntersectionObserver(observerCallback, {
-      threshold: [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0],
-      rootMargin: '-50px 0px -30% 0px'
+    };    const observer = new IntersectionObserver(observerCallback, {
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+      rootMargin: '-80px 0px -20% 0px' // More aggressive top margin to trigger earlier
     });
 
-    // Observe all sections
+    // Observe all sections with a slight delay to ensure DOM is ready
     setTimeout(() => {
       const sections = document.querySelectorAll('section[id]');
       sections.forEach((section) => observer.observe(section));
@@ -107,12 +115,19 @@ const Navigation: React.FC = () => {
           behavior: 'smooth',
           block: 'start'
         });
-        
-        // Reset navigation state after scroll completes
+          // Reset navigation state after scroll completes with multiple fallbacks
         navigationTimeoutRef.current = setTimeout(() => {
           setIsNavigating(false);
           setTargetSection(null);
-        }, 1500); // Give enough time for smooth scroll to complete
+        }, 1200); // Reduced timeout for better responsiveness
+        
+        // Additional safety timeout
+        setTimeout(() => {
+          if (isNavigating) {
+            setIsNavigating(false);
+            setTargetSection(null);
+          }
+        }, 2000);
       }
     }
   };

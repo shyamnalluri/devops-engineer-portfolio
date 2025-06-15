@@ -44,10 +44,17 @@ const Achievements = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl font-bold text-white mb-4">Achievements</h2>
-          <p className="text-gray-400">Key metrics and milestones</p>
+          className="text-center mb-12"        >
+          <div className="w-full flex flex-col items-center">
+            <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4">
+              Achievements
+            </h2>
+            {/* Full-width decorative underline */}
+            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
+          </div>
+          <p className="text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2">
+            Key metrics and milestones
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

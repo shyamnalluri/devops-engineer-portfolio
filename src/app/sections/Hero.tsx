@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useRef, useEffect } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { personalInfo } from "../../data/portfolio";
 import LiveTerminal from "../components/LiveTerminal";
 
@@ -19,7 +19,6 @@ const Hero = () => {
         (el as HTMLElement).style.animation = 'none';
       });
     }  }, []);
-
   return (
     <section
       id="home"
@@ -28,22 +27,40 @@ const Hero = () => {
       role="region"
       aria-label="Hero section - Introduction to Shyam Nalluri"
     >
+      {/* Available for Opportunities Badge - Top Right */}
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="fixed top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-50"
+      >
+        <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-full px-3 py-2 sm:px-4 sm:py-2 backdrop-blur-sm">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-green-400 text-xs sm:text-sm font-medium">
+            Available for Opportunities
+          </span>
+        </div>
+      </motion.div>
+
       {/* Background effects - mobile-optimized */}
       <div className="absolute inset-0 bg-grid-white/[0.02] -z-10" aria-hidden="true" />
-        {/* Subtle background gradients */}
-      <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-orange-600/10 via-red-500/5 to-orange-600/5 rounded-full blur-3xl -z-10" aria-hidden="true" />
-      <div className="absolute top-1/4 right-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-red-500/5 via-orange-500/5 to-red-500/5 rounded-full blur-3xl -z-10" aria-hidden="true" />{/* Main content container - mobile-first layout */}
-      <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
+      {/* Mobile-optimized background gradients */}
+      <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-orange-600/8 via-red-500/4 to-orange-600/4 rounded-full blur-3xl -z-10" aria-hidden="true" />
+      <div className="absolute top-1/4 right-1/4 w-32 h-32 sm:w-48 sm:h-48 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-red-500/4 via-orange-500/4 to-red-500/4 rounded-full blur-3xl -z-10" aria-hidden="true" />
+      {/* Mobile-only center gradient */}
+      <div className="lg:hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-r from-orange-500/5 to-red-500/5 rounded-full blur-2xl -z-10" aria-hidden="true" />      {/* Main content container - optimized for all screen sizes */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-screen">
+          {/* Responsive layout with proper spacing to prevent overlap */}
+          <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-8 xl:gap-12 items-center justify-center min-h-screen py-12 sm:py-16 lg:py-8 xl:py-0">
           
-            {/* Left column - Terminal component */}
-            <div className="flex justify-center lg:justify-start order-1 lg:order-1">
+            {/* Terminal component - Hidden on mobile, properly contained on desktop */}
+            <div className="hidden lg:flex justify-center lg:justify-start order-1 lg:order-1 w-full">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="relative"
+                className="relative flex justify-center lg:justify-start max-w-full"
               >
                 <LiveTerminal />
                 
@@ -56,7 +73,7 @@ const Hero = () => {
                 >
                   <span className="text-orange-400 text-sm">🚀</span>
                 </motion.div>
-                  <motion.div
+                <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 1.4 }}
@@ -64,7 +81,6 @@ const Hero = () => {
                 >
                   <span className="text-orange-400 text-lg">⚙️</span>
                 </motion.div>
-                
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -74,58 +90,49 @@ const Hero = () => {
                   <span className="text-green-400 text-xs">☁️</span>
                 </motion.div>
               </motion.div>
-            </div>
-
-            {/* Right column - Text content */}
-            <div className="text-left space-y-6 lg:space-y-8 order-2 lg:order-2">              {/* Small intro text */}
-              <motion.p 
+            </div>            {/* Main content - Properly contained with responsive spacing */}
+            <div className="text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-5 xl:space-y-6 order-1 lg:order-2 w-full max-w-2xl lg:max-w-full mx-auto relative px-0 lg:px-2 xl:px-4 lg:min-w-0">              {/* Small intro text - larger on desktop */}
+              <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="text-orange-400 text-mobile-base sm:text-lg font-mono"
+                className="text-orange-400 text-base sm:text-lg lg:text-xl xl:text-2xl font-mono mb-2 sm:mb-3"
               >
                 Hello, I'm
-              </motion.p>
-
-              {/* Main name - clean and bold */}
+              </motion.p>{/* Main name - responsive sizing for all screen sizes */}
               <motion.h1 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.7 }}
-                className="text-mobile-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white leading-tight"
+                className="text-3xl xs:text-4xl sm:text-5xl lg:text-4xl xl:text-6xl 2xl:text-7xl font-bold tracking-tight text-white leading-tight -mt-2 sm:-mt-3"
               >
                 {personalInfo.name}
-              </motion.h1>
-
-              {/* Subtitle */}
+              </motion.h1>              {/* Subtitle - responsive sizing */}
               <motion.h2 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.9 }}
-                className="text-mobile-xl sm:text-2xl lg:text-3xl font-light text-gray-300"
+                className="text-lg sm:text-xl lg:text-lg xl:text-2xl 2xl:text-3xl font-light text-gray-300"
               >
                 {personalInfo.subtitle}
               </motion.h2>
-              
-              {/* Description */}
+                {/* Description - responsive sizing */}
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.1 }}
-                className="text-mobile-base sm:text-lg lg:text-xl text-gray-400 leading-relaxed max-w-xl"
+                className="text-sm sm:text-base lg:text-base xl:text-lg 2xl:text-xl text-gray-400 leading-relaxed max-w-xl mx-auto lg:mx-0"
                 aria-label="Professional summary"
               >
                 {personalInfo.description}
-              </motion.p>
-
-              {/* Action buttons - multiple like in the design */}
+              </motion.p>              {/* Action buttons - mobile-optimized sizing */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.3 }}
-                className="flex flex-wrap gap-4 pt-6"
+                className="flex flex-col sm:flex-row gap-3 pt-4 sm:pt-6 justify-center lg:justify-start items-center w-full"
               >
-                {/* Primary CTA */}
+                {/* Primary CTA - 50% width on mobile with 25% margins */}
                 <button
                   onClick={() => {
                     const contactSection = document.getElementById('contact');
@@ -136,42 +143,81 @@ const Hero = () => {
                       });
                     }
                   }}
-                  className="group inline-flex items-center justify-center px-8 py-4 text-mobile-base sm:text-lg min-h-[56px] bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full hover:from-orange-600 hover:to-red-600 hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 font-medium cursor-pointer"
+                  className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-1/2 sm:w-auto bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full hover:from-orange-600 hover:to-red-600 hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 cursor-pointer"
                   aria-label="Hire me for opportunities"
                   type="button"
                 >
                   <span>Hire Me</span>
-                  <FaArrowRight className="ml-3 text-sm transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true" />
+                  <FaArrowRight className="ml-2 text-xs transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true" />
                 </button>
 
-                {/* Secondary buttons */}
-                <button
-                  className="group inline-flex items-center justify-center px-6 py-4 text-mobile-base sm:text-lg min-h-[56px] bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 font-medium cursor-pointer"
-                  aria-label="View resume"
-                  type="button"
-                >
-                  <span>Resume</span>
-                  <svg className="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
+                {/* Secondary buttons - 50% width on mobile */}
+                <div className="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">                  <button
+                    onClick={() => {
+                      window.open('/Shyam_Nalluri_Resume.pdf', '_blank', 'noopener,noreferrer');
+                    }}
+                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-1/2 sm:w-auto bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
+                    aria-label="View resume"
+                    type="button"
+                  >
+                    <span>Resume</span>
+                    <svg className="ml-2 w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
 
-                <button
-                  onClick={() => {
-                    const aboutSection = document.getElementById('about');
-                    if (aboutSection) {
-                      aboutSection.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                      });
-                    }
-                  }}
-                  className="group inline-flex items-center justify-center px-6 py-4 text-mobile-base sm:text-lg min-h-[56px] bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 font-medium cursor-pointer"
-                  aria-label="Learn more about me"
-                  type="button"
+                  <button
+                    onClick={() => {
+                      const aboutSection = document.getElementById('about');
+                      if (aboutSection) {
+                        aboutSection.scrollIntoView({ 
+                          behavior: 'smooth',
+                          block: 'start'
+                        });
+                      }
+                    }}
+                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-1/2 sm:w-auto bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
+                    aria-label="Learn more about me"
+                    type="button"
+                  >
+                    <span>Learn More</span>
+                  </button>
+                </div>
+              </motion.div>
+
+              {/* Social icons - visible on mobile, hidden on large screens where terminal is shown */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.5 }}
+                className="flex justify-center lg:hidden gap-6 pt-6"
+              >
+                <a 
+                  href={personalInfo.socialLinks.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-orange-400 hover:bg-gray-700 transition-all duration-300"
+                  aria-label="GitHub Profile"
                 >
-                  <span>Learn More</span>
-                </button>              </motion.div>
+                  <FaGithub size={20} />
+                </a>
+                <a 
+                  href={personalInfo.socialLinks.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-gray-700 transition-all duration-300"
+                  aria-label="LinkedIn Profile"
+                >
+                  <FaLinkedin size={20} />
+                </a>
+                <a 
+                  href={`mailto:${personalInfo.email}`}
+                  className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-gray-700 transition-all duration-300"
+                  aria-label="Email Contact"
+                >
+                  <FaEnvelope size={20} />
+                </a>
+              </motion.div>
             </div>
 
           </div>

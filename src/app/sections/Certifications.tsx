@@ -37,12 +37,16 @@ const Certifications = () => {
           ref={headerRef}
           className={`text-center mb-6 sm:mb-8 transition-all duration-800 ${
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
-          }`}
-        >          <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
-            headerVisible ? 'animate-hero-title' : ''
-          }`}>
-            Professional Certifications
-          </h2>          <p className={`hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
+          }`}        >          <div className="w-full flex flex-col items-center">
+            <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
+              headerVisible ? 'animate-hero-title' : ''
+            }`}>
+              Professional Certifications
+            </h2>
+            {/* Full-width decorative underline */}
+            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
+          </div>
+          <p className={`hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
             headerVisible ? 'animate-hero-subtitle' : ''
           }`}>
             Industry-recognized certifications demonstrating expertise in cloud architecture,
