@@ -30,6 +30,8 @@ const Certifications = dynamic(() => import("./sections/Certifications"), {
   ssr: true
 });
 
+
+
 const Contact = dynamic(() => import("./sections/Contact"), {
   loading: () => <SkeletonScreen type="contact" />,
   ssr: true

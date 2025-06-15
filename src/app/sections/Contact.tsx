@@ -422,7 +422,7 @@ const Contact = () => {
                 )}
               </form>
             </div>
-          </div>          {/* Testimonials - Mobile-first responsive width */}
+          </div>          {/* Testimonials - Fixed size container with centered content */}
           <div
             ref={testimonialsRef}
             className={`transition-all duration-800 ${
@@ -430,108 +430,132 @@ const Contact = () => {
             }`}
             style={{ animationDelay: '400ms' }}
           >
-            <div className="mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-5 h-full hover:border-blue-500/30 transition-all duration-500 group">
+            <div className="mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg sm:rounded-xl overflow-hidden hover:border-blue-500/30 transition-all duration-500 group">
               {/* Testimonials Header */}
-              <div className={`flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 transition-all duration-600 ${
+              <div className={`flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b border-gray-700/30 transition-all duration-600 ${
                 testimonialsVisible ? 'animate-fade-in' : 'opacity-0'
               }`} style={{ animationDelay: '600ms' }}>
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">                  <FaQuoteLeft className="text-white text-xs sm:text-sm" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <FaQuoteLeft className="text-white text-xs sm:text-sm" />
                 </div>
                 <div>
                   <h3 className="text-lg sm:text-xl font-bold text-white">Client Testimonials</h3>
                   <p className="text-xs sm:text-sm text-gray-400">What others say about my work</p>
                 </div>
-              </div>              {/* Testimonials Content with Touch Support */}
+              </div>
+
+              {/* Fixed height testimonials content with scrolling */}
               <div 
-                className={`bg-gradient-to-br from-gray-900/30 to-gray-800/30 backdrop-blur-sm border border-gray-600/30 rounded-lg p-3 sm:p-4 flex-1 mb-3 sm:mb-4 transition-all duration-600 ${
+                className={`bg-gradient-to-br from-gray-900/30 to-gray-800/30 backdrop-blur-sm transition-all duration-600 flex flex-col justify-center items-center ${
                   testimonialsVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
                 }`} 
-                style={{ animationDelay: '800ms' }}
+                style={{ 
+                  animationDelay: '800ms',
+                  height: '300px' // Fixed height for consistency
+                }}
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
               >
                 <div
                   key={currentTestimonial}
-                  className="h-full flex flex-col justify-between animate-fade-in min-h-[200px] sm:min-h-[240px]"
+                  className="h-full w-full flex flex-col justify-center px-3 sm:px-4 animate-fade-in"
                 >
-                  {/* Testimonial Content */}
-                  <div className="mb-3 sm:mb-4">
-                    <div className="mb-3 sm:mb-4">
+                  {/* Testimonial Content - Scrollable if needed */}
+                  <div className="flex-1 flex flex-col justify-center overflow-hidden">
+                    <div className="text-center mb-4">
                       <span className="inline-block px-2 py-1 text-xs bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full text-orange-400 font-medium">
                         {testimonials[currentTestimonial].highlight}
                       </span>
                     </div>
-                    <blockquote className="text-xs sm:text-sm text-gray-200 leading-relaxed mb-3 sm:mb-4 italic">
-                      &ldquo;{testimonials[currentTestimonial].content}&rdquo;
-                    </blockquote>
-                  </div>
+                    
+                    {/* Scrollable testimonial text */}
+                    <div 
+                      className="max-h-32 overflow-y-auto scrollbar-thin scrollbar-track-gray-800/50 scrollbar-thumb-blue-500/50 hover:scrollbar-thumb-blue-500/70 mb-4"
+                      style={{ 
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: 'rgba(59, 130, 246, 0.5) rgba(31, 41, 55, 0.5)'
+                      }}
+                    >
+                      <blockquote className="text-xs sm:text-sm text-gray-200 leading-relaxed italic text-center px-2">
+                        &ldquo;{testimonials[currentTestimonial].content}&rdquo;
+                      </blockquote>
+                    </div>
 
-                  {/* Client Info */}
-                  <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-800/30 rounded-lg border border-gray-700/30 hover:border-gray-600/50 transition-all duration-300">                    <Image
-                      src={testimonials[currentTestimonial].image}
-                      alt={testimonials[currentTestimonial].name}
-                      width={40}
-                      height={40}
-                      loading="lazy"
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-orange-500/30 hover:border-orange-500/60 transition-all duration-300"
-                    /><div>
-                      <h4 className="text-white font-bold text-xs sm:text-sm">
-                        {testimonials[currentTestimonial].name}
-                      </h4>
-                      <p className="text-orange-400 font-medium text-xs">
-                        {testimonials[currentTestimonial].role}
-                      </p>
-                      <p className="text-gray-400 text-xs">
-                        {testimonials[currentTestimonial].company}
-                      </p>
+                    {/* Client Info - Always visible at bottom */}
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-800/30 rounded-lg border border-gray-700/30 hover:border-gray-600/50 transition-all duration-300 mx-auto">
+                      <Image
+                        src={testimonials[currentTestimonial].image}
+                        alt={testimonials[currentTestimonial].name}
+                        width={40}
+                        height={40}
+                        loading="lazy"
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-orange-500/30 hover:border-orange-500/60 transition-all duration-300"
+                      />
+                      <div className="text-center">
+                        <h4 className="text-white font-bold text-xs sm:text-sm">
+                          {testimonials[currentTestimonial].name}
+                        </h4>
+                        <p className="text-orange-400 font-medium text-xs">
+                          {testimonials[currentTestimonial].role}
+                        </p>
+                        <p className="text-gray-400 text-xs">
+                          {testimonials[currentTestimonial].company}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>              {/* Arrow Navigation */}
-              <div className={`flex items-center justify-center space-x-4 transition-all duration-600 ${
-                testimonialsVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
-              }`} style={{ animationDelay: '1000ms' }}>
-                <button
-                  onClick={() => setCurrentTestimonial(currentTestimonial === 0 ? testimonials.length - 1 : currentTestimonial - 1)}
-                  className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-orange-500/20 hover:border-orange-500/50 hover:scale-105 active:bg-orange-500/30 active:scale-95 touch-button group"
-                  aria-label="Previous testimonial"
-                >
-                  <svg 
-                    className="w-3 h-3 text-white transition-colors duration-200 group-hover:text-orange-300 group-active:text-orange-200" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                
-                {/* Numeric Counter */}
-                <div className="text-xs font-medium text-gray-300 min-w-[2rem] text-center">
-                  {currentTestimonial + 1} / {testimonials.length}
-                </div>
-                
-                <button
-                  onClick={() => setCurrentTestimonial(currentTestimonial === testimonials.length - 1 ? 0 : currentTestimonial + 1)}
-                  className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-orange-500/20 hover:border-orange-500/50 hover:scale-105 active:bg-orange-500/30 active:scale-95 touch-button group"
-                  aria-label="Next testimonial"
-                >                  <svg 
-                    className="w-3 h-3 text-white transition-colors duration-200 group-hover:text-orange-300 group-active:text-orange-200" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
               </div>
 
-              {/* Mobile Swipe Indicator */}
-              <div className="lg:hidden text-center mt-2 sm:mt-3">
-                <p className="text-xs text-gray-500">
-                  Swipe left or right to navigate
-                </p>
+              {/* Bottom Navigation */}
+              <div className={`p-3 sm:p-4 border-t border-gray-700/30 bg-gray-800/20 ${
+                testimonialsVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
+              }`} style={{ animationDelay: '1000ms' }}>
+                {/* Arrow Navigation */}
+                <div className="flex items-center justify-center space-x-4 mb-2">
+                  <button
+                    onClick={() => setCurrentTestimonial(currentTestimonial === 0 ? testimonials.length - 1 : currentTestimonial - 1)}
+                    className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-orange-500/20 hover:border-orange-500/50 hover:scale-105 active:bg-orange-500/30 active:scale-95 touch-button group"
+                    aria-label="Previous testimonial"
+                  >
+                    <svg 
+                      className="w-3 h-3 text-white transition-colors duration-200 group-hover:text-orange-300 group-active:text-orange-200" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  
+                  <button
+                    onClick={() => setCurrentTestimonial(currentTestimonial === testimonials.length - 1 ? 0 : currentTestimonial + 1)}
+                    className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-orange-500/20 hover:border-orange-500/50 hover:scale-105 active:bg-orange-500/30 active:scale-95 touch-button group"
+                    aria-label="Next testimonial"
+                  >
+                    <svg 
+                      className="w-3 h-3 text-white transition-colors duration-200 group-hover:text-orange-300 group-active:text-orange-200" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Numeric Counter */}
+                <div className="text-xs font-medium text-gray-300 text-center">
+                  {currentTestimonial + 1} / {testimonials.length}
+                </div>
+
+                {/* Mobile Swipe Indicator */}
+                <div className="lg:hidden text-center mt-2">
+                  <p className="text-xs text-gray-500">
+                    Swipe left or right to navigate
+                  </p>
+                </div>
               </div>
             </div>
           </div>
