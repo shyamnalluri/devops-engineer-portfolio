@@ -580,17 +580,13 @@ a, button {
     min-width: 44px;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-  }
-  .touch-button {
+  }  .touch-button {
     min-height: 44px;
     min-width: 44px;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     transition: all var(--motion-duration-fast) var(--ease-primary);
     transform: translateZ(0);
-  }
-  .touch-button:active {
-    transform: scale(0.95) translateZ(0);
   }
 
   /* Page counter stabilization to prevent number flickering */
@@ -601,17 +597,11 @@ a, button {
     display: inline-block;
     text-align: center;
   }
-
   /* Mobile-Optimized Cards */
   .mobile-card {
     border-radius: 12px;
     transition: all var(--motion-duration-medium) var(--ease-secondary);
     will-change: transform;
-  }
-
-  .mobile-card:active {
-    transform: scale(0.98) translateZ(0);
-    transition-duration: var(--motion-duration-fast);
   }
 
   /* Safe Area Utilities */
