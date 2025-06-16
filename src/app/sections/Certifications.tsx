@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { certificationsData } from '../../data/certifications';
-import { FaExternalLinkAlt, FaCheckCircle, FaCertificate, FaCalendarAlt, FaStar, FaShieldAlt } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaCertificate, FaShieldAlt } from 'react-icons/fa';
 
 const Certifications = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -28,8 +28,8 @@ const Certifications = () => {
     ? certificationsData
     : certificationsData.filter(cert => {
         const categoryData = categories.find(cat => cat.name === selectedCategory);
-        return categoryData ? cert.issuer === categoryData.originalName : false;
-      });
+        return categoryData ? cert.issuer === categoryData.originalName : false;      });
+
   // Get certification importance level (number of stars)
   const getCertImportance = (category: string): number => {
     const levelMap: { [key: string]: number } = {
@@ -39,7 +39,9 @@ const Certifications = () => {
       'programming': 3
     };
     return levelMap[category] || 3;
-  };  // Get provider-specific styling - now using consistent red-orange-yellow theme
+  };
+
+  // Get provider-specific styling - toned down color scheme
   const getProviderStyling = (issuer: string): {
     bgGradient: string;
     badge: string;
@@ -51,40 +53,40 @@ const Certifications = () => {
       button: string;
     } } = {
       'Amazon Web Services': {
-        bgGradient: 'bg-gradient-to-br from-red-500 to-orange-500',
-        badge: 'bg-red-500/20 text-red-300 border border-red-500/30',
-        button: 'bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white'
+        bgGradient: 'bg-gradient-to-br from-slate-600 to-slate-700',
+        badge: 'bg-slate-600/20 text-slate-300 border border-slate-600/30',
+        button: 'bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 text-white'
       },
       'Microsoft': {
-        bgGradient: 'bg-gradient-to-br from-orange-500 to-yellow-500',
-        badge: 'bg-orange-500/20 text-orange-300 border border-orange-500/30',
-        button: 'bg-gradient-to-r from-orange-600 to-yellow-600 hover:from-orange-500 hover:to-yellow-500 text-white'
+        bgGradient: 'bg-gradient-to-br from-blue-600 to-blue-700',
+        badge: 'bg-blue-600/20 text-blue-300 border border-blue-600/30',
+        button: 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white'
       },
       'Cloud Native Computing Foundation': {
-        bgGradient: 'bg-gradient-to-br from-yellow-500 to-red-500',
-        badge: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
-        button: 'bg-gradient-to-r from-yellow-600 to-red-600 hover:from-yellow-500 hover:to-red-500 text-white'
+        bgGradient: 'bg-gradient-to-br from-cyan-600 to-cyan-700',
+        badge: 'bg-cyan-600/20 text-cyan-300 border border-cyan-600/30',
+        button: 'bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white'
       },
       'HashiCorp': {
-        bgGradient: 'bg-gradient-to-br from-red-500 to-yellow-500',
-        badge: 'bg-red-500/20 text-red-300 border border-red-500/30',
-        button: 'bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-500 hover:to-yellow-500 text-white'
+        bgGradient: 'bg-gradient-to-br from-purple-600 to-purple-700',
+        badge: 'bg-purple-600/20 text-purple-300 border border-purple-600/30',
+        button: 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white'
       },
       'ISC2': {
-        bgGradient: 'bg-gradient-to-br from-yellow-500 to-orange-500',
-        badge: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
-        button: 'bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white'
+        bgGradient: 'bg-gradient-to-br from-green-600 to-green-700',
+        badge: 'bg-green-600/20 text-green-300 border border-green-600/30',
+        button: 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white'
       },
       'Docker Inc': {
-        bgGradient: 'bg-gradient-to-br from-orange-500 to-red-500',
-        badge: 'bg-orange-500/20 text-orange-300 border border-orange-500/30',
-        button: 'bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white'
+        bgGradient: 'bg-gradient-to-br from-sky-600 to-sky-700',
+        badge: 'bg-sky-600/20 text-sky-300 border border-sky-600/30',
+        button: 'bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600 text-white'
       }
-    };return styleMap[issuer] || {
-      bgGradient: 'bg-gradient-to-br from-orange-500 to-red-500',
-      badge: 'bg-orange-500/20 text-orange-300 border border-orange-500/30',
-      button: 'bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white'
-    };  };
+    };    return styleMap[issuer] || {
+      bgGradient: 'bg-gradient-to-br from-gray-600 to-gray-700',
+      badge: 'bg-gray-600/20 text-gray-300 border border-gray-600/30',
+      button: 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white'
+    };};
 
   return (<section 
       id="certifications" 
@@ -160,11 +162,6 @@ const Certifications = () => {
                            cert.issuer === 'HashiCorp' ? 'HashiCorp' :
                            cert.issuer === 'ISC2' ? 'ISC2' :
                            cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
-                        </div>
-                        <div className="flex ml-auto">
-                          {Array.from({ length: getCertImportance(cert.category) }).map((_, i) => (
-                            <FaStar key={i} className="text-yellow-400 text-xs" />
-                          ))}
                         </div>
                       </div>
 
@@ -258,11 +255,6 @@ const Certifications = () => {
                                cert.issuer === 'ISC2' ? 'ISC2' :
                                cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
                             </div>
-                            <div className="flex ml-auto">
-                              {Array.from({ length: getCertImportance(cert.category) }).map((_, i) => (
-                                <FaStar key={i} className="text-yellow-400 text-xs" />
-                              ))}
-                            </div>
                           </div>
 
                           {/* Compact certification icon */}
@@ -343,11 +335,6 @@ const Certifications = () => {
                            cert.issuer === 'HashiCorp' ? 'HashiCorp' :
                            cert.issuer === 'ISC2' ? 'ISC2' :
                            cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
-                        </div>
-                        <div className="flex">
-                          {Array.from({ length: getCertImportance(cert.category) }).map((_, i) => (
-                            <FaStar key={i} className="text-yellow-400 text-xs" />
-                          ))}
                         </div>
                       </div>
 
@@ -440,11 +427,6 @@ const Certifications = () => {
                                cert.issuer === 'HashiCorp' ? 'HashiCorp' :
                                cert.issuer === 'ISC2' ? 'ISC2' :
                                cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
-                            </div>
-                            <div className="flex">
-                              {Array.from({ length: getCertImportance(cert.category) }).map((_, i) => (
-                                <FaStar key={i} className="text-yellow-400 text-xs" />
-                              ))}
                             </div>
                           </div>
 
