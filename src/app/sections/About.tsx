@@ -7,13 +7,8 @@ import { aboutData } from '../../data/about';
 const About = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
   const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation();
-  const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });
-  return (
-    <section id="about" className="min-h-screen flex items-center bg-black py-8 sm:py-12 lg:py-16 relative overflow-hidden">
-      {/* Background effects - mobile-optimized */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+  const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });  return (
+    <section id="about" className="min-h-screen flex items-center py-8 sm:py-12 lg:py-16 relative overflow-hidden">
       
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-6xl mx-auto">

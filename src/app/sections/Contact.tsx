@@ -158,15 +158,8 @@ const Contact = () => {
 
   const isFormValid = formData.name.trim() && formData.email.trim() && formData.message.trim() && 
     Object.keys(fieldErrors).every(key => !fieldErrors[key]);
-
   return (
     <section id="contact" className="py-8 sm:py-12 lg:py-20 relative overflow-hidden">
-      {/* Mobile-first Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 bg-gradient-to-r from-orange-500/5 to-red-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
-      </div>
 
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         {/* Mobile-first Section Header */}

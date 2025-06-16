@@ -39,16 +39,9 @@ const Hero = () => {
           <span className="text-green-400 text-xs sm:text-sm font-medium">
             Available for Opportunities
           </span>
-        </div>
-      </motion.div>
+        </div>      </motion.div>
 
-      {/* Background effects - mobile-optimized */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-10" aria-hidden="true" />
-      {/* Mobile-optimized background gradients */}
-      <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-orange-600/8 via-red-500/4 to-orange-600/4 rounded-full blur-3xl -z-10" aria-hidden="true" />
-      <div className="absolute top-1/4 right-1/4 w-32 h-32 sm:w-48 sm:h-48 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-red-500/4 via-orange-500/4 to-red-500/4 rounded-full blur-3xl -z-10" aria-hidden="true" />
-      {/* Mobile-only center gradient */}
-      <div className="lg:hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-r from-orange-500/5 to-red-500/5 rounded-full blur-2xl -z-10" aria-hidden="true" />      {/* Main content container - optimized for all screen sizes */}
+      {/* Main content container - optimized for all screen sizes */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* Responsive layout with proper spacing to prevent overlap */}

@@ -426,17 +426,12 @@ const Projects = () => {
     setSelectedProject(project);
   };
   return (
-    <section 
-      id="projects" 
-      className="py-8 sm:py-12 lg:py-16 bg-black relative overflow-hidden"
+    <section      id="projects" 
+      className="py-8 sm:py-12 lg:py-16 relative overflow-hidden"
       ref={sectionRef}
     >
-      {/* Mobile-first background effects */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
-      <div className="mobile-container sm:container mx-auto px-4 relative z-10">        <div className="text-center mb-8 sm:mb-12 opacity-100 animate-in">
+      <div className="mobile-container sm:container mx-auto px-4 relative z-10"><div className="text-center mb-8 sm:mb-12 opacity-100 animate-in">
           <div className="w-full flex flex-col items-center">
             <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
               Recent Projects

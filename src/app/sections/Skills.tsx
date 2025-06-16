@@ -37,17 +37,12 @@ const Skills = () => {
       </div>
     );
   };
-
   return (    
     <section 
       id="skills" 
-      className="py-8 sm:py-12 lg:py-16 bg-black relative overflow-hidden"
+      className="py-8 sm:py-12 lg:py-16 relative overflow-hidden"
       ref={sectionRef}
     >
-      {/* Background effects - professional and subtle */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500/8 to-red-500/8 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-gray-500/8 to-orange-500/8 rounded-full -z-0 blur-3xl" />
       
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12 lg:mb-16 opacity-100 animate-in">
