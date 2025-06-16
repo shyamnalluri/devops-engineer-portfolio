@@ -159,12 +159,12 @@ const Contact = () => {
   const isFormValid = formData.name.trim() && formData.email.trim() && formData.message.trim() && 
     Object.keys(fieldErrors).every(key => !fieldErrors[key]);
   return (
-    <section id="contact" className="py-4 sm:py-6 lg:py-8 relative overflow-hidden">
+    <section id="contact" className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden">
 
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         {/* Mobile-first Section Header */}        <div
           ref={headerRef}
-          className={`text-center mb-4 sm:mb-6 lg:mb-8 transition-all duration-800 ${
+          className={`text-center mb-2 sm:mb-4 md:mb-6 lg:mb-8 transition-all duration-800 ${
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}>          <div className="w-full flex flex-col items-center">
             <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${

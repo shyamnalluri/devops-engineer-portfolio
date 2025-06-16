@@ -427,12 +427,12 @@ const Projects = () => {
   };  return (
     <section 
       id="projects" 
-      className="py-4 sm:py-6 lg:py-8 relative overflow-hidden"
+      className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
       ref={sectionRef}
     >
       
       <div className="mobile-container sm:container mx-auto px-4 relative z-10">
-        <div className="text-center mb-4 sm:mb-6 opacity-100 animate-in">
+        <div className="text-center mb-2 sm:mb-4 md:mb-6 opacity-100 animate-in">
           <div className="w-full flex flex-col items-center">
             <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
               Recent Projects
@@ -444,7 +444,7 @@ const Projects = () => {
             Infrastructure solutions, automation pipelines, and DevOps implementations
           </p>
             {/* Mobile-first category filters */}
-          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-4 sm:mb-6 mt-4 sm:mt-6">
+          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-2 sm:mb-4 md:mb-6 mt-4 sm:mt-6">
             <div className="flex gap-2 sm:gap-3 px-4 sm:px-0 sm:justify-center min-w-max sm:min-w-0">
               {categories.map((category, index) => (
                 <button

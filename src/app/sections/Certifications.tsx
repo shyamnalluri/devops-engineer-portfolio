@@ -103,13 +103,13 @@ const Certifications = () => {
   const current = certificationsData[featuredCert];
   return (    <section 
       id="certifications" 
-      className="py-4 sm:py-6 lg:py-8 relative overflow-hidden"
+      className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
     >
       
       <div className="mobile-container sm:container mx-auto px-4 relative z-10">
         {/* Section Header */}        <div
           ref={headerRef}
-          className={`text-center mb-4 sm:mb-6 transition-all duration-800 ${
+          className={`text-center mb-2 sm:mb-4 md:mb-6 transition-all duration-800 ${
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}
         >
