@@ -1,4 +1,5 @@
 // Icon mapping utility for dynamic icon rendering
+import React from 'react';
 import { 
   FaDocker, 
   FaAws, 
@@ -111,7 +112,7 @@ export const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGEl
 };
 
 // Helper function to get icon component by name
-export const getIcon = (iconName: string, className: string = "w-5 h-5") => {
+export const getIcon = (iconName: string, className: string = "w-5 h-5"): React.ReactElement | null => {
   const IconComponent = iconMap[iconName];
   if (!IconComponent) {
     console.warn(`Icon "${iconName}" not found in iconMap`);

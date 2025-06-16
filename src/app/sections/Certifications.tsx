@@ -53,8 +53,16 @@ const Certifications = () => {
     };
     return levelMap[category] || 3;
   };  // Get provider-specific styling - now using consistent red-orange-yellow theme
-  const getProviderStyling = (issuer: string) => {
-    const styleMap: { [key: string]: any } = {
+  const getProviderStyling = (issuer: string): {
+    bgGradient: string;
+    badge: string;
+    button: string;
+  } => {
+    const styleMap: { [key: string]: {
+      bgGradient: string;
+      badge: string;
+      button: string;
+    } } = {
       'Amazon Web Services': {
         bgGradient: 'bg-gradient-to-br from-red-500 to-orange-500',
         badge: 'bg-red-500/20 text-red-300 border border-red-500/30',

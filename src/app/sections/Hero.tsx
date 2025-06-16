@@ -95,10 +95,9 @@ const Hero = () => {
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="text-orange-400 text-base sm:text-lg lg:text-xl xl:text-2xl font-mono mb-2 sm:mb-3"
+                transition={{ duration: 0.8, delay: 0.5 }}                className="text-orange-400 text-base sm:text-lg lg:text-xl xl:text-2xl font-mono mb-2 sm:mb-3"
               >
-                Hello, I'm
+                Hello, I&apos;m
               </motion.p>{/* Main name - responsive sizing for all screen sizes */}
               <motion.h1 
                 initial={{ opacity: 0, y: 30 }}

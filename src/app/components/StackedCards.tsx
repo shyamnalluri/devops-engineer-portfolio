@@ -1,24 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-interface StackedCardsProps {
-  items: any[];
+interface StackedCardsProps<T = unknown> {
+  items: T[];
   currentIndex: number;
   onIndexChange: (index: number) => void;
-  renderCard: (item: any, index: number) => React.ReactNode;
+  renderCard: (item: T, index: number) => React.ReactNode;
   isScrolling: boolean;
   isTouchActive: boolean;
 }
 
-const StackedCards: React.FC<StackedCardsProps> = ({
+const StackedCards = <T,>({
   items,
   currentIndex,
   onIndexChange,
   renderCard,
-  isScrolling,
-  isTouchActive
-}) => {
+  isScrolling,  isTouchActive
+}: StackedCardsProps<T>) => {
   // Calculate stacked card classes based on current active index
   const getStackedCardClass = (index: number) => {
     const totalItems = items.length;
@@ -97,13 +96,13 @@ const StackedCards: React.FC<StackedCardsProps> = ({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-    >
-      {items.map((item, index) => {
+    >      {items.map((item, index) => {
         const stackedClass = getStackedCardClass(index);
         console.log(`Card ${index}: currentIndex=${currentIndex}, class="${stackedClass}"`); // Debug log
+        
         return (
           <div 
-            key={`stacked-${item.title}-${index}`} 
+            key={`stacked-card-${index}`} 
             className={stackedClass}
             style={{
               position: 'absolute',

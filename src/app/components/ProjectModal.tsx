@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaExternalLinkAlt, FaServer, FaCode, FaLightbulb, FaTimes } from 'react-icons/fa';
-import { Project } from '../sections/Projects';
+import { ProjectItem as Project } from '../../data/projects';
 import { useEffect } from 'react';
 
 interface ProjectModalProps {
