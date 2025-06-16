@@ -424,14 +424,15 @@ const Projects = () => {
 
   const openProjectModal = (project: Project) => {
     setSelectedProject(project);
-  };
-  return (
-    <section      id="projects" 
-      className="py-8 sm:py-12 lg:py-16 relative overflow-hidden"
+  };  return (
+    <section 
+      id="projects" 
+      className="py-4 sm:py-6 lg:py-8 relative overflow-hidden"
       ref={sectionRef}
     >
       
-      <div className="mobile-container sm:container mx-auto px-4 relative z-10"><div className="text-center mb-8 sm:mb-12 opacity-100 animate-in">
+      <div className="mobile-container sm:container mx-auto px-4 relative z-10">
+        <div className="text-center mb-4 sm:mb-6 opacity-100 animate-in">
           <div className="w-full flex flex-col items-center">
             <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
               Recent Projects
@@ -442,9 +443,8 @@ const Projects = () => {
           <p className="hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
             Infrastructure solutions, automation pipelines, and DevOps implementations
           </p>
-          
-          {/* Mobile-first category filters */}
-          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-8 sm:mb-12 mt-4 sm:mt-6">
+            {/* Mobile-first category filters */}
+          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-4 sm:mb-6 mt-4 sm:mt-6">
             <div className="flex gap-2 sm:gap-3 px-4 sm:px-0 sm:justify-center min-w-max sm:min-w-0">
               {categories.map((category, index) => (
                 <button
@@ -481,7 +481,7 @@ const Projects = () => {
               </div>
             ))}
           </div>          {/* Arrow Navigation - Enhanced with better UX */}
-          <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-6">
+          <div className="flex items-center justify-center mt-4 sm:mt-6 space-x-6">
             <button
               onClick={scrollLeft}
               className={`w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 touch-button group ${

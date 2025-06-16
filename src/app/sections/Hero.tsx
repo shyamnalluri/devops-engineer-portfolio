@@ -26,13 +26,12 @@ const Hero = () => {
       ref={containerRef}
       role="region"
       aria-label="Hero section - Introduction to Shyam Nalluri"
-    >
-      {/* Available for Opportunities Badge - Top Right */}
+    >      {/* Available for Opportunities Badge - Top Right */}
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="fixed top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-50"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-20"
       >
         <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-full px-3 py-2 sm:px-4 sm:py-2 backdrop-blur-sm">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>

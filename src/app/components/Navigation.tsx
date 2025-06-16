@@ -9,9 +9,9 @@ type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS
 const navItems: Array<{ name: MenuIconKey; href: string }> = [
   { name: 'HOME', href: '#home' },
   { name: 'ABOUT ME', href: '#about' },
-  { name: 'SKILLS', href: '#skills' },
+  { name: 'PROJECTS', href: '#projects' },      // 🔥 Moved up in priority order
+  { name: 'SKILLS', href: '#skills' },          // Now after projects
   { name: 'EXPERIENCE', href: '#experience' },
-  { name: 'PROJECTS', href: '#projects' },
   { name: 'CERTIFICATIONS', href: '#certifications' },
   { name: 'CONTACT', href: '#contact' },
 ];

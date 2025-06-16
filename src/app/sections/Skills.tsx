@@ -36,16 +36,15 @@ const Skills = () => {
                        opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg" />
       </div>
     );
-  };
-  return (    
+  };  return (    
     <section 
       id="skills" 
-      className="py-8 sm:py-12 lg:py-16 relative overflow-hidden"
+      className="py-4 sm:py-6 lg:py-8 relative overflow-hidden"
       ref={sectionRef}
     >
       
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="text-center mb-8 sm:mb-12 lg:mb-16 opacity-100 animate-in">
+        <div className="text-center mb-4 sm:mb-6 lg:mb-8 opacity-100 animate-in">
           <div className="w-full flex flex-col items-center">
             <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
               Skills & Technologies

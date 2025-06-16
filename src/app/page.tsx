@@ -45,14 +45,13 @@ const Footer = dynamic(() => import("./components/Footer"), {
 export default function Home() {
   return (
     <ClientWrapper>
-      <main className="bg-black text-white min-h-screen">
-        {/* All sections */}        
+      <main className="bg-black text-white min-h-screen">        {/* All sections - Impact-First Order */}        
         <Hero />
         <About />            
-        <Skills />
-        <Experience />        
-        <Projects />        
-        <Certifications />
+        <Projects />        {/* 🔥 Moved up - Show impact first! */}
+        <Skills />          {/* Now provides context for the projects */}
+        <Experience />      {/* Professional backing for the work shown */}
+        <Certifications />  {/* Additional credibility */}
         <Contact />
         <Footer />
       </main>
