@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { experienceData } from '../../data/portfolio';
+import { experienceData } from '../../data/experience';
 
 interface ExperienceData {
   id: string;

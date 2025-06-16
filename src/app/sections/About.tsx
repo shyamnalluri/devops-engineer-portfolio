@@ -2,7 +2,7 @@
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
-import { aboutData } from '../../data/portfolio';
+import { aboutData } from '../../data/about';
 
 const About = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();

@@ -10,7 +10,11 @@ import {
   FaGithub,
   FaGitlab,
   FaShieldAlt,
-  FaCertificate
+  FaCertificate,
+  FaTerminal,
+  FaServer,
+  FaLinux,
+  FaWindows
 } from 'react-icons/fa';
 
 import { 
@@ -27,13 +31,25 @@ import {
   SiGrafana,
   SiElastic,
   SiDatadog,
-  SiVault
+  SiVault,
+  SiGooglecloud,
+  SiAmazon, // AWS alternative
+  SiPodman,
+  SiContainerd,
+  SiJenkins,
+  SiGithubactions,
+  SiGitlab,
+  SiArgo,
+  SiFlux,
+  SiElasticsearch,
+  SiNewrelic,
+  SiJaeger,
+  SiAqua,
+  SiFalco,
+  SiSnyk,
+  SiSonarqube,
+  SiGo
 } from 'react-icons/si';
-
-import { 
-  FaTerminal,
-  FaServer
-} from 'react-icons/fa';
 
 // Icon mapping object
 export const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
@@ -49,7 +65,11 @@ export const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGEl
   FaGitlab,
   FaShieldAlt,
   FaCertificate,
-    // Simple Icons
+  FaTerminal,
+  FaServer,
+  FaLinux,
+  FaWindows,
+  // Simple Icons
   SiKubernetes,
   SiTerraform,
   SiAnsible,
@@ -64,10 +84,30 @@ export const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGEl
   SiElastic,
   SiDatadog,
   SiVault,
+  SiGooglecloud,
+  SiAmazon,
+  SiPodman,
+  SiContainerd,
+  SiJenkins,
+  SiGithubactions,
+  SiGitlab,
+  SiArgo,
+  SiFlux,
+  SiElasticsearch,
+  SiNewrelic,
+  SiJaeger,
+  SiAqua,
+  SiFalco,
+  SiSnyk,
+  SiSonarqube,
+  SiGo,
   
-  // Alternative icons for missing ones
-  FaTerminal, // For PowerShell
-  FaServer    // For Nagios
+  // Icon aliases for skills that don't have exact matches
+  SiMicrosoftazure: FaMicrosoft, // Use Microsoft icon for Azure
+  SiAmazonaws: SiAmazon, // Use Amazon icon for AWS
+  SiAzuredevops: FaMicrosoft, // Use Microsoft icon for Azure DevOps
+  SiOpenpolicyagent: FaShieldAlt, // Use shield icon for OPA
+  SiPowershell: FaTerminal // Use terminal icon for PowerShell
 };
 
 // Helper function to get icon component by name

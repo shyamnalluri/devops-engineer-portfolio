@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { certificationsData } from '../../data/portfolio';
+import { certificationsData } from '../../data/certifications';
 import { FaExternalLinkAlt, FaCheckCircle, FaCertificate, FaCalendarAlt, FaStar, FaShieldAlt } from 'react-icons/fa';
 
 const Certifications = () => {
