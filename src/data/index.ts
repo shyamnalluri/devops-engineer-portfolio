@@ -24,3 +24,7 @@ export type { ProjectItem } from './projects';
 // Certifications Section
 export { certificationsData } from './certifications';
 export type { Certification } from './certifications';
+
+// Testimonials Section
+export { testimonialsData } from './testimonials';
+export type { Testimonial } from './testimonials';

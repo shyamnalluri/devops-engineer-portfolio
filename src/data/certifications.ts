@@ -67,5 +67,18 @@ export const certificationsData: Certification[] = [
     issueDate: "2024",
     validUntil: "2026",
     category: 'devops'
+  },
+  {
+    id: 'kubernetes-developer',
+    name: "Kubernetes Developer",
+    issuer: "Cloud Native Computing Foundation",
+    description: "Container orchestration and Kubernetes administration",
+    credentialId: "K8S-123456",
+    credentialUrl: "https://www.cncf.io/certification/",
+    verificationUrl: "https://www.cncf.io/certification/",
+    icon: "SiKubernetes",
+    issueDate: "2024",
+    validUntil: "2026",
+    category: 'devops'
   }
 ];

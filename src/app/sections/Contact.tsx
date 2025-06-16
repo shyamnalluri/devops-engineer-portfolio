@@ -4,6 +4,7 @@ import { FaQuoteLeft, FaPaperPlane, FaCheck } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
+import { testimonialsData } from '../../data/testimonials';
 
 const Contact = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);  const [formData, setFormData] = useState({
@@ -21,38 +22,7 @@ const Contact = () => {
   const { ref: testimonialsRef, isVisible: testimonialsVisible } = useScrollAnimation();
 
   // Touch gesture handling for mobile testimonials navigation
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  // Curated testimonials (reduced for supporting role)
-  const testimonials = [
-    {
-      id: 1,
-      name: "Alexandra Thompson",
-      role: "VP of Engineering",
-      company: "InnovateTech Labs",
-      content: "Shyam transformed our legacy system into a modern, scalable architecture. His innovative approach exceeded all expectations.",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
-      highlight: "System Transformation Expert"
-    },
-    {
-      id: 2,
-      name: "James Mitchell",
-      role: "Tech Lead", 
-      company: "GlobalFinance Solutions",
-      content: "Our trading platform performance improved by 300% under his guidance. Exceptional technical leadership.",
-      image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=150&h=150&fit=crop&crop=face",
-      highlight: "Performance Optimization"
-    },
-    {
-      id: 3,
-      name: "Priya Sharma",
-      role: "Product Director",
-      company: "HealthTech Innovations", 
-      content: "Built a healthcare platform now used by 50,000+ patients. His code quality and user-centric approach are exceptional.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
-      highlight: "Healthcare Tech Specialist"
-    }
-  ];
+  const [touchStart, setTouchStart] = useState<number | null>(null);  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // Minimum distance before we consider the gesture as a swipe
   const minSwipeDistance = 50;
@@ -68,22 +38,20 @@ const Contact = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    const isRightSwipe = distance < -minSwipeDistance;    if (isLeftSwipe) {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonialsData.length);
     } else if (isRightSwipe) {
-      setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+      setCurrentTestimonial((prev) => (prev - 1 + testimonialsData.length) % testimonialsData.length);
     }
   };
 
   // Auto-rotate testimonials
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+      setCurrentTestimonial((prev) => (prev + 1) % testimonialsData.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [testimonials.length]);
+  }, [testimonialsData.length]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -463,9 +431,8 @@ const Contact = () => {
                 >
                   {/* Testimonial Content - Scrollable if needed */}
                   <div className="flex-1 flex flex-col justify-center overflow-hidden">
-                    <div className="text-center mb-4">
-                      <span className="inline-block px-2 py-1 text-xs bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full text-orange-400 font-medium">
-                        {testimonials[currentTestimonial].highlight}
+                    <div className="text-center mb-4">                      <span className="inline-block px-2 py-1 text-xs bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full text-orange-400 font-medium">
+                        {testimonialsData[currentTestimonial].highlight}
                       </span>
                     </div>
                     
@@ -476,17 +443,16 @@ const Contact = () => {
                         scrollbarWidth: 'thin',
                         scrollbarColor: 'rgba(59, 130, 246, 0.5) rgba(31, 41, 55, 0.5)'
                       }}
-                    >
-                      <blockquote className="text-xs sm:text-sm text-gray-200 leading-relaxed italic text-center px-2">
-                        &ldquo;{testimonials[currentTestimonial].content}&rdquo;
+                    >                      <blockquote className="text-xs sm:text-sm text-gray-200 leading-relaxed italic text-center px-2">
+                        &ldquo;{testimonialsData[currentTestimonial].content}&rdquo;
                       </blockquote>
                     </div>
 
                     {/* Client Info - Always visible at bottom */}
                     <div className="flex items-center justify-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-800/30 rounded-lg border border-gray-700/30 hover:border-gray-600/50 transition-all duration-300 mx-auto">
                       <Image
-                        src={testimonials[currentTestimonial].image}
-                        alt={testimonials[currentTestimonial].name}
+                        src={testimonialsData[currentTestimonial].image}
+                        alt={testimonialsData[currentTestimonial].name}
                         width={40}
                         height={40}
                         loading="lazy"
@@ -494,13 +460,13 @@ const Contact = () => {
                       />
                       <div className="text-center">
                         <h4 className="text-white font-bold text-xs sm:text-sm">
-                          {testimonials[currentTestimonial].name}
+                          {testimonialsData[currentTestimonial].name}
                         </h4>
                         <p className="text-orange-400 font-medium text-xs">
-                          {testimonials[currentTestimonial].role}
+                          {testimonialsData[currentTestimonial].role}
                         </p>
                         <p className="text-gray-400 text-xs">
-                          {testimonials[currentTestimonial].company}
+                          {testimonialsData[currentTestimonial].company}
                         </p>
                       </div>
                     </div>
@@ -515,7 +481,7 @@ const Contact = () => {
                 {/* Arrow Navigation */}
                 <div className="flex items-center justify-center space-x-4 mb-2">
                   <button
-                    onClick={() => setCurrentTestimonial(currentTestimonial === 0 ? testimonials.length - 1 : currentTestimonial - 1)}
+                    onClick={() => setCurrentTestimonial(currentTestimonial === 0 ? testimonialsData.length - 1 : currentTestimonial - 1)}
                     className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-orange-500/20 hover:border-orange-500/50 hover:scale-105 active:bg-orange-500/30 active:scale-95 touch-button group"
                     aria-label="Previous testimonial"
                   >
@@ -530,7 +496,7 @@ const Contact = () => {
                   </button>
                   
                   <button
-                    onClick={() => setCurrentTestimonial(currentTestimonial === testimonials.length - 1 ? 0 : currentTestimonial + 1)}
+                    onClick={() => setCurrentTestimonial(currentTestimonial === testimonialsData.length - 1 ? 0 : currentTestimonial + 1)}
                     className="w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-orange-500/20 hover:border-orange-500/50 hover:scale-105 active:bg-orange-500/30 active:scale-95 touch-button group"
                     aria-label="Next testimonial"
                   >
@@ -547,7 +513,7 @@ const Contact = () => {
 
                 {/* Numeric Counter */}
                 <div className="text-xs font-medium text-gray-300 text-center">
-                  {currentTestimonial + 1} / {testimonials.length}
+                  {currentTestimonial + 1} / {testimonialsData.length}
                 </div>
 
                 {/* Mobile Swipe Indicator */}
