@@ -291,8 +291,7 @@ export const certificationsData: Certification[] = [
     issueDate: "2023",
     validUntil: "2025",
     category: 'devops'
-  },
-  {
+  },  {
     name: "Certified Kubernetes Administrator (CKA)",
     credentialId: "CKA-2024",
     credentialUrl: "https://www.cncf.io/certification/cka/",
@@ -300,6 +299,36 @@ export const certificationsData: Certification[] = [
     issuer: "Cloud Native Computing Foundation",
     issueDate: "2024",
     validUntil: "2027",
+    category: 'devops'
+  },
+  {
+    name: "AWS Solutions Architect Associate",
+    credentialId: "AWS-SAA-C03",
+    credentialUrl: "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+    logo: "/certifications/aws-cert.svg",
+    issuer: "Amazon Web Services",
+    issueDate: "2024",
+    validUntil: "2027",
+    category: 'cloud'
+  },
+  {
+    name: "Certified Information Systems Security Professional (CISSP)",
+    credentialId: "CISSP-2024",
+    credentialUrl: "https://www.isc2.org/Certifications/CISSP",
+    logo: "/certifications/cissp-cert.svg",
+    issuer: "ISC2",
+    issueDate: "2023",
+    validUntil: "2026",
+    category: 'security'
+  },
+  {
+    name: "Docker Certified Associate",
+    credentialId: "DCA-2024",
+    credentialUrl: "https://www.docker.com/certification/",
+    logo: "/certifications/docker-cert.svg",
+    issuer: "Docker Inc",
+    issueDate: "2024",
+    validUntil: "2026",
     category: 'devops'
   }
   // Add more certifications as needed
