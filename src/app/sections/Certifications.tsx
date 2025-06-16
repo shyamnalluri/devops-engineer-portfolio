@@ -30,17 +30,6 @@ const Certifications = () => {
         const categoryData = categories.find(cat => cat.name === selectedCategory);
         return categoryData ? cert.issuer === categoryData.originalName : false;      });
 
-  // Get certification importance level (number of stars)
-  const getCertImportance = (category: string): number => {
-    const levelMap: { [key: string]: number } = {
-      'cloud': 4,
-      'devops': 4,
-      'security': 5,
-      'programming': 3
-    };
-    return levelMap[category] || 3;
-  };
-
   // Get provider-specific styling - toned down color scheme
   const getProviderStyling = (issuer: string): {
     bgGradient: string;

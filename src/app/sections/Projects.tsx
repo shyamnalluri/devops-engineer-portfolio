@@ -249,7 +249,7 @@ const Projects = () => {
               scrollbarWidth: 'none', 
               msOverflowStyle: 'none'
             }}
-          >            {filteredProjects.map((project, index) => (
+          >            {filteredProjects.map((project) => (
               <div 
                 key={project.title} 
                 className="flex-shrink-0 w-[85vw] sm:w-[45vw] lg:w-80 xl:w-96 snap-start"

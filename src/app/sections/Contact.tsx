@@ -58,9 +58,8 @@ const Contact = () => {
         setTestimonialTransition(true);
       }, 150); // Brief pause for smooth transition
     }, 4000); // Reduced to 4 seconds for better engagement
-    
-    return () => clearInterval(interval);
-  }, [testimonialsData.length, isTestimonialsPaused]);
+      return () => clearInterval(interval);
+  }, [isTestimonialsPaused]);
 
   // Navigation function with smooth transition
   const navigateTestimonial = (direction: 'next' | 'prev') => {
