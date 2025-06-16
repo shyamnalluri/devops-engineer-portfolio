@@ -1,18 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { certificationsData } from '../../data/certifications';
 import { FaExternalLinkAlt, FaCheckCircle, FaCertificate, FaCalendarAlt, FaStar, FaShieldAlt } from 'react-icons/fa';
 
 const Certifications = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [featuredCert, setFeaturedCert] = useState(0);
-  const [autoRotate, setAutoRotate] = useState(true);
   
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: featuredRef, isVisible: featuredVisible } = useScrollAnimation();
-  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation({ stagger: true, staggerDelay: 100 });  // Get unique categories with counts
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation({ stagger: true, staggerDelay: 100 });// Get unique categories with counts
   const categories = [
     { name: 'All', count: certificationsData.length, originalName: 'All' },
     ...Array.from(new Set(certificationsData.map(cert => cert.issuer))).map(issuer => ({
@@ -26,7 +23,6 @@ const Certifications = () => {
       count: certificationsData.filter(cert => cert.issuer === issuer).length
     }))
   ];
-
   // Filter certifications based on selected category
   const filteredCertifications = selectedCategory === 'All'
     ? certificationsData
@@ -34,15 +30,6 @@ const Certifications = () => {
         const categoryData = categories.find(cat => cat.name === selectedCategory);
         return categoryData ? cert.issuer === categoryData.originalName : false;
       });
-
-  // Auto-rotate featured certification
-  useEffect(() => {
-    if (!autoRotate) return;
-    const interval = setInterval(() => {
-      setFeaturedCert((prev) => (prev + 1) % certificationsData.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [autoRotate]);
   // Get certification importance level (number of stars)
   const getCertImportance = (category: string): number => {
     const levelMap: { [key: string]: number } = {
@@ -97,11 +84,9 @@ const Certifications = () => {
       bgGradient: 'bg-gradient-to-br from-orange-500 to-red-500',
       badge: 'bg-orange-500/20 text-orange-300 border border-orange-500/30',
       button: 'bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white'
-    };
-  };
+    };  };
 
-  const current = certificationsData[featuredCert];
-  return (    <section 
+  return (<section 
       id="certifications" 
       className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
     >
@@ -127,115 +112,9 @@ const Certifications = () => {
           }`}>
             Industry-recognized credentials validating expertise in cloud architecture,
             DevOps practices, and infrastructure management
-          </p>
-        </div>
-
-        {/* Featured Certification Hero */}
-        <div
-          ref={featuredRef}
-          className={`mb-8 sm:mb-12 transition-all duration-800 ${
-            featuredVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
-          }`}
-        >          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700">            {/* Auto-rotating navigation dots */}
-            <div className="absolute top-4 right-4 z-10 flex space-x-2">
-              {certificationsData.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setFeaturedCert(index);
-                    setAutoRotate(false);
-                    setTimeout(() => setAutoRotate(true), 10000);
-                  }}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === featuredCert 
-                      ? 'bg-orange-500 scale-125' 
-                      : 'bg-slate-500 hover:bg-slate-400'
-                  }`}
-                />
-              ))}
-            </div>            {/* Featured certification content */}
-            <div className="p-6 sm:p-8">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
-                {/* Certification icon/badge - Desktop only */}
-                <div className={`hidden sm:block relative flex-shrink-0 p-4 rounded-xl ${getProviderStyling(current.issuer).bgGradient}`}>
-                  <div className="w-16 h-16 flex items-center justify-center">                    {current.issuer === 'Amazon Web Services' && (
-                      <div className="text-3xl font-bold text-white">AWS</div>
-                    )}
-                    {current.issuer === 'Microsoft' && (
-                      <div className="w-10 h-10 bg-white rounded-sm flex items-center justify-center">
-                        <div className="text-blue-600 font-bold text-xl">M</div>
-                      </div>
-                    )}
-                    {current.issuer === 'Cloud Native Computing Foundation' && (
-                      <FaCertificate className="text-3xl text-white" />
-                    )}
-                    {current.issuer === 'HashiCorp' && (
-                      <div className="text-3xl font-bold text-white">HC</div>
-                    )}
-                    {current.issuer === 'ISC2' && (
-                      <FaShieldAlt className="text-3xl text-white" />
-                    )}
-                    {current.issuer === 'Docker Inc' && (
-                      <div className="text-3xl font-bold text-white">🐳</div>
-                    )}
-                  </div>
-                  
-                  {/* Certification level indicator */}
-                  <div className="absolute -top-1 -right-1 flex">
-                    {Array.from({ length: getCertImportance(current.category) }).map((_, i) => (
-                      <FaStar key={i} className="text-yellow-400 text-xs" />
-                    ))}
-                  </div>
-                </div>{/* Certification details */}
-                <div className="flex-grow min-w-0">
-                  <div className="flex flex-col gap-2 mb-3">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white leading-tight">
-                      {current.name}
-                    </h3>
-                    <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium self-start ${getProviderStyling(current.issuer).badge}`}>
-                      <FaShieldAlt className="mr-1.5 text-xs" />
-                      {current.category}
-                    </div>
-                  </div>
-                  
-                  <p className="text-slate-300 text-sm sm:text-base mb-4 leading-relaxed">
-                    Issued by {current.issuer}
-                  </p>
-                  
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm">
-                    <div className="flex items-center text-slate-400">
-                      <FaCalendarAlt className="mr-2" />
-                      <span>Obtained {current.issueDate}</span>
-                    </div>
-                    
-                    {current.validUntil && (
-                      <div className="flex items-center text-slate-400">
-                        <FaCheckCircle className="mr-2" />
-                        <span>Valid until {current.validUntil}</span>
-                      </div>
-                    )}
-                    
-                    {current.credentialUrl && (
-                      <a
-                        href={current.credentialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105 ${getProviderStyling(current.issuer).button}`}
-                      >
-                        <FaExternalLinkAlt className="mr-2" />
-                        Verify Credential
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Category Navigation */}
+          </p>        </div>        {/* Category Navigation */}
         <div className="mb-6 sm:mb-8">
-          <div className="flex flex-wrap gap-2 sm:gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
             {categories.map((category) => (
               <button
                 key={category.name}
