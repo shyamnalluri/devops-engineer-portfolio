@@ -30,7 +30,7 @@ export default function GamePage() {
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">
+            <span className="bg-gradient-to-r from-orange-400 via-red-400 to-orange-400 text-transparent bg-clip-text">
               DevOps Runner
             </span>
           </h1>

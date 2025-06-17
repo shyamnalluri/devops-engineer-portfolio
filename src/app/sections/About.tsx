@@ -2,18 +2,13 @@
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
-import { aboutData } from '../../data/portfolio';
+import { aboutData } from '../../data/about';
 
 const About = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
   const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation();
-  const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });
-  return (
-    <section id="about" className="min-h-screen flex items-center bg-black py-8 sm:py-12 lg:py-16 relative overflow-hidden">
-      {/* Background effects - mobile-optimized */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+  const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });  return (
+    <section id="about" className="min-h-screen flex items-center py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden">
       
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
@@ -21,18 +16,21 @@ const About = () => {
             ref={headerRef}
             className={`transition-all duration-800 ${
               headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
-            }`}
-          >            <h2 className={`text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-center text-white relative ${
-              headerVisible ? 'animate-hero-title' : ''
+            }`}          >            <div className="w-full flex flex-col items-center">
+              <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 text-center ${
+                headerVisible ? 'animate-hero-title' : ''
+              }`}>
+                About Me
+              </h2>
+              {/* Full-width decorative underline */}
+              <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
+            </div>
+            {/* Hide subtitle on mobile, show on sm and above */}
+            <p className={`hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 text-center ${
+              headerVisible ? 'animate-hero-subtitle' : ''
             }`}>
-              About Me
-              <div 
-                className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-800 rounded-full ${
-                  headerVisible ? 'w-16 sm:w-20 lg:w-24 animate-scale-in' : 'w-0'
-                }`}
-                style={{ animationDelay: '400ms' }}
-              />
-            </h2>
+              Get to know the person behind the code
+            </p>
           </div>          <div className="p-4 sm:p-6 lg:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">{/* Mobile Profile Image - Show on mobile first, hide on large screens */}
               <div
@@ -125,7 +123,7 @@ const About = () => {
                   }`} style={{ animationDelay: '800ms' }}>
                     {aboutData.description[1]}
                   </p>
-                </div>                {/* Dynamic stats from data - Mobile-first grid */}
+                </div>{/* Dynamic stats from data - Mobile-first grid */}
                 <div className={`grid grid-cols-2 gap-3 sm:gap-4 mt-6 sm:mt-8 transition-all duration-800 ${
                   textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`} style={{ animationDelay: '1000ms' }}>

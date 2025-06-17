@@ -64,21 +64,24 @@ export interface ProjectItem {
   id: string;
   title: string;
   description: string;
+  detailedDescription: string;
+  category: 'Infrastructure' | 'Automation' | 'DevOps';
+  tags: string[];
   technologies: string[];
-  features: string[];
   githubUrl?: string;
   liveUrl?: string;
-  image: string;
-  category: string;
-  status: 'completed' | 'in-progress' | 'planned';
+  challenges?: string[];
+  solutions?: string[];
+  metrics?: string[];
+  image?: string;
+  status?: 'completed' | 'in-progress' | 'planned';
 }
 
 // Personal Information
-export const personalInfo: PersonalInfo = {
-  name: "Shyam Nalluri",
+export const personalInfo: PersonalInfo = {  name: "Shyam Nalluri",
   title: "Senior DevOps Engineer",
-  subtitle: "DevSecOps and Platform Engineer",
-  description: "5+ years of experience delivering scalable, secure infrastructure and platform automation across AWS and Azure",
+  subtitle: "DevSecOps & Platform Engineer",
+  description: "Architecting enterprise-grade cloud infrastructure with 5+ years of expertise in DevSecOps and platform automation",
   location: "India",
   email: "shyam.nalluri@example.com", // Update with your actual email
   phone: "+91-XXXXXXXXXX", // Update with your actual phone
@@ -196,16 +199,11 @@ export const experienceData: ExperienceItem[] = [
 // Skills Data
 export const skillsData: SkillCategory[] = [
   {
-    name: "Cloud Platforms",
+    name: "Cloud & Infrastructure",
     skills: [
       { title: "AWS", icon: "FaAws", proficiency: 90 },
       { title: "Azure", icon: "FaMicrosoft", proficiency: 85 },
-      { title: "Google Cloud", icon: "FaGoogle", proficiency: 70 }
-    ]
-  },
-  {
-    name: "Infrastructure & Config",
-    skills: [
+      { title: "Google Cloud", icon: "FaGoogle", proficiency: 70 },
       { title: "Terraform", icon: "SiTerraform", proficiency: 95 },
       { title: "Ansible", icon: "SiAnsible", proficiency: 85 },
       { title: "CloudFormation", icon: "FaAws", proficiency: 80 },
@@ -213,32 +211,24 @@ export const skillsData: SkillCategory[] = [
     ]
   },
   {
-    name: "CI/CD & DevOps",
-    skills: [
-      { title: "Jenkins", icon: "FaJenkins", proficiency: 90 },
-      { title: "GitLab CI", icon: "FaGitlab", proficiency: 85 },
-      { title: "GitHub Actions", icon: "FaGithub", proficiency: 80 },
-      { title: "Azure DevOps", icon: "FaMicrosoft", proficiency: 75 },
-      { title: "Git", icon: "FaGitAlt", proficiency: 95 }
-    ]
-  },
-  {
-    name: "Programming & Scripting",
-    skills: [
-      { title: "Python", icon: "FaPython", proficiency: 90 },
-      { title: "Bash", icon: "SiGnubash", proficiency: 85 },
-      { title: "PowerShell", icon: "FaTerminal", proficiency: 75 },
-      { title: "YAML", icon: "SiYaml", proficiency: 90 },
-      { title: "JSON", icon: "SiJson", proficiency: 95 }
-    ]
-  },
-  {
-    name: "Containers & Orchestration",
+    name: "Container & Orchestration",
     skills: [
       { title: "Docker", icon: "FaDocker", proficiency: 95 },
       { title: "Kubernetes", icon: "SiKubernetes", proficiency: 90 },
       { title: "Helm", icon: "SiHelm", proficiency: 80 },
       { title: "OpenShift", icon: "SiRedhatopenshift", proficiency: 70 }
+    ]
+  },
+  {
+    name: "CI/CD & GitOps",
+    skills: [
+      { title: "Jenkins", icon: "FaJenkins", proficiency: 90 },
+      { title: "GitLab CI", icon: "FaGitlab", proficiency: 85 },
+      { title: "GitHub Actions", icon: "FaGithub", proficiency: 80 },
+      { title: "Azure DevOps", icon: "FaMicrosoft", proficiency: 75 },
+      { title: "Git", icon: "FaGitAlt", proficiency: 95 },
+      { title: "ArgoCD", icon: "SiArgo", proficiency: 75 },
+      { title: "FluxCD", icon: "SiFlux", proficiency: 70 }
     ]
   },
   {
@@ -252,11 +242,25 @@ export const skillsData: SkillCategory[] = [
     ]
   },
   {
-    name: "Security & Compliance",
+    name: "Security & Policy",
     skills: [
       { title: "Vault", icon: "SiVault", proficiency: 80 },
       { title: "SAST/DAST", icon: "FaShieldAlt", proficiency: 75 },
-      { title: "Compliance", icon: "FaCertificate", proficiency: 80 }
+      { title: "Compliance", icon: "FaCertificate", proficiency: 80 },
+      { title: "OPA", icon: "SiOpenpolicyagent", proficiency: 70 },
+      { title: "Falco", icon: "SiFalco", proficiency: 65 }
+    ]
+  },
+  {
+    name: "Programming & OS",
+    skills: [
+      { title: "Python", icon: "FaPython", proficiency: 90 },
+      { title: "Bash", icon: "SiGnubash", proficiency: 85 },
+      { title: "PowerShell", icon: "FaTerminal", proficiency: 75 },
+      { title: "YAML", icon: "SiYaml", proficiency: 90 },
+      { title: "JSON", icon: "SiJson", proficiency: 95 },
+      { title: "Linux", icon: "FaLinux", proficiency: 90 },
+      { title: "Windows", icon: "FaWindows", proficiency: 80 }
     ]
   }
 ];
@@ -292,8 +296,7 @@ export const certificationsData: Certification[] = [
     issueDate: "2023",
     validUntil: "2025",
     category: 'devops'
-  },
-  {
+  },  {
     name: "Certified Kubernetes Administrator (CKA)",
     credentialId: "CKA-2024",
     credentialUrl: "https://www.cncf.io/certification/cka/",
@@ -302,28 +305,248 @@ export const certificationsData: Certification[] = [
     issueDate: "2024",
     validUntil: "2027",
     category: 'devops'
+  },
+  {
+    name: "AWS Solutions Architect Associate",
+    credentialId: "AWS-SAA-C03",
+    credentialUrl: "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+    logo: "/certifications/aws-cert.svg",
+    issuer: "Amazon Web Services",
+    issueDate: "2024",
+    validUntil: "2027",
+    category: 'cloud'
+  },
+  {
+    name: "Certified Information Systems Security Professional (CISSP)",
+    credentialId: "CISSP-2024",
+    credentialUrl: "https://www.isc2.org/Certifications/CISSP",
+    logo: "/certifications/cissp-cert.svg",
+    issuer: "ISC2",
+    issueDate: "2023",
+    validUntil: "2026",
+    category: 'security'
+  },
+  {
+    name: "Docker Certified Associate",
+    credentialId: "DCA-2024",
+    credentialUrl: "https://www.docker.com/certification/",
+    logo: "/certifications/docker-cert.svg",
+    issuer: "Docker Inc",
+    issueDate: "2024",
+    validUntil: "2026",
+    category: 'devops'
   }
   // Add more certifications as needed
 ];
 
-// Projects Data (for future use)
+// Projects Data
 export const projectsData: ProjectItem[] = [
-  // Add your projects here when you're ready to update the Projects section
   {
-    id: 'enterprise-cicd',
-    title: "Enterprise CI/CD Pipeline",
-    description: "Automated deployment pipeline for microservices architecture",
-    technologies: ["Jenkins", "Kubernetes", "Docker", "Terraform"],
-    features: [
-      "Zero-downtime deployments",
-      "Automated testing integration",
-      "Multi-environment support",
-      "Security scanning"
+    id: 'cloud-infrastructure-migration',
+    title: "Cloud Infrastructure Migration",
+    description: "Enterprise-scale on-premise to AWS cloud migration with zero downtime",
+    detailedDescription: "Architected and executed a comprehensive cloud migration strategy for a mission-critical infrastructure supporting 100+ microservices.",
+    category: 'Infrastructure',
+    tags: ["Cloud Migration", "High Availability", "Cost Optimization"],
+    technologies: ["AWS", "Terraform", "Docker", "Route53", "EKS", "RDS"],
+    githubUrl: "https://github.com/yourusername/cloud-migration",
+    challenges: [
+      "Complex legacy system dependencies with 24/7 availability requirement",
+      "Data migration of 5TB+ with minimal downtime",
+      "Multi-region failover requirements"
     ],
-    githubUrl: "https://github.com/shyamnalluri/enterprise-cicd",
-    image: "/images/projects/cicd-pipeline.jpg",
-    category: "DevOps",
+    solutions: [
+      "Implemented blue-green deployment with automated rollback",
+      "Designed custom data migration pipeline with parallel processing",
+      "Set up cross-region replication with automated failover"
+    ],
+    metrics: [
+      "Achieved 99.99% uptime during migration",
+      "Reduced infrastructure costs by 40%",
+      "Improved system response time by 60%"
+    ],
+    status: "completed"
+  },
+  {
+    id: 'kubernetes-platform-engineering',
+    title: "Kubernetes Platform Engineering",
+    description: "Production-grade Kubernetes platform with automated scaling and self-healing",
+    detailedDescription: "Designed and implemented a robust Kubernetes platform supporting multiple development teams and environments.",
+    category: 'Infrastructure',
+    tags: ["Container Orchestration", "Platform Engineering"],
+    technologies: ["Kubernetes", "Helm", "Prometheus", "Grafana", "ArgoCD", "Istio"],
+    githubUrl: "https://github.com/yourusername/k8s-platform",
+    challenges: [
+      "Multi-tenant cluster security requirements",
+      "Complex monitoring and alerting needs",
+      "Automated disaster recovery"
+    ],
+    solutions: [
+      "Implemented network policies and pod security policies",
+      "Set up comprehensive monitoring with custom dashboards",
+      "Automated backup and restore procedures"
+    ],
+    metrics: [
+      "Supporting 200+ microservices",
+      "99.99% platform availability",
+      "70% reduction in deployment time"
+    ],
+    status: "completed"
+  },
+  {
+    id: 'gitops-cicd-pipeline',
+    title: "GitOps CI/CD Pipeline",
+    description: "Fully automated GitOps pipeline with advanced deployment strategies",
+    detailedDescription: "End-to-end CI/CD automation implementing GitOps principles for a microservices architecture.",
+    category: 'Automation',
+    tags: ["CI/CD", "GitOps", "Automation"],
+    technologies: ["ArgoCD", "GitHub Actions", "Terraform", "Docker"],
+    githubUrl: "https://github.com/yourusername/gitops-pipeline",
+    challenges: [
+      "Complex dependency management across services",
+      "Strict security compliance requirements",
+      "Multiple environment configurations"
+    ],
+    solutions: [
+      "Implemented Helm charts for dependency management",
+      "Integrated security scanning in pipeline",
+      "Created dynamic environment provisioning"
+    ],
+    metrics: [
+      "Reduced deployment time from hours to minutes",
+      "Zero failed productions deployments",
+      "100% audit compliance"
+    ],
+    status: "completed"
+  },
+  {
+    id: 'multi-region-disaster-recovery',
+    title: "Multi-Region Disaster Recovery",
+    description: "Designed and implemented a comprehensive DR strategy with automated failover across multiple regions",
+    detailedDescription: "Enterprise-grade disaster recovery solution ensuring business continuity with minimal data loss and downtime.",
+    category: 'Infrastructure',
+    tags: ["Disaster Recovery", "High Availability", "Cloud Architecture"],
+    technologies: ["Azure Site Recovery", "Traffic Manager", "PowerShell", "Terraform"],
+    githubUrl: "https://github.com/yourusername/dr-automation",
+    challenges: [
+      "RPO/RTO requirements under 15 minutes",
+      "Complex database synchronization",
+      "Regulatory compliance requirements"
+    ],
+    solutions: [
+      "Implemented active-active architecture",
+      "Automated failover testing",
+      "Real-time data replication"
+    ],
+    metrics: [
+      "Achieved RPO of < 5 minutes",
+      "Reduced failover time by 80%",
+      "100% successful DR tests"
+    ],
+    status: "completed"
+  },
+  {
+    id: 'devsecops-pipeline-enhancement',
+    title: "DevSecOps Pipeline Enhancement",
+    description: "Integrated security scanning and compliance checks into the CI/CD pipeline",
+    detailedDescription: "Advanced DevSecOps implementation with automated security testing, vulnerability scanning, and compliance verification.",
+    category: 'Automation',
+    tags: ["Security", "Compliance", "CI/CD"],
+    technologies: ["SonarQube", "Snyk", "OWASP", "Jenkins", "Artifactory"],
+    githubUrl: "https://github.com/yourusername/devsecops-pipeline",
+    challenges: [
+      "Integration of multiple security tools",
+      "Minimal pipeline performance impact",
+      "Compliance with SOC2 requirements"
+    ],
+    solutions: [
+      "Parallel security scanning implementation",
+      "Custom policy-as-code framework",
+      "Automated security reporting"
+    ],
+    metrics: [
+      "90% reduction in security vulnerabilities",
+      "Compliance verification time reduced by 75%",
+      "Zero security incidents post-deployment"
+    ],
+    status: "completed"
+  },
+  {
+    id: 'container-platform-optimization',
+    title: "Container Platform Optimization",
+    description: "Optimized Kubernetes cluster performance and resource utilization",
+    detailedDescription: "Comprehensive Kubernetes platform optimization project focusing on cost efficiency and performance.",
+    category: 'DevOps',
+    tags: ["Kubernetes", "Performance", "Cost Optimization"],
+    technologies: ["Kubernetes", "Prometheus", "Grafana", "Horizontal Pod Autoscaling"],
+    githubUrl: "https://github.com/yourusername/k8s-optimization",
+    challenges: [
+      "High infrastructure costs",
+      "Resource underutilization",
+      "Performance bottlenecks"
+    ],
+    solutions: [
+      "Implemented pod right-sizing",
+      "Custom autoscaling algorithms",
+      "Resource quota management"
+    ],
+    metrics: [
+      "45% reduction in cloud costs",
+      "30% improvement in resource utilization",
+      "99.99% platform availability maintained"
+    ],
+    status: "completed"
+  },
+  {
+    id: 'zero-trust-security-implementation',
+    title: "Zero-Trust Security Implementation",
+    description: "Implemented zero-trust architecture across cloud infrastructure",
+    detailedDescription: "Complete zero-trust security model implementation with identity-based access control and network segmentation.",
+    category: 'Infrastructure',
+    tags: ["Security", "Zero-Trust", "IAM"],
+    technologies: ["Azure AD", "NSGs", "Service Endpoints", "Private Link"],
+    githubUrl: "https://github.com/yourusername/zero-trust-implementation",
+    challenges: [
+      "Legacy system integration",
+      "Minimal user experience impact",
+      "Complex service dependencies"
+    ],
+    solutions: [
+      "Implemented service mesh with mTLS",
+      "Just-in-time access provisioning",
+      "Automated certificate management"
+    ],
+    metrics: [
+      "100% encrypted service-to-service communication",
+      "75% reduction in attack surface",
+      "Zero unauthorized access attempts"
+    ],
+    status: "completed"
+  },
+  {
+    id: 'infrastructure-as-code-migration',
+    title: "Infrastructure as Code Migration",
+    description: "Migrated manual infrastructure provisioning to Infrastructure as Code",
+    detailedDescription: "Large-scale migration of manually provisioned infrastructure to Terraform with state management and modular design.",
+    category: 'Automation',
+    tags: ["IaC", "Terraform", "Automation"],
+    technologies: ["Terraform", "Azure DevOps", "Python", "Go"],
+    githubUrl: "https://github.com/yourusername/terraform-migration",
+    challenges: [
+      "Complex existing infrastructure",
+      "Minimal downtime requirement",
+      "State management complexity"
+    ],
+    solutions: [
+      "Developed custom Terraform modules",
+      "Automated state migration tool",
+      "Progressive infrastructure adoption"
+    ],
+    metrics: [
+      "100% infrastructure documented as code",
+      "Deployment time reduced by 90%",
+      "Zero production incidents during migration"
+    ],
     status: "completed"
   }
-  // Add more projects as needed
 ];

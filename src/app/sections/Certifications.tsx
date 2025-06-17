@@ -2,164 +2,491 @@
 
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import OptimizedImage from '../components/OptimizedImage';
-import { certificationsData } from '../../data/portfolio';
-
-// Use dynamic data from portfolio.ts
-const certifications = certificationsData;
+import { certificationsData } from '../../data/certifications';
+import { FaExternalLinkAlt, FaCertificate, FaShieldAlt } from 'react-icons/fa';
 
 const Certifications = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation({ stagger: true, staggerDelay: 100 });
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation({ stagger: true, staggerDelay: 100 });// Get unique categories with counts
   const categories = [
-    { id: 'all', label: 'All Certifications' },
-    { id: 'cloud', label: 'Cloud' },
-    { id: 'devops', label: 'DevOps' },
-    { id: 'security', label: 'Security' }
+    { name: 'All', count: certificationsData.length, originalName: 'All' },
+    ...Array.from(new Set(certificationsData.map(cert => cert.issuer))).map(issuer => ({
+      name: issuer === 'Amazon Web Services' ? 'AWS' :
+            issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
+            issuer === 'Microsoft' ? 'Microsoft' :
+            issuer === 'HashiCorp' ? 'HashiCorp' :
+            issuer === 'ISC2' ? 'ISC2' :
+            issuer === 'Docker Inc' ? 'Docker' : issuer,
+      originalName: issuer, // Keep original for filtering
+      count: certificationsData.filter(cert => cert.issuer === issuer).length
+    }))
   ];
+  // Filter certifications based on selected category
+  const filteredCertifications = selectedCategory === 'All'
+    ? certificationsData
+    : certificationsData.filter(cert => {
+        const categoryData = categories.find(cat => cat.name === selectedCategory);
+        return categoryData ? cert.issuer === categoryData.originalName : false;      });
 
-  const filteredCertifications = selectedCategory === 'all'
-    ? certifications
-    : certifications.filter(cert => cert.category === selectedCategory);
+  // Get provider-specific styling - toned down color scheme
+  const getProviderStyling = (issuer: string): {
+    bgGradient: string;
+    badge: string;
+    button: string;
+  } => {
+    const styleMap: { [key: string]: {
+      bgGradient: string;
+      badge: string;
+      button: string;
+    } } = {
+      'Amazon Web Services': {
+        bgGradient: 'bg-gradient-to-br from-slate-600 to-slate-700',
+        badge: 'bg-slate-600/20 text-slate-300 border border-slate-600/30',
+        button: 'bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 text-white'
+      },
+      'Microsoft': {
+        bgGradient: 'bg-gradient-to-br from-blue-600 to-blue-700',
+        badge: 'bg-blue-600/20 text-blue-300 border border-blue-600/30',
+        button: 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white'
+      },
+      'Cloud Native Computing Foundation': {
+        bgGradient: 'bg-gradient-to-br from-cyan-600 to-cyan-700',
+        badge: 'bg-cyan-600/20 text-cyan-300 border border-cyan-600/30',
+        button: 'bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white'
+      },
+      'HashiCorp': {
+        bgGradient: 'bg-gradient-to-br from-purple-600 to-purple-700',
+        badge: 'bg-purple-600/20 text-purple-300 border border-purple-600/30',
+        button: 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white'
+      },
+      'ISC2': {
+        bgGradient: 'bg-gradient-to-br from-green-600 to-green-700',
+        badge: 'bg-green-600/20 text-green-300 border border-green-600/30',
+        button: 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white'
+      },
+      'Docker Inc': {
+        bgGradient: 'bg-gradient-to-br from-sky-600 to-sky-700',
+        badge: 'bg-sky-600/20 text-sky-300 border border-sky-600/30',
+        button: 'bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600 text-white'
+      }
+    };    return styleMap[issuer] || {
+      bgGradient: 'bg-gradient-to-br from-gray-600 to-gray-700',
+      badge: 'bg-gray-600/20 text-gray-300 border border-gray-600/30',
+      button: 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white'
+    };};
 
-  return (      <section 
+  return (<section 
       id="certifications" 
-      className="py-8 sm:py-12 lg:py-16 bg-black relative overflow-hidden"
+      className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
     >
-      {/* Mobile-first background effects */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
       
-      <div className="mobile-container sm:container mx-auto px-4 relative z-10">        <div
+      <div className="mobile-container sm:container mx-auto px-4 relative z-10">
+        {/* Section Header */}        <div
           ref={headerRef}
-          className={`text-center mb-6 sm:mb-8 transition-all duration-800 ${
+          className={`text-center mb-2 sm:mb-4 md:mb-6 transition-all duration-800 ${
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}
         >
-          <h2 className={`text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-white relative inline-block ${
-            headerVisible ? 'animate-hero-title' : ''
-          }`}>
-            Professional Certifications
-            <div className={`absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 w-16 sm:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-orange-500 to-red-500 ${
-              headerVisible ? 'animate-scale-in' : 'scale-x-0'
-            }`} style={{ animationDelay: '400ms' }}></div>
-          </h2>
-          <p className={`text-gray-400 max-w-2xl mx-auto text-sm sm:text-lg mt-3 sm:mt-4 px-4 ${
+          <div className="w-full flex flex-col items-center">
+            <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
+              headerVisible ? 'animate-hero-title' : ''
+            }`}>
+              Professional Certifications
+            </h2>
+            {/* Full-width decorative underline */}
+            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
+          </div>
+          <p className={`hidden sm:block text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
             headerVisible ? 'animate-hero-subtitle' : ''
           }`}>
-            Industry-recognized certifications demonstrating expertise in cloud architecture,
+            Industry-recognized credentials validating expertise in cloud architecture,
             DevOps practices, and infrastructure management
-          </p>
-          
-          {/* Mobile-first category filters */}
-          <div className={`overflow-x-auto -mx-4 sm:mx-0 mt-4 mb-4 sm:mb-6 ${
-            headerVisible ? 'animate-hero-description' : ''
-          }`}>
-            <div className="flex gap-2 sm:gap-4 px-4 sm:px-0 sm:justify-center min-w-max sm:min-w-0">
-              {categories.map((category, index) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`px-3 py-1.5 sm:px-5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-500 touch-button hover:scale-105 active:scale-95 whitespace-nowrap ${
-                    selectedCategory === category.id 
-                      ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-glow-red' 
-                      : 'bg-gray-800/80 text-gray-300 hover:bg-gray-700 hover:text-white hover:shadow-glow-subtle'
-                  } ${
-                    headerVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
-                  }`}
-                  style={{ animationDelay: `${600 + (index * 100)}ms` }}
-                >
-                  {category.label}
-                </button>
-              ))}
-            </div>
+          </p>        </div>        {/* Category Navigation */}
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
+            {categories.map((category) => (
+              <button
+                key={category.name}
+                onClick={() => setSelectedCategory(category.name)}                className={`flex items-center px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  selectedCategory === category.name
+                    ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-lg hover:from-red-500 hover:to-orange-500'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white hover:border-orange-500/30'
+                }`}
+              >
+                <span>{category.name}</span>                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  selectedCategory === category.name
+                    ? 'bg-red-700/50 text-orange-100'
+                    : 'bg-slate-700 text-slate-400'
+                }`}>
+                  {category.count}
+                </span>
+              </button>
+            ))}
           </div>
-        </div>
-          <div 
+        </div>        {/* Certifications Grid - Scrollable Design */}
+        <div
           ref={gridRef}
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto transition-all duration-800 ${
+          className={`transition-all duration-800 ${
             gridVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}
-        >
-          {filteredCertifications.map((cert, index) => (
-            <div
-              key={`${cert.credentialId}-${selectedCategory}`}
-              className={`group transition-all duration-600 ${
-                gridVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="relative h-full rounded-xl overflow-hidden bg-gradient-to-br from-gray-900 to-black 
-                border border-gray-800 hover:border-red-500/50 shadow-lg hover:shadow-glow-red transition-all duration-500
-                mobile-card hover:-translate-y-2 hover:scale-[1.02] cursor-pointer group-hover:bg-gray-800/50">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 via-red-500/0 to-transparent opacity-0 
-                  group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="p-4 sm:p-6 relative">
-                  <div className="flex justify-center mb-3 sm:mb-4">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 via-transparent to-transparent 
-                        rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <OptimizedImage
-                        src={cert.logo}
-                        alt={`${cert.name} logo`}
-                        width={60}
-                        height={60}
-                        className="w-12 h-12 sm:w-16 sm:h-16 object-contain relative z-10 transform group-hover:scale-110 group-hover:rotate-3
-                          transition-all duration-500"
-                      />
+        >          {/* Mobile & Desktop: Smart grid/scroll layout */}
+          <div className="sm:hidden">
+            {filteredCertifications.length <= 4 ? (              /* Mobile Grid layout for ≤4 certifications */
+              <div className="grid grid-cols-1 gap-3">
+                {filteredCertifications.map((cert, index) => (
+                  <div
+                    key={index}
+                    className="group relative bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700/50 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:bg-slate-800/80 hover:shadow-lg hover:shadow-orange-500/10 h-full"
+                  >
+                    <div className="p-3 h-full flex flex-col">
+                      {/* Header with provider and level */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium flex-shrink-0 ${getProviderStyling(cert.issuer).badge}`}>
+                          <FaShieldAlt className="mr-1 text-xs" />
+                          {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
+                           cert.issuer === 'Microsoft' ? 'Microsoft' :
+                           cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
+                           cert.issuer === 'HashiCorp' ? 'HashiCorp' :
+                           cert.issuer === 'ISC2' ? 'ISC2' :
+                           cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
+                        </div>
+                      </div>
+
+                      {/* Compact certification icon */}
+                      <div className={`w-8 h-8 rounded-md flex items-center justify-center mb-3 ${getProviderStyling(cert.issuer).bgGradient}`}>
+                        {cert.issuer === 'Amazon Web Services' && (
+                          <div className="text-sm font-bold text-white">AWS</div>
+                        )}
+                        {cert.issuer === 'Microsoft' && (
+                          <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
+                            <div className="text-blue-600 font-bold text-xs">M</div>
+                          </div>
+                        )}
+                        {cert.issuer === 'Cloud Native Computing Foundation' && (
+                          <FaCertificate className="text-sm text-white" />
+                        )}
+                        {cert.issuer === 'HashiCorp' && (
+                          <div className="text-sm font-bold text-white">HC</div>
+                        )}
+                        {cert.issuer === 'ISC2' && (
+                          <FaShieldAlt className="text-sm text-white" />
+                        )}
+                        {cert.issuer === 'Docker Inc' && (
+                          <div className="text-sm font-bold text-white">🐳</div>
+                        )}
+                      </div>
+
+                      {/* Certification details - flexible content area */}
+                      <div className="flex-grow">
+                        <h3 className="text-sm font-semibold text-white mb-2 group-hover:text-orange-400 transition-colors leading-tight min-h-[2.5rem]">
+                          {cert.name}
+                        </h3>
+                        
+                        <div className="flex items-center justify-between text-xs mb-3">
+                          <span className="text-slate-400">{cert.issueDate}</span>
+                          {cert.validUntil && cert.validUntil !== 'Never expires' && (
+                            <span className="text-orange-400">Until {cert.validUntil}</span>
+                          )}
+                          {cert.validUntil === 'Never expires' && (
+                            <span className="text-yellow-400">No Expiry</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action button - always at bottom */}
+                      <a
+                        href={cert.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
+                      >
+                        <FaExternalLinkAlt className="text-xs" />
+                        Verify Credential
+                      </a>
                     </div>
                   </div>
-                  
-                  <div className="text-center">
-                    <h3 className="text-base sm:text-lg font-medium text-white group-hover:text-red-400 
-                      transition-colors duration-300 mb-1 sm:mb-2 leading-5 sm:leading-6">
-                      {cert.name}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4 group-hover:text-gray-300 transition-colors duration-300">{cert.issuer}</p>
-                    
-                    <div className="flex justify-between items-center text-xs text-gray-500 mb-4 sm:mb-6">
-                      <div>
-                        <p className="text-gray-600">Issued</p>
-                        <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{cert.issueDate}</p>
+                ))}
+              </div>
+            ) : (
+              /* Mobile Horizontal scroll layout for >4 certifications */
+              <div className="relative">
+                {/* Mobile Scroll indicator */}
+                <div className="flex flex-col gap-2 mb-4">
+                  <p className="text-sm text-slate-400">
+                    {filteredCertifications.length} certifications • Swipe to view all
+                  </p>
+                  <div className="flex gap-2 justify-center">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse delay-150"></div>
+                    <div className="w-2 h-2 bg-orange-300 rounded-full animate-pulse delay-300"></div>
+                  </div>
+                </div>
+                
+                {/* Mobile Scrollable container */}
+                <div className="overflow-x-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-orange-500 hover:scrollbar-thumb-orange-400">
+                  <div className="flex gap-3 pb-4" style={{ width: `${filteredCertifications.length * 280}px` }}>
+                    {filteredCertifications.map((cert, index) => (
+                      <div
+                        key={index}
+                        className="group relative bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700/50 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:bg-slate-800/80 hover:shadow-lg hover:shadow-orange-500/10 flex-shrink-0"
+                        style={{ width: '260px', height: '200px' }}
+                      >                        <div className="p-3 h-full flex flex-col">
+                          {/* Header with provider and level */}
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium flex-shrink-0 ${getProviderStyling(cert.issuer).badge}`}>
+                              <FaShieldAlt className="mr-1 text-xs" />
+                              {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
+                               cert.issuer === 'Microsoft' ? 'Microsoft' :
+                               cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
+                               cert.issuer === 'HashiCorp' ? 'HashiCorp' :
+                               cert.issuer === 'ISC2' ? 'ISC2' :
+                               cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
+                            </div>
+                          </div>
+
+                          {/* Compact certification icon */}
+                          <div className={`w-8 h-8 rounded-md flex items-center justify-center mb-3 ${getProviderStyling(cert.issuer).bgGradient}`}>
+                            {cert.issuer === 'Amazon Web Services' && (
+                              <div className="text-sm font-bold text-white">AWS</div>
+                            )}
+                            {cert.issuer === 'Microsoft' && (
+                              <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
+                                <div className="text-blue-600 font-bold text-xs">M</div>
+                              </div>
+                            )}
+                            {cert.issuer === 'Cloud Native Computing Foundation' && (
+                              <FaCertificate className="text-sm text-white" />
+                            )}
+                            {cert.issuer === 'HashiCorp' && (
+                              <div className="text-sm font-bold text-white">HC</div>
+                            )}
+                            {cert.issuer === 'ISC2' && (
+                              <FaShieldAlt className="text-sm text-white" />
+                            )}
+                            {cert.issuer === 'Docker Inc' && (
+                              <div className="text-sm font-bold text-white">🐳</div>
+                            )}
+                          </div>
+
+                          {/* Certification details - flexible content area */}
+                          <div className="flex-grow">
+                            <h3 className="text-sm font-semibold text-white mb-2 group-hover:text-orange-400 transition-colors leading-tight min-h-[2.5rem] line-clamp-2">
+                              {cert.name}
+                            </h3>
+                            
+                            <div className="flex items-center justify-between text-xs mb-3">
+                              <span className="text-slate-400">{cert.issueDate}</span>
+                              {cert.validUntil && cert.validUntil !== 'Never expires' && (
+                                <span className="text-orange-400">Until {cert.validUntil}</span>
+                              )}
+                              {cert.validUntil === 'Never expires' && (
+                                <span className="text-yellow-400">No Expiry</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Action button - always at bottom */}
+                          <a
+                            href={cert.credentialUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
+                          >
+                            <FaExternalLinkAlt className="text-xs" />
+                            Verify Credential
+                          </a>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-gray-600">Valid until</p>
-                        <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{cert.validUntil}</p>
-                      </div>
-                    </div>
-                    
-                    <a
-                      href={cert.credentialUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 w-full rounded-lg text-xs sm:text-sm font-medium
-                        bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 
-                        text-white transition-all duration-500 transform hover:scale-[1.05] hover:shadow-glow-red
-                        focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 touch-button"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Verify Credential
-                      <svg
-                        className="w-3 h-3 sm:w-4 sm:h-4 transform transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
-                        />
-                      </svg>
-                    </a>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )}
+          </div>          {/* Desktop: Smart grid/scroll layout */}
+          <div className="hidden sm:block">
+            {filteredCertifications.length <= 4 ? (              /* Grid layout for ≤4 certifications */
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                {filteredCertifications.map((cert, index) => (
+                  <div
+                    key={index}
+                    className="group relative bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700/50 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:bg-slate-800/80 hover:shadow-lg hover:shadow-orange-500/10 h-full"
+                  >
+                    <div className="p-3 sm:p-4 h-full flex flex-col">
+                      {/* Header with provider and level */}
+                      <div className="flex items-center justify-between mb-2">
+                        <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getProviderStyling(cert.issuer).badge}`}>
+                          <FaShieldAlt className="mr-1 text-xs" />
+                          {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
+                           cert.issuer === 'Microsoft' ? 'Microsoft' :
+                           cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
+                           cert.issuer === 'HashiCorp' ? 'HashiCorp' :
+                           cert.issuer === 'ISC2' ? 'ISC2' :
+                           cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
+                        </div>
+                      </div>
+
+                      {/* Compact certification icon */}
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-md flex items-center justify-center mb-3 ${getProviderStyling(cert.issuer).bgGradient}`}>
+                        {cert.issuer === 'Amazon Web Services' && (
+                          <div className="text-sm sm:text-base font-bold text-white">AWS</div>
+                        )}
+                        {cert.issuer === 'Microsoft' && (
+                          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-sm flex items-center justify-center">
+                            <div className="text-blue-600 font-bold text-xs sm:text-sm">M</div>
+                          </div>
+                        )}
+                        {cert.issuer === 'Cloud Native Computing Foundation' && (
+                          <FaCertificate className="text-sm sm:text-base text-white" />
+                        )}
+                        {cert.issuer === 'HashiCorp' && (
+                          <div className="text-sm sm:text-base font-bold text-white">HC</div>
+                        )}
+                        {cert.issuer === 'ISC2' && (
+                          <FaShieldAlt className="text-sm sm:text-base text-white" />
+                        )}
+                        {cert.issuer === 'Docker Inc' && (
+                          <div className="text-sm sm:text-base font-bold text-white">🐳</div>
+                        )}
+                      </div>
+
+                      {/* Certification details - flexible content area */}
+                      <div className="flex-grow">
+                        <h3 className="text-sm sm:text-base font-semibold text-white mb-2 group-hover:text-orange-400 transition-colors leading-tight min-h-[2.5rem] sm:min-h-[3rem]">
+                          {cert.name}
+                        </h3>
+                        
+                        <div className="flex items-center justify-between text-xs mb-3">
+                          <span className="text-slate-400">{cert.issueDate}</span>
+                          {cert.validUntil && cert.validUntil !== 'Never expires' && (
+                            <span className="text-orange-400">Until {cert.validUntil}</span>
+                          )}
+                          {cert.validUntil === 'Never expires' && (
+                            <span className="text-yellow-400">No Expiry</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action button - always at bottom */}
+                      <a
+                        href={cert.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
+                      >
+                        <FaExternalLinkAlt className="text-xs" />
+                        Verify Credential
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Horizontal scroll layout for >4 certifications */
+              <div className="relative">
+                {/* Scroll indicator */}
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-sm text-slate-400">
+                    {filteredCertifications.length} certifications • Scroll horizontally to view all
+                  </p>
+                  <div className="flex gap-2">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse delay-150"></div>
+                    <div className="w-2 h-2 bg-orange-300 rounded-full animate-pulse delay-300"></div>
+                  </div>
+                </div>
+                
+                {/* Scrollable container */}
+                <div className="overflow-x-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-orange-500 hover:scrollbar-thumb-orange-400">
+                  <div className="flex gap-4 pb-4" style={{ width: `${filteredCertifications.length * 280}px` }}>
+                    {filteredCertifications.map((cert, index) => (
+                      <div
+                        key={index}
+                        className="group relative bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700/50 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:bg-slate-800/80 hover:shadow-lg hover:shadow-orange-500/10 flex-shrink-0"
+                        style={{ width: '260px', height: '220px' }}
+                      >
+                        <div className="p-4 h-full flex flex-col">
+                          {/* Header with provider and level */}                          <div className="flex items-center justify-between mb-2">
+                            <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getProviderStyling(cert.issuer).badge}`}>
+                              <FaShieldAlt className="mr-1 text-xs" />
+                              {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
+                               cert.issuer === 'Microsoft' ? 'Microsoft' :
+                               cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
+                               cert.issuer === 'HashiCorp' ? 'HashiCorp' :
+                               cert.issuer === 'ISC2' ? 'ISC2' :
+                               cert.issuer === 'Docker Inc' ? 'Docker' : cert.issuer}
+                            </div>
+                          </div>
+
+                          {/* Compact certification icon */}
+                          <div className={`w-10 h-10 rounded-md flex items-center justify-center mb-3 ${getProviderStyling(cert.issuer).bgGradient}`}>
+                            {cert.issuer === 'Amazon Web Services' && (
+                              <div className="text-base font-bold text-white">AWS</div>
+                            )}
+                            {cert.issuer === 'Microsoft' && (
+                              <div className="w-6 h-6 bg-white rounded-sm flex items-center justify-center">
+                                <div className="text-blue-600 font-bold text-sm">M</div>
+                              </div>
+                            )}
+                            {cert.issuer === 'Cloud Native Computing Foundation' && (
+                              <FaCertificate className="text-base text-white" />
+                            )}
+                            {cert.issuer === 'HashiCorp' && (
+                              <div className="text-base font-bold text-white">HC</div>
+                            )}
+                            {cert.issuer === 'ISC2' && (
+                              <FaShieldAlt className="text-base text-white" />
+                            )}
+                            {cert.issuer === 'Docker Inc' && (
+                              <div className="text-base font-bold text-white">🐳</div>
+                            )}
+                          </div>
+
+                          {/* Certification details - flexible content area */}
+                          <div className="flex-grow">
+                            <h3 className="text-sm font-semibold text-white mb-2 group-hover:text-orange-400 transition-colors leading-tight min-h-[3rem] line-clamp-3">
+                              {cert.name}
+                            </h3>
+                            
+                            <div className="flex items-center justify-between text-xs mb-3">
+                              <span className="text-slate-400">{cert.issueDate}</span>
+                              {cert.validUntil && cert.validUntil !== 'Never expires' && (
+                                <span className="text-orange-400">Until {cert.validUntil}</span>
+                              )}
+                              {cert.validUntil === 'Never expires' && (
+                                <span className="text-yellow-400">No Expiry</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Action button - always at bottom */}
+                          <a
+                            href={cert.credentialUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
+                          >
+                            <FaExternalLinkAlt className="text-xs" />
+                            Verify Credential
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Empty state */}
+        {filteredCertifications.length === 0 && (
+          <div className="text-center py-12">
+            <FaCertificate className="mx-auto text-4xl text-slate-600 mb-4" />
+            <p className="text-slate-400">No certifications found in this category.</p>
+          </div>
+        )}
       </div>
     </section>
   );

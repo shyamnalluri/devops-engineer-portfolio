@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import MobileMenu from './MobileMenu';
 
@@ -9,37 +9,77 @@ type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS
 const navItems: Array<{ name: MenuIconKey; href: string }> = [
   { name: 'HOME', href: '#home' },
   { name: 'ABOUT ME', href: '#about' },
-  { name: 'SKILLS', href: '#skills' },
+  { name: 'PROJECTS', href: '#projects' },      // 🔥 Moved up in priority order
+  { name: 'SKILLS', href: '#skills' },          // Now after projects
   { name: 'EXPERIENCE', href: '#experience' },
-  { name: 'PROJECTS', href: '#projects' },
   { name: 'CERTIFICATIONS', href: '#certifications' },
   { name: 'CONTACT', href: '#contact' },
 ];
 
 const Navigation: React.FC = () => {
-  const [activeSection, setActiveSection] = useState('home');  const [isLoaded, setIsLoaded] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  useEffect(() => {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [targetSection, setTargetSection] = useState<string | null>(null);
+  const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);  useEffect(() => {
     setIsLoaded(true);
-    
-    // Enhanced scroll spy with professional intersection observer
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Sort entries by intersection ratio to get the most visible section
-        const sortedEntries = entries
-          .filter(entry => entry.intersectionRatio > 0)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (sortedEntries.length > 0) {
-          const mostVisibleEntry = sortedEntries[0];
-          setActiveSection(mostVisibleEntry.target.id);
+      // Enhanced scroll spy with better navigation state management
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      // If we're currently navigating, only update to target section
+      if (isNavigating && targetSection) {
+        const targetEntry = entries.find(entry => entry.target.id === targetSection);
+        if (targetEntry && targetEntry.isIntersecting && targetEntry.intersectionRatio > 0.3) {
+          setActiveSection(targetSection);
+          setIsNavigating(false);
+          setTargetSection(null);
         }
-      },
-      {
-        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0],
-        rootMargin: '-80px 0px -20% 0px'
+        return;
+      }      // Normal scroll detection when not navigating
+      if (!isNavigating) {
+        let bestSectionId: string | null = null;
+        let maxScore = 0;
+
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const rect = entry.boundingClientRect;
+            const viewportHeight = window.innerHeight;
+            
+            // Calculate how much of the section is visible
+            const visibleTop = Math.max(0, -rect.top);
+            const visibleBottom = Math.min(rect.height, viewportHeight - rect.top);
+            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+            const visibilityRatio = visibleHeight / Math.min(rect.height, viewportHeight);
+            
+            // Enhanced scoring: prefer sections at the top and give more weight to visibility
+            let score = visibilityRatio;
+            
+            // Strong preference for sections starting near the top
+            if (rect.top <= 150 && rect.top >= -100) {
+              score += 0.5;
+            }
+            
+            // Additional bonus for sections that are prominently visible
+            if (visibilityRatio > 0.6) {
+              score += 0.3;
+            }
+            
+            if (score > maxScore) {
+              maxScore = score;
+              bestSectionId = entry.target.id;
+            }
+          }
+        });
+
+        // Update active section if we have a clear winner and we're not in a navigation state
+        if (bestSectionId && maxScore > 0.4) {
+          setActiveSection(bestSectionId);
+        }
       }
-    );
+    };    const observer = new IntersectionObserver(observerCallback, {
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+      rootMargin: '-80px 0px -20% 0px' // More aggressive top margin to trigger earlier
+    });
 
     // Observe all sections with a slight delay to ensure DOM is ready
     setTimeout(() => {
@@ -47,20 +87,47 @@ const Navigation: React.FC = () => {
       sections.forEach((section) => observer.observe(section));
     }, 100);
 
-    // Handle scroll for mobile header background    
     return () => {
       observer.disconnect();
+      if (navigationTimeoutRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+      }
     };
-  }, []);
-
+  }, [isNavigating, targetSection]);
   const handleNavClick = (href: string) => {
     if (href.startsWith('#')) {
+      const targetId = href.replace('#', '');
+      
+      // Set navigation state to prevent highlighting intermediate sections
+      setIsNavigating(true);
+      setTargetSection(targetId);
+      setActiveSection(targetId); // Immediately update to target section
+      
+      // Clear any existing timeout
+      if (navigationTimeoutRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+      }
+      
+      // Scroll to the section
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ 
           behavior: 'smooth',
           block: 'start'
         });
+          // Reset navigation state after scroll completes with multiple fallbacks
+        navigationTimeoutRef.current = setTimeout(() => {
+          setIsNavigating(false);
+          setTargetSection(null);
+        }, 1200); // Reduced timeout for better responsiveness
+        
+        // Additional safety timeout
+        setTimeout(() => {
+          if (isNavigating) {
+            setIsNavigating(false);
+            setTargetSection(null);
+          }
+        }, 2000);
       }
     }
   };
@@ -72,12 +139,12 @@ const Navigation: React.FC = () => {
 
   return (
     <>      {/* Mobile Header - Visible on mobile/tablet */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden transition-all duration-300 ease-primary bg-black/60 backdrop-blur-md"><div className="container mx-auto">
-          <div className="flex items-center justify-between py-2 px-4 sm:px-6">
-            {/* Mobile menu toggle - moved to left */}
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden transition-all duration-300 ease-primary bg-black/60 backdrop-blur-md">        <div className="container mx-auto">
+          <div className="flex items-center justify-start py-2 pl-2 pr-4 sm:pl-3 sm:pr-6">
+            {/* Mobile menu toggle - moved further left */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="touch-button flex items-center justify-center w-10 h-10 text-white hover:bg-gray-800/50 rounded-lg transition-all duration-300 focus-ring relative"
+              className="touch-button flex items-center justify-center w-12 h-12 min-w-[48px] min-h-[48px] text-white hover:bg-gray-800/50 rounded-lg transition-all duration-300 focus-ring relative"
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileMenuOpen}
             >
@@ -106,21 +173,6 @@ const Navigation: React.FC = () => {
                 />
               </div>
             </button>
-
-            {/* Logo - centered */}
-            <Link 
-              href="#home"
-              onClick={(e) => scrollToSection(e, '#home')}
-              className={`text-2xl font-bold transition-all duration-300 ${
-                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-              } focus-ring`}
-            >
-              <span className="text-white">S</span>
-              <span className="text-red-500">N</span>
-            </Link>
-
-            {/* Empty div for balance */}
-            <div className="w-10"></div>
           </div>
         </div>
       </header>

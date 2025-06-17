@@ -1,218 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import ProjectModal from '../components/ProjectModal';
 import { useScrollAnimation, useCardAnimation } from '../../hooks/useScrollAnimation';
-
-export interface Project {
-  title: string;
-  description: string;
-  detailedDescription: string;
-  category: 'Infrastructure' | 'Automation' | 'DevOps';
-  tags: string[];
-  technologies: string[];
-  githubUrl?: string;
-  liveUrl?: string;
-  challenges?: string[];
-  solutions?: string[];
-  metrics?: string[];
-}
-
-const projects: Project[] = [
-  {
-    title: "Cloud Infrastructure Migration",
-    description: "Enterprise-scale on-premise to AWS cloud migration with zero downtime",
-    detailedDescription: "Architected and executed a comprehensive cloud migration strategy for a mission-critical infrastructure supporting 100+ microservices.",
-    category: 'Infrastructure',
-    tags: ["Cloud Migration", "High Availability", "Cost Optimization"],
-    technologies: ["AWS", "Terraform", "Docker", "Route53", "EKS", "RDS"],
-    githubUrl: "https://github.com/yourusername/cloud-migration",
-    challenges: [
-      "Complex legacy system dependencies with 24/7 availability requirement",
-      "Data migration of 5TB+ with minimal downtime",
-      "Multi-region failover requirements"
-    ],
-    solutions: [
-      "Implemented blue-green deployment with automated rollback",
-      "Designed custom data migration pipeline with parallel processing",
-      "Set up cross-region replication with automated failover"
-    ],
-    metrics: [
-      "Achieved 99.99% uptime during migration",
-      "Reduced infrastructure costs by 40%",
-      "Improved system response time by 60%"
-    ]
-  },
-  {
-    title: "Kubernetes Platform Engineering",
-    description: "Production-grade Kubernetes platform with automated scaling and self-healing",
-    detailedDescription: "Designed and implemented a robust Kubernetes platform supporting multiple development teams and environments.",
-    category: 'Infrastructure',
-    tags: ["Container Orchestration", "Platform Engineering"],
-    technologies: ["Kubernetes", "Helm", "Prometheus", "Grafana", "ArgoCD", "Istio"],
-    githubUrl: "https://github.com/yourusername/k8s-platform",
-    challenges: [
-      "Multi-tenant cluster security requirements",
-      "Complex monitoring and alerting needs",
-      "Automated disaster recovery"
-    ],
-    solutions: [
-      "Implemented network policies and pod security policies",
-      "Set up comprehensive monitoring with custom dashboards",
-      "Automated backup and restore procedures"
-    ],
-    metrics: [
-      "Supporting 200+ microservices",
-      "99.99% platform availability",
-      "70% reduction in deployment time"
-    ]
-  },
-  {
-    title: "GitOps CI/CD Pipeline",
-    description: "Fully automated GitOps pipeline with advanced deployment strategies",
-    detailedDescription: "End-to-end CI/CD automation implementing GitOps principles for a microservices architecture.",
-    category: 'Automation',
-    tags: ["CI/CD", "GitOps", "Automation"],
-    technologies: ["ArgoCD", "GitHub Actions", "Terraform", "Docker"],
-    githubUrl: "https://github.com/yourusername/gitops-pipeline",
-    challenges: [
-      "Complex dependency management across services",
-      "Strict security compliance requirements",
-      "Multiple environment configurations"
-    ],
-    solutions: [
-      "Implemented Helm charts for dependency management",
-      "Integrated security scanning in pipeline",
-      "Created dynamic environment provisioning"
-    ],
-    metrics: [
-      "Reduced deployment time from hours to minutes",
-      "Zero failed productions deployments",
-      "100% audit compliance"
-    ]
-  },
-  {
-    title: "Multi-Region Disaster Recovery",
-    description: "Designed and implemented a comprehensive DR strategy with automated failover across multiple regions",
-    detailedDescription: "Enterprise-grade disaster recovery solution ensuring business continuity with minimal data loss and downtime.",
-    category: 'Infrastructure',
-    tags: ["Disaster Recovery", "High Availability", "Cloud Architecture"],
-    technologies: ["Azure Site Recovery", "Traffic Manager", "PowerShell", "Terraform"],
-    githubUrl: "https://github.com/yourusername/dr-automation",
-    challenges: [
-      "RPO/RTO requirements under 15 minutes",
-      "Complex database synchronization",
-      "Regulatory compliance requirements"
-    ],
-    solutions: [
-      "Implemented active-active architecture",
-      "Automated failover testing",
-      "Real-time data replication"
-    ],
-    metrics: [
-      "Achieved RPO of < 5 minutes",
-      "Reduced failover time by 80%",
-      "100% successful DR tests"
-    ]
-  },
-  {
-    title: "DevSecOps Pipeline Enhancement",
-    description: "Integrated security scanning and compliance checks into the CI/CD pipeline",
-    detailedDescription: "Advanced DevSecOps implementation with automated security testing, vulnerability scanning, and compliance verification.",
-    category: 'Automation',
-    tags: ["Security", "Compliance", "CI/CD"],
-    technologies: ["SonarQube", "Snyk", "OWASP", "Jenkins", "Artifactory"],
-    githubUrl: "https://github.com/yourusername/devsecops-pipeline",
-    challenges: [
-      "Integration of multiple security tools",
-      "Minimal pipeline performance impact",
-      "Compliance with SOC2 requirements"
-    ],
-    solutions: [
-      "Parallel security scanning implementation",
-      "Custom policy-as-code framework",
-      "Automated security reporting"
-    ],
-    metrics: [
-      "90% reduction in security vulnerabilities",
-      "Compliance verification time reduced by 75%",
-      "Zero security incidents post-deployment"
-    ]
-  },
-  {
-    title: "Container Platform Optimization",
-    description: "Optimized Kubernetes cluster performance and resource utilization",
-    detailedDescription: "Comprehensive Kubernetes platform optimization project focusing on cost efficiency and performance.",
-    category: 'DevOps',
-    tags: ["Kubernetes", "Performance", "Cost Optimization"],
-    technologies: ["Kubernetes", "Prometheus", "Grafana", "Horizontal Pod Autoscaling"],
-    githubUrl: "https://github.com/yourusername/k8s-optimization",
-    challenges: [
-      "High infrastructure costs",
-      "Resource underutilization",
-      "Performance bottlenecks"
-    ],
-    solutions: [
-      "Implemented pod right-sizing",
-      "Custom autoscaling algorithms",
-      "Resource quota management"
-    ],
-    metrics: [
-      "45% reduction in cloud costs",
-      "30% improvement in resource utilization",
-      "99.99% platform availability maintained"
-    ]
-  },
-  {
-    title: "Zero-Trust Security Implementation",
-    description: "Implemented zero-trust architecture across cloud infrastructure",
-    detailedDescription: "Complete zero-trust security model implementation with identity-based access control and network segmentation.",
-    category: 'Infrastructure',
-    tags: ["Security", "Zero-Trust", "IAM"],
-    technologies: ["Azure AD", "NSGs", "Service Endpoints", "Private Link"],
-    githubUrl: "https://github.com/yourusername/zero-trust-implementation",
-    challenges: [
-      "Legacy system integration",
-      "Minimal user experience impact",
-      "Complex service dependencies"
-    ],
-    solutions: [
-      "Implemented service mesh with mTLS",
-      "Just-in-time access provisioning",
-      "Automated certificate management"
-    ],
-    metrics: [
-      "100% encrypted service-to-service communication",
-      "75% reduction in attack surface",
-      "Zero unauthorized access attempts"
-    ]
-  },
-  {
-    title: "Infrastructure as Code Migration",
-    description: "Migrated manual infrastructure provisioning to Infrastructure as Code",
-    detailedDescription: "Large-scale migration of manually provisioned infrastructure to Terraform with state management and modular design.",
-    category: 'Automation',
-    tags: ["IaC", "Terraform", "Automation"],
-    technologies: ["Terraform", "Azure DevOps", "Python", "Go"],
-    githubUrl: "https://github.com/yourusername/terraform-migration",
-    challenges: [
-      "Complex existing infrastructure",
-      "Minimal downtime requirement",
-      "State management complexity"
-    ],
-    solutions: [
-      "Developed custom Terraform modules",
-      "Automated state migration tool",
-      "Progressive infrastructure adoption"
-    ],
-    metrics: [
-      "100% infrastructure documented as code",
-      "Deployment time reduced by 90%",
-      "Zero production incidents during migration"
-    ]
-  }
-];
+import { projectsData, ProjectItem as Project } from '../../data/projects';
 
 const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
   const { cardRef } = useCardAnimation();
@@ -299,186 +91,134 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
   );
 };
 
-const Projects = () => {  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+const Projects = () => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);  const [isInitializing, setIsInitializing] = useState(true);
-  const [isReady, setIsReady] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   
-  // Professional scroll animation hooks
   const { ref: sectionRef } = useScrollAnimation({
     threshold: 0.1,
     stagger: true,
     staggerDelay: 100,
     animationClass: 'animate-slide-up'
   });
-  
-  // Set initial ready state when component mounts
-  useEffect(() => {
-    const timer = setTimeout(() => setIsReady(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-  
-  const categories = ['All', ...Array.from(new Set(projects.map((project) => project.category)))];
+
+  const categories = ['All', ...Array.from(new Set(projectsData.map((project) => project.category)))];
   
   const filteredProjects = selectedCategory === 'All'
-    ? projects
-    : projects.filter((project) => project.category === selectedCategory);
-  // Create infinite scroll by duplicating projects
-  const infiniteProjects = [...filteredProjects, ...filteredProjects, ...filteredProjects];
-  const totalOriginalItems = filteredProjects.length;
-  const startIndex = totalOriginalItems;
-    // Additional safety: Reset to first project when category changes
+    ? projectsData
+    : projectsData.filter((project) => project.category === selectedCategory);
+
+  // Reset index when category changes
   useEffect(() => {
     setCurrentIndex(0);
-    setIsReady(false);
-    // Give time for DOM to update before setting ready
-    setTimeout(() => setIsReady(true), 100);
   }, [selectedCategory]);
-  // Calculate how many projects can fit in view (mobile-first approach)
+
+  // Calculate projects per view - mobile-first
   const getProjectsPerView = () => {
     if (typeof window !== 'undefined') {
-      if (window.innerWidth < 640) return 1; // Mobile
-      if (window.innerWidth < 1024) return 2; // Tablet
-      return 3; // Desktop
+      if (window.innerWidth < 640) return 1; // Mobile: 1 project
+      if (window.innerWidth < 1024) return 2; // Tablet: 2 projects
+      return 3; // Desktop: 3 projects
     }
-    return 1; // Default to mobile
+    return 1;
   };
 
   const [projectsPerView, setProjectsPerView] = useState(getProjectsPerView());
+  
   useEffect(() => {
     const handleResize = () => {
       setProjectsPerView(getProjectsPerView());
     };
-    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Touch gesture handlers for mobile
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 640) {
-      setIsDragging(true);
-      setStartX(e.touches[0].clientX);
-    }
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging || typeof window === 'undefined' || window.innerWidth >= 640) return;
-    e.preventDefault();
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!isDragging || typeof window === 'undefined' || window.innerWidth >= 640) return;
+  // Simple scroll functions - updated for proper page navigation
+  const scrollToProject = (index: number) => {
+    if (!carouselRef.current) return;
     
-    setIsDragging(false);
-    const endX = e.changedTouches[0].clientX;
-    const diffX = startX - endX;
-    const threshold = 50; // Minimum swipe distance
-
-    if (Math.abs(diffX) > threshold) {
-      if (diffX > 0) {
-        // Swipe left - next project
-        scrollRight();
-      } else {
-        // Swipe right - previous project
-        scrollLeft();
-      }
-    }
-  };  // Initialize scroll position to middle set
-  useEffect(() => {
-    if (carouselRef.current && isReady) {
-      setIsInitializing(true);
-      // Force current index to 0 first
-      setCurrentIndex(0);
-      
-      // Use requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        if (carouselRef.current) {
-          const containerWidth = carouselRef.current.clientWidth;
-          const scrollPosition = startIndex * (containerWidth / projectsPerView);
-          carouselRef.current.scrollLeft = scrollPosition;
-          
-          // Allow normal scroll checking after a longer delay to ensure everything is settled
-          setTimeout(() => {
-            setIsInitializing(false);
-          }, 200);
-        }
-      });
-    }
-  }, [selectedCategory, projectsPerView, startIndex, isReady]);  // Check scroll position and handle infinite scroll
-  const checkScrollPosition = () => {
-    // Don't update position during initialization or if not ready to prevent jumping
-    if (isInitializing || !isReady || !carouselRef.current) return;
+    const container = carouselRef.current;
+    const cardWidth = container.scrollWidth / filteredProjects.length;
+    const scrollPosition = index * cardWidth;
     
-    const { scrollLeft, clientWidth } = carouselRef.current;
-    const itemWidth = clientWidth / projectsPerView;
-    const rawIndex = Math.round(scrollLeft / itemWidth);
-    
-    // Handle infinite scroll wrapping
-    if (rawIndex >= totalOriginalItems * 2) {
-      carouselRef.current.scrollLeft = totalOriginalItems * itemWidth;
-      setCurrentIndex(0);
-    } else if (rawIndex < totalOriginalItems) {
-      carouselRef.current.scrollLeft = (totalOriginalItems * 2 - 1) * itemWidth;
-      setCurrentIndex(totalOriginalItems - 1);
-    } else {
-      const actualIndex = rawIndex - totalOriginalItems;
-      setCurrentIndex(actualIndex);
-    }
-  };const scrollToIndex = (index: number) => {
-    if (carouselRef.current) {
-      const containerWidth = carouselRef.current.clientWidth;
-      const itemWidth = containerWidth / projectsPerView;
-      const scrollPosition = (startIndex + index) * itemWidth;
-      carouselRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-      });
-      // Update state after smooth scroll animation completes (typically 300-500ms)
-      setTimeout(() => {
-        setCurrentIndex(index);
-      }, 400);
-    }
+    container.scrollTo({
+      left: scrollPosition,
+      behavior: 'smooth'
+    });
   };
 
   const scrollLeft = () => {
-    const newIndex = currentIndex > 0 ? currentIndex - 1 : totalOriginalItems - 1;
-    scrollToIndex(newIndex);
+    let newIndex;
+    if (projectsPerView === 1) {
+      // Mobile: move one project at a time
+      newIndex = currentIndex > 0 ? currentIndex - 1 : filteredProjects.length - 1;
+    } else {
+      // Desktop: move by page (projectsPerView)
+      newIndex = Math.max(0, currentIndex - projectsPerView);
+    }
+    setCurrentIndex(newIndex);
+    scrollToProject(newIndex);
   };
 
   const scrollRight = () => {
-    const newIndex = currentIndex < totalOriginalItems - 1 ? currentIndex + 1 : 0;    scrollToIndex(newIndex);
+    let newIndex;
+    if (projectsPerView === 1) {
+      // Mobile: move one project at a time
+      newIndex = currentIndex < filteredProjects.length - 1 ? currentIndex + 1 : 0;
+    } else {
+      // Desktop: move by page (projectsPerView)
+      const maxIndex = filteredProjects.length - projectsPerView;
+      newIndex = Math.min(maxIndex, currentIndex + projectsPerView);
+    }
+    setCurrentIndex(newIndex);
+    scrollToProject(newIndex);
   };
 
   const openProjectModal = (project: Project) => {
     setSelectedProject(project);
   };
+  // Handle manual scroll to update current index
+  const handleScroll = () => {
+    if (!carouselRef.current) return;
+    
+    const container = carouselRef.current;
+    const cardWidth = container.scrollWidth / filteredProjects.length;
+    const scrollLeft = container.scrollLeft;
+    let newIndex = Math.round(scrollLeft / cardWidth);
+    
+    // For desktop, snap to page boundaries
+    if (projectsPerView > 1) {
+      newIndex = Math.floor(newIndex / projectsPerView) * projectsPerView;
+    }
+    
+    if (newIndex !== currentIndex && newIndex >= 0 && newIndex < filteredProjects.length) {
+      setCurrentIndex(newIndex);
+    }
+  };
+
   return (
     <section 
       id="projects" 
-      className="py-8 sm:py-12 lg:py-16 bg-black relative overflow-hidden"
+      className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
       ref={sectionRef}
     >
-      {/* Mobile-first background effects */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      
       <div className="mobile-container sm:container mx-auto px-4 relative z-10">
-        <div className="text-center mb-8 sm:mb-12 opacity-100 animate-in">
-          <h2 className="text-mobile-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-white relative inline-block">
-            Recent Projects
-            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 w-16 sm:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto"></div>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-lg mt-4 sm:mt-6 mb-6 sm:mb-10 px-4">
+        {/* Section Header */}
+        <div className="text-center mb-2 sm:mb-4 md:mb-6 opacity-100 animate-in">
+          <div className="w-full flex flex-col items-center">
+            <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
+              Recent Projects
+            </h2>
+            {/* Full-width decorative underline */}
+            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
+          </div>
+          <p className="hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
             Infrastructure solutions, automation pipelines, and DevOps implementations
           </p>
           
           {/* Mobile-first category filters */}
-          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-8 sm:mb-12">
+          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-2 sm:mb-4 md:mb-6 mt-4 sm:mt-6">
             <div className="flex gap-2 sm:gap-3 px-4 sm:px-0 sm:justify-center min-w-max sm:min-w-0">
               {categories.map((category, index) => (
                 <button
@@ -496,69 +236,52 @@ const Projects = () => {  const [selectedProject, setSelectedProject] = useState
               ))}
             </div>
           </div>
-        </div>        {/* Mobile-first Projects Carousel */}
+        </div>
+
+        {/* Projects Carousel */}
         <div className="relative max-w-7xl mx-auto">
-          {/* Carousel Container - Mobile-first */}
+          {/* Carousel Container */}
           <div
             ref={carouselRef}
-            onScroll={checkScrollPosition}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory gap-4 sm:gap-0"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {infiniteProjects.map((project, index) => (
-              <div key={`${project.title}-${Math.floor(index / totalOriginalItems)}`} className="flex-shrink-0 w-[85vw] sm:w-full md:w-1/2 lg:w-1/3 px-0 sm:px-3 snap-center">
+            onScroll={handleScroll}
+            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory gap-4 lg:gap-6 pb-4"
+            style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none'
+            }}
+          >            {filteredProjects.map((project) => (
+              <div 
+                key={project.title} 
+                className="flex-shrink-0 w-[85vw] sm:w-[45vw] lg:w-80 xl:w-96 snap-start"
+              >
                 <ProjectCard project={project} onClick={() => openProjectModal(project)} />
               </div>
             ))}
-          </div>          {/* Arrow Navigation */}
-          <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-6">
-            <button
-              onClick={scrollLeft}
-              disabled={currentIndex === 0}
-              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-black/20 disabled:hover:border-white/10 touch-button group"
-              aria-label="Previous project"
-            >
-              <svg 
-                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200 group-disabled:text-white" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
+          </div>          {/* Navigation Controls */}
+          {filteredProjects.length > 1 && (
+            <div className="flex items-center justify-center mt-2 sm:mt-2 lg:mt-2 gap-6"><button
+                onClick={scrollLeft}
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-ring"
+                aria-label="Previous project"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>            {/* Numeric Counter */}
-            <div className="text-sm font-medium text-gray-300 min-w-[3rem] text-center">
-              {!isReady ? 1 : (currentIndex % totalOriginalItems) + 1} / {totalOriginalItems}
+                <FaChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </button>
+
+              <button
+                onClick={scrollRight}
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-ring"
+                aria-label="Next project"
+              >
+                <FaChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </button>
             </div>
-            
-            <button
-              onClick={scrollRight}
-              disabled={currentIndex === totalOriginalItems - 1}
-              className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 active:bg-red-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-black/20 disabled:hover:border-white/10 touch-button group"
-              aria-label="Next project"
-            >
-              <svg 
-                className="w-5 h-5 text-white transition-colors duration-200 group-hover:text-red-300 group-active:text-red-200 group-disabled:text-white" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+          )}
         </div>
       </div>
 
       {/* Project Modal */}
       <ProjectModal
-        project={selectedProject}
-        onClose={() => {
-          setSelectedProject(null);
-        }}
+        project={selectedProject}        onClose={() => setSelectedProject(null)}
       />
     </section>
   );

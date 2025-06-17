@@ -125,12 +125,10 @@ const LiveTerminal = () => {
       setShowCursor(prev => !prev);
     }, 530);
     return () => clearInterval(cursorTimer);
-  }, []);
-
-  const currentCommand = commands[currentCommandIndex] || commands[0];
+  }, []);  const currentCommand = commands[currentCommandIndex] || commands[0];
   return (
     <motion.div
-      className="relative w-[480px] h-[520px]"
+      className="relative w-[360px] h-[400px] lg:w-[400px] lg:h-[440px] xl:w-[450px] xl:h-[480px] 2xl:w-[480px] 2xl:h-[520px] max-w-full"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, delay: 0.3 }}

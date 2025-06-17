@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { experienceData } from '../../data/portfolio';
+import { experienceData } from '../../data/experience';
 
 interface ExperienceData {
   id: string;
@@ -188,31 +188,28 @@ const Experience = () => {
 
   const workExperiences = allExperiences.filter(exp => exp.type === 'work');
   const educationExperiences = allExperiences.filter(exp => exp.type === 'education');  return (
-    <section id="experience" className="py-8 sm:py-12 lg:py-16 relative bg-black overflow-hidden">
-      {/* Background effects - mobile-optimized */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] -z-0" />
-      <div className="absolute right-0 bottom-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-tr from-orange-500 to-red-500 opacity-10 rounded-full -z-0 blur-3xl" />
-      <div className="absolute left-0 top-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-[300px] lg:h-[300px] bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 rounded-full -z-0 blur-3xl" />
+    <section id="experience" className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden">
 
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          {/* Section Header - Mobile-first */}
-          <div 
+          {/* Section Header - Mobile-first */}          <div 
             ref={headerRef}
-            className={`text-center mb-8 sm:mb-12 lg:mb-16 transition-all duration-800 ${
+            className={`text-center mb-2 sm:mb-4 md:mb-6 lg:mb-8 transition-all duration-800 ${
               headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
-              headerVisible ? 'animate-hero-title' : ''
-            }`}>
-              Experience & Education
-            </h2>
+            }`}>            <div className="w-full flex flex-col items-center">
+              <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
+                headerVisible ? 'animate-hero-title' : ''
+              }`}>
+                Experience & Education
+              </h2>
+              {/* Full-width decorative underline */}
+              <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
+            </div>
             <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
               headerVisible ? 'animate-hero-subtitle' : ''
             }`}>
-              A visual journey through my DevOps evolution
-              <span className="block sm:inline text-orange-400 font-semibold mt-1 sm:mt-0"> Click timeline nodes to expand details</span>
+              <span className="hidden sm:inline">A visual journey through my DevOps evolution</span>
+              <span className="block sm:inline text-amber-100 sm:text-orange-400 font-semibold mt-1 sm:mt-0"> Click timeline nodes to expand details</span>
             </p>
           </div>          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-20">
             {/* Professional Experience - Mobile-first */}

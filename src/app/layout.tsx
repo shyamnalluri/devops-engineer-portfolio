@@ -1,10 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Dancing_Script, Oswald } from "next/font/google";
 import "./globals.css";
+import "./fonts.css";
 import Navigation from "./components/Navigation";
 import ClientWrapper from "./components/ClientWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
+const dancingScript = Dancing_Script({ 
+  subsets: ["latin"],
+  variable: '--font-dancing-script',
+});
+const oswald = Oswald({ 
+  subsets: ["latin"],
+  variable: '--font-oswald',
+  weight: ['200', '300', '400', '500', '600', '700']
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -73,14 +83,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth overscroll-none">
-      <body
-        className={`${inter.className} min-h-screen antialiased overscroll-none touch-manipulation`}
-      >        <ClientWrapper>
+    <html lang="en" className="scroll-smooth overscroll-none">      <body
+        className={`${inter.className} ${dancingScript.variable} ${oswald.variable} min-h-screen antialiased overscroll-none touch-manipulation`}
+      ><ClientWrapper>
           <div className="overflow-x-hidden w-full">
-            <Navigation />            
-            {/* Mobile-first main content with responsive margin */}
-            <main className="relative z-10 pt-14 lg:pt-0 lg:ml-[214px] min-h-screen">
+            <Navigation />              {/* Mobile-first main content with responsive margin */}
+            <main className="relative z-10 lg:ml-[214px]">
               {children}
             </main>
           </div>
