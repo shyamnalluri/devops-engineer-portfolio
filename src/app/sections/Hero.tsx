@@ -151,6 +151,9 @@ const Hero = () => {
                 {/* Primary CTA - full width on mobile */}
                 <button
                   onClick={() => {
+                    if (typeof window !== 'undefined' && (window as any).gtag) {
+                      (window as any).gtag('event', 'click_hire_me', { section: 'hero' });
+                    }
                     const contactSection = document.getElementById('contact');
                     if (contactSection) {
                       contactSection.scrollIntoView({ 
@@ -170,6 +173,9 @@ const Hero = () => {
                 {/* Secondary buttons - full width on mobile */}
                 <div className="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">                  <button
                     onClick={() => {
+                      if (typeof window !== 'undefined' && (window as any).gtag) {
+                        (window as any).gtag('event', 'click_resume', { section: 'hero' });
+                      }
                       window.open('/Shyam_Nalluri_Resume.pdf', '_blank', 'noopener,noreferrer');
                     }}
                     className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
@@ -184,6 +190,9 @@ const Hero = () => {
 
                   <button
                     onClick={() => {
+                      if (typeof window !== 'undefined' && (window as any).gtag) {
+                        (window as any).gtag('event', 'click_learn_more', { section: 'hero' });
+                      }
                       const aboutSection = document.getElementById('about');
                       if (aboutSection) {
                         aboutSection.scrollIntoView({ 

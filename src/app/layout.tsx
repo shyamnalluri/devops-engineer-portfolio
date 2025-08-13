@@ -3,6 +3,7 @@ import { Inter, Dancing_Script, Oswald } from "next/font/google";
 import "./globals.css";
 import "./fonts.css";
 import Navigation from "./components/Navigation";
+import Script from "next/script";
 import ClientWrapper from "./components/ClientWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -91,14 +92,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gtagId = process.env.NEXT_PUBLIC_GTAG_ID;
   return (
     <html lang="en" className="scroll-smooth overscroll-none">      
     <body
         className={`${inter.className} ${dancingScript.variable} ${oswald.variable} min-h-screen antialiased overscroll-none touch-manipulation`}
-      ><ClientWrapper>
+      >{gtagId && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`} strategy="afterInteractive" />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);} 
+                gtag('js', new Date());
+                gtag('config', '${gtagId}', {
+                  page_path: window.location.pathname
+                });
+              `}
+            </Script>
+          </>
+        )}<a
+          href="#main"
+          className="fixed top-2 left-2 z-[100] -translate-y-16 focus:translate-y-0 transition transform bg-orange-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-white"
+        >
+          Skip to content
+        </a><ClientWrapper>
           <div className="overflow-x-hidden w-full">
             <Navigation />              {/* Mobile-first main content with responsive margin */}
-            <main className="relative z-10 lg:ml-[214px]">
+            <main id="main" tabIndex={-1} className="relative z-10 lg:ml-[214px] focus:outline-none">
               {children}
             </main>
           </div>

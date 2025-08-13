@@ -178,12 +178,12 @@ const Navigation: React.FC = () => {
       </header>
 
       {/* Desktop Sidebar - Hidden on mobile/tablet */}
-      <nav className={`fixed inset-y-0 left-0 w-[214px] bg-black text-white flex-col z-50 hidden lg:flex transition-transform duration-500 ease-primary ${isLoaded ? 'translate-x-0' : '-translate-x-full'}`}>
+      <nav aria-label="Primary" className={`fixed inset-y-0 left-0 w-[214px] bg-black text-white flex-col z-50 hidden lg:flex transition-transform duration-500 ease-primary ${isLoaded ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo Section with professional animation */}
         <div className="px-6 py-8">
-          <h1 className={`text-3xl font-bold text-white transition-all duration-800 ease-spring ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className={`text-3xl font-bold text-white transition-all duration-800 ease-spring ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} aria-label="Site logo">
             SN
-          </h1>
+          </div>
         </div>
 
         {/* Menu Links with staggered animations */}

@@ -8,7 +8,7 @@ const About = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
   const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation();
   const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });  return (
-    <section id="about" className="min-h-screen flex items-center py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden">
+    <section id="about" className="min-h-screen flex items-center py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden" role="region" aria-label="About me">
       
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-6xl mx-auto">

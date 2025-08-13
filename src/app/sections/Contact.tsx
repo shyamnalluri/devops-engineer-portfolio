@@ -158,7 +158,7 @@ const Contact = () => {
   const isFormValid = formData.name.trim() && formData.email.trim() && formData.message.trim() && 
     Object.keys(fieldErrors).every(key => !fieldErrors[key]);
   return (
-    <section id="contact" className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden">
+    <section id="contact" className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden" role="region" aria-label="Contact and testimonials">
 
       <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
         {/* Mobile-first Section Header */}        <div

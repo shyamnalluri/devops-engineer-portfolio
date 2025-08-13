@@ -202,6 +202,8 @@ const Projects = () => {
       id="projects" 
       className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
       ref={sectionRef}
+      role="region"
+      aria-label="Recent projects and case studies"
     >
       <div className="mobile-container sm:container mx-auto px-4 relative z-10">
         {/* Section Header */}
