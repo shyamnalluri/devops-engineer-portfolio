@@ -153,6 +153,18 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
                 className="p-4 sm:p-6 space-y-6 sm:space-y-8"
               >
+                {/* Architecture Diagram (optional) */}
+                {project.architectureImage && (
+                  <div>
+                    <h4 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">Architecture</h4>
+                    <img
+                      src={project.architectureImage}
+                      alt={`${project.title} architecture diagram`}
+                      className="w-full rounded-lg border border-gray-700/50 bg-gray-900"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
                 {/* Overview */}
                 <div>
                   <h4 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">Project Overview</h4>

@@ -15,6 +15,7 @@ export interface ProjectItem {
   solutions?: string[];
   metrics?: string[];
   image?: string;
+  architectureImage?: string;
   status?: 'completed' | 'in-progress' | 'planned';
 }
 
