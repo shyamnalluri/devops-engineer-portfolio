@@ -16,6 +16,15 @@ const oswald = Oswald({
   weight: ['400', '700']
 });
 
+// Environment-aware site URLs for dev vs prod (GitHub Pages)
+const isProd = process.env.NODE_ENV === 'production';
+const siteUrl = isProd
+  ? 'https://shyamnalluri.github.io/devops-engineer-portfolio'
+  : 'http://localhost:3000';
+const ogImageUrl = isProd
+  ? `${siteUrl}/images/profile.jpg`
+  : '/images/profile.jpg';
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -25,7 +34,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.shyamnalluri.com"),
+  metadataBase: new URL(siteUrl),
   title: "Shyam Nalluri | DevOps Engineer",
   description:
     "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions. Expertise in AWS, Kubernetes, and CI/CD pipelines.",
@@ -43,7 +52,7 @@ export const metadata: Metadata = {
   publisher: "Shyam Nalluri",
   robots: "index, follow",
   alternates: {
-    canonical: "https://www.shyamnalluri.com",
+    canonical: siteUrl,
   },
   openGraph: {
     type: "website",
@@ -51,10 +60,10 @@ export const metadata: Metadata = {
     description:
       "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions.",
     siteName: "Shyam Nalluri Portfolio",
-    url: "https://www.shyamnalluri.com",
+    url: siteUrl,
     images: [
       {
-        url: "/images/profile.jpg",
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: "Shyam Nalluri - DevOps Engineer",
@@ -67,7 +76,7 @@ export const metadata: Metadata = {
     description:
       "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions.",
     creator: "@shyamnalluri",
-    images: ["/images/profile.jpg"],
+    images: [ogImageUrl],
   },
   verification: {
     google: "verification-code",
