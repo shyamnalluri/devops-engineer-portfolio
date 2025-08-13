@@ -68,13 +68,9 @@ html {
 }
 
 /* Hide scrollbar but keep functionality */
+/* Keep scrollbars visible for accessibility; customize only where needed via utilities */
 html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar {
-  display: none;
+  /* default scrollbar appearance retained */
 }
 
 body {
@@ -90,6 +86,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   width: 100%;
+}
+
+/* Offset anchored sections so fixed headers don't cover titles */
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 /* Mobile-First Container System */

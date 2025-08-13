@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -21,6 +21,8 @@ type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS
 
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
   const [activeSection, setActiveSection] = useState<string>('');
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -86,7 +88,80 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
         document.body.style.overflow = '';
       }
     };
-  }, [isOpen, navItems]);  return (
+  }, [isOpen, navItems]);
+
+  // Focus management: trap focus when open, handle Escape, and restore focus on close
+  useEffect(() => {
+    if (!isOpen) {
+      // restore focus to the element that was focused before opening
+      if (previouslyFocusedElementRef.current) {
+        previouslyFocusedElementRef.current.focus();
+      }
+      return;
+    }
+
+    previouslyFocusedElementRef.current = document.activeElement as HTMLElement | null;
+
+    const container = panelRef.current;
+    if (!container) return;
+
+    const getFocusable = () => {
+      const focusableSelectors = [
+        'a[href]',
+        'button:not([disabled])',
+        'textarea',
+        'input[type="text"]',
+        'input[type="radio"]',
+        'input[type="checkbox"]',
+        'select',
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(',');
+      return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors))
+        .filter(el => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden'));
+    };
+
+    // Focus the first focusable element inside the panel
+    const focusables = getFocusable();
+    if (focusables.length) {
+      focusables[0].focus();
+    } else {
+      container.focus();
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const elements = getFocusable();
+        if (!elements.length) return;
+        const first = elements[0];
+        const last = elements[elements.length - 1];
+        const current = document.activeElement as HTMLElement | null;
+        if (e.shiftKey) {
+          if (current === first || !container.contains(current)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (current === last || !container.contains(current)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  return (
     <>
       {isOpen && (
         <>          {/* Backdrop with close functionality */}
@@ -100,6 +175,11 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
             className={`fixed top-0 right-0 h-full w-[300px] bg-black shadow-xl z-50 flex flex-col transform transition-transform duration-300 ease-primary ${
               isOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+            tabIndex={-1}
+            ref={panelRef}
           >            <div className="relative p-6">
               {/* Close button in top-right for easier thumb reach */}
               <button
@@ -128,6 +208,7 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                           ? 'border-l-2 border-orange-500 text-orange-500 font-medium'
                           : 'border-l-2 border-transparent hover:border-gray-700 hover:text-orange-500'
                       }`}
+                      aria-current={activeSection === item.href.substring(1) ? 'page' : undefined}
                     >
                       <span className="relative z-10">{item.name}</span>                      {/* Active indicator animation */}
                       <div className={`absolute right-0 top-0 w-0.5 h-full bg-orange-500 transition-all duration-300 ease-primary ${

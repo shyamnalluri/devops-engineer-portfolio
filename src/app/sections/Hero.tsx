@@ -1,13 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { FaArrowRight, FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { personalInfo } from "../../data/portfolio";
-import LiveTerminal from "../components/LiveTerminal";
+
+// Desktop-only dynamic import to avoid shipping terminal to mobile bundles
+const LiveTerminalDesktop = dynamic(() => import("../components/LiveTerminal"), { ssr: false });
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // Handle reduced motion preference
   useEffect(() => {
@@ -18,7 +22,26 @@ const Hero = () => {
       elements.forEach(el => {
         (el as HTMLElement).style.animation = 'none';
       });
-    }  }, []);
+    }
+
+    const mql = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsDesktop(mql.matches);
+    update();
+    if (typeof mql.addEventListener === 'function') {
+      mql.addEventListener('change', update);
+    } else {
+      // @ts-ignore Safari fallback
+      mql.addListener(update);
+    }
+    return () => {
+      if (typeof mql.removeEventListener === 'function') {
+        mql.removeEventListener('change', update);
+      } else {
+        // @ts-ignore Safari fallback
+        mql.removeListener(update);
+      }
+    };
+  }, []);
   return (
     <section
       id="home"
@@ -46,7 +69,8 @@ const Hero = () => {
           {/* Responsive layout with proper spacing to prevent overlap */}
           <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-8 xl:gap-12 items-center justify-center min-h-screen py-12 sm:py-16 lg:py-8 xl:py-0">
           
-            {/* Terminal component - Hidden on mobile, properly contained on desktop */}
+            {/* Terminal component - dynamically loaded on desktop only */}
+            {isDesktop && (
             <div className="hidden lg:flex justify-center lg:justify-start order-1 lg:order-1 w-full">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -54,7 +78,7 @@ const Hero = () => {
                 transition={{ duration: 1, delay: 0.3 }}
                 className="relative flex justify-center lg:justify-start max-w-full"
               >
-                <LiveTerminal />
+                <LiveTerminalDesktop />
                 
                 {/* Floating tech icons around terminal */}
                 <motion.div
@@ -82,7 +106,8 @@ const Hero = () => {
                   <span className="text-green-400 text-xs">☁️</span>
                 </motion.div>
               </motion.div>
-            </div>            {/* Main content - Properly contained with responsive spacing */}
+            </div>
+            )}            {/* Main content - Properly contained with responsive spacing */}
             <div className="text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-5 xl:space-y-6 order-1 lg:order-2 w-full max-w-2xl lg:max-w-full mx-auto relative px-0 lg:px-2 xl:px-4 lg:min-w-0">              {/* Small intro text - larger on desktop */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -123,7 +148,7 @@ const Hero = () => {
                 transition={{ duration: 0.8, delay: 1.3 }}
                 className="flex flex-col sm:flex-row gap-3 pt-4 sm:pt-6 justify-center lg:justify-start items-center w-full"
               >
-                {/* Primary CTA - 50% width on mobile with 25% margins */}
+                {/* Primary CTA - full width on mobile */}
                 <button
                   onClick={() => {
                     const contactSection = document.getElementById('contact');
@@ -134,7 +159,7 @@ const Hero = () => {
                       });
                     }
                   }}
-                  className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-1/2 sm:w-auto bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full hover:from-orange-600 hover:to-red-600 hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 cursor-pointer"
+                  className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full hover:from-orange-600 hover:to-red-600 hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 cursor-pointer"
                   aria-label="Hire me for opportunities"
                   type="button"
                 >
@@ -142,12 +167,12 @@ const Hero = () => {
                   <FaArrowRight className="ml-2 text-xs transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true" />
                 </button>
 
-                {/* Secondary buttons - 50% width on mobile */}
+                {/* Secondary buttons - full width on mobile */}
                 <div className="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">                  <button
                     onClick={() => {
                       window.open('/Shyam_Nalluri_Resume.pdf', '_blank', 'noopener,noreferrer');
                     }}
-                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-1/2 sm:w-auto bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
+                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
                     aria-label="View resume"
                     type="button"
                   >
@@ -167,7 +192,7 @@ const Hero = () => {
                         });
                       }
                     }}
-                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-1/2 sm:w-auto bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
+                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
                     aria-label="Learn more about me"
                     type="button"
                   >

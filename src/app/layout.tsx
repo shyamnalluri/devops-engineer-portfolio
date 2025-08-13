@@ -13,7 +13,7 @@ const dancingScript = Dancing_Script({
 const oswald = Oswald({ 
   subsets: ["latin"],
   variable: '--font-oswald',
-  weight: ['200', '300', '400', '500', '600', '700']
+  weight: ['400', '700']
 });
 
 export const viewport: Viewport = {
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   publisher: "Shyam Nalluri",
   robots: "index, follow",
   alternates: {
-    canonical: "https://www.yourwebsite.com",
+    canonical: "https://www.shyamnalluri.com",
   },
   openGraph: {
     type: "website",
@@ -83,7 +83,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth overscroll-none">      <body
+    <html lang="en" className="scroll-smooth overscroll-none">      
+    <body
         className={`${inter.className} ${dancingScript.variable} ${oswald.variable} min-h-screen antialiased overscroll-none touch-manipulation`}
       ><ClientWrapper>
           <div className="overflow-x-hidden w-full">

@@ -22,7 +22,7 @@ const Navigation: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const [targetSection, setTargetSection] = useState<string | null>(null);
-  const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);  useEffect(() => {
+  const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);  useEffect(() => {
     setIsLoaded(true);
       // Enhanced scroll spy with better navigation state management
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -210,6 +210,7 @@ const Navigation: React.FC = () => {
                         ? 'border-l-2 border-orange-500 text-orange-500 font-medium'
                         : 'border-l-2 border-transparent hover:border-gray-700 hover:text-orange-500'
                     }`}
+                    aria-current={isActive ? 'page' : undefined}
                   >
                     <span className="relative z-10">{item.name}</span>
                     {/* Active indicator animation */}
