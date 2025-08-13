@@ -679,6 +679,12 @@ a, button {
   }
 }
 
+/* Content-visibility utility to defer rendering of off-screen sections */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}
+
 /* Custom Scrollbar Styles for Skills Masonry */
 .scrollbar-thin {
   scrollbar-width: thin;

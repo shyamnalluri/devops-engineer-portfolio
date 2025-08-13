@@ -3,7 +3,7 @@
 import { ReactNode, useState, useEffect } from 'react';
 import ScrollProgressBar from './ScrollProgressBar';
 import MobileMenu from './MobileMenu';
-import { FaBars, FaTimes } from 'react-icons/fa';
+// Inline SVGs to avoid pulling react-icons above the fold
 import BackToTop from './BackToTop';
 
 // Import MenuIconKey type from MobileMenu
@@ -47,7 +47,15 @@ export default function ClientWrapper({ children }: { children: ReactNode }) {
         className="fixed top-4 right-4 z-50 p-3 rounded-full bg-gradient-to-r from-orange-600 to-red-600 text-white lg:hidden shadow-md shadow-red-500/20 hover:from-orange-500 hover:to-red-500 transition-all duration-300"
         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
       >
-        {isMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
+        {isMenuOpen ? (
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        )}
       </button>
       
       {/* Mobile menu */}

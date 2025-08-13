@@ -199,10 +199,10 @@ const Contact = () => {
                   <h3 className="text-lg sm:text-xl font-bold text-white">Send Message</h3>
                   <p className="text-xs sm:text-sm text-gray-400">Let&apos;s start the conversation</p>
                 </div>
-              </div>              <form onSubmit={handleSubmit} className="space-y-2 flex-1">
+              </div>              <form onSubmit={handleSubmit} className="space-y-2 flex-1" aria-busy={formStatus.submitting}>
                 {/* Success Message */}
                 {formStatus.submitted && (
-                  <div className="mb-2 p-2 bg-green-500/10 border border-green-500/30 rounded-lg animate-fade-in">
+                  <div className="mb-2 p-2 bg-green-500/10 border border-green-500/30 rounded-lg animate-fade-in" role="status" aria-live="polite">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
                         <FaCheck className="text-white text-xs" />
@@ -241,6 +241,8 @@ const Contact = () => {
                               : 'border-gray-600/50 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
                           }`}
                           placeholder="Your name"
+                          aria-invalid={Boolean(fieldErrors.name && touchedFields.name)}
+                          aria-describedby={fieldErrors.name && touchedFields.name ? 'name-error' : undefined}
                         />
                         {formData.name && !fieldErrors.name && (
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -249,7 +251,7 @@ const Contact = () => {
                         )}
                       </div>
                       {fieldErrors.name && touchedFields.name && (
-                        <p className="text-red-400 text-xs mt-1 animate-fade-in">
+                        <p id="name-error" className="text-red-400 text-xs mt-1 animate-fade-in">
                           {fieldErrors.name}
                         </p>
                       )}
@@ -280,6 +282,8 @@ const Contact = () => {
                               : 'border-gray-600/50 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
                           }`}
                           placeholder="your@email.com"
+                          aria-invalid={Boolean(fieldErrors.email && touchedFields.email)}
+                          aria-describedby={fieldErrors.email && touchedFields.email ? 'email-error' : undefined}
                         />
                         {formData.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && !fieldErrors.email && (
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -288,7 +292,7 @@ const Contact = () => {
                         )}
                       </div>
                       {fieldErrors.email && touchedFields.email && (
-                        <p className="text-red-400 text-xs mt-1 animate-fade-in">
+                        <p id="email-error" className="text-red-400 text-xs mt-1 animate-fade-in">
                           {fieldErrors.email}
                         </p>
                       )}
@@ -320,7 +324,7 @@ const Contact = () => {
                       Message *
                     </label>
                     <div className="relative">
-                      <textarea
+                        <textarea
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
@@ -335,13 +339,15 @@ const Contact = () => {
                             : 'border-gray-600/50 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
                         }`}
                         placeholder="Tell me about your project, goals, and how I can help..."
+                          aria-invalid={Boolean(fieldErrors.message && touchedFields.message)}
+                          aria-describedby={fieldErrors.message && touchedFields.message ? 'message-error' : undefined}
                       />
                       <div className="absolute bottom-2 right-3 text-xs text-gray-500">
                         {formData.message.length}/500
                       </div>
                     </div>
                     {fieldErrors.message && touchedFields.message && (
-                      <p className="text-red-400 text-xs mt-1 animate-fade-in">
+                      <p id="message-error" className="text-red-400 text-xs mt-1 animate-fade-in">
                         {fieldErrors.message}
                       </p>
                     )}
@@ -392,7 +398,7 @@ const Contact = () => {
                   </button>
                 </div>{/* Global Error Message */}
                 {formStatus.error && (
-                  <div className="mt-2 p-3 bg-red-500/10 border border-red-500/30 rounded-lg animate-fade-in">
+                  <div className="mt-2 p-3 bg-red-500/10 border border-red-500/30 rounded-lg animate-fade-in" role="alert" aria-live="assertive">
                     <div className="flex items-center gap-2">
                       <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

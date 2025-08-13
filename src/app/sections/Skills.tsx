@@ -59,7 +59,7 @@ const Skills = () => {
           </p>
         </div>        {/* Skills Grid - Three Column Layout */}
         <div className="w-full max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg" tabIndex={0} aria-label="Skills grid">
             {skillsData.map((category, categoryIndex) => (
               <div 
                 key={category.name} 

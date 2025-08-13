@@ -47,13 +47,13 @@ export default function Home() {
     <ClientWrapper>
       <main className="bg-black text-white min-h-screen">        {/* All sections - Impact-First Order */}        
         <Hero />
-        <About />            
-        <Projects />        {/* 🔥 Moved up - Show impact first! */}
-        <Skills />          {/* Now provides context for the projects */}
-        <Experience />      {/* Professional backing for the work shown */}
-        <Certifications />  {/* Additional credibility */}
-        <Contact />
-        <Footer />
+        <div className="cv-auto"><About /></div>            
+        <div className="cv-auto"><Projects /></div>        {/* 🔥 Moved up - Show impact first! */}
+        <div className="cv-auto"><Skills /></div>          {/* Now provides context for the projects */}
+        <div className="cv-auto"><Experience /></div>      {/* Professional backing for the work shown */}
+        <div className="cv-auto"><Certifications /></div>  {/* Additional credibility */}
+        <div className="cv-auto"><Contact /></div>
+        <div className="cv-auto"><Footer /></div>
       </main>
     </ClientWrapper>
   );

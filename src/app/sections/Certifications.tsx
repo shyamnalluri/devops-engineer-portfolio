@@ -227,7 +227,20 @@ const Certifications = () => {
                 </div>
                 
                 {/* Mobile Scrollable container */}
-                <div className="overflow-x-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-orange-500 hover:scrollbar-thumb-orange-400">
+                <div
+                  className="overflow-x-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-orange-500 hover:scrollbar-thumb-orange-400 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg"
+                  tabIndex={0}
+                  aria-label="Certifications carousel. Use left and right arrow keys to navigate."
+                  onKeyDown={(e) => {
+                    if (e.key === 'ArrowLeft') {
+                      e.preventDefault();
+                      (e.currentTarget as HTMLDivElement).scrollBy({ left: -300, behavior: 'smooth' });
+                    } else if (e.key === 'ArrowRight') {
+                      e.preventDefault();
+                      (e.currentTarget as HTMLDivElement).scrollBy({ left: 300, behavior: 'smooth' });
+                    }
+                  }}
+                >
                   <div className="flex gap-3 pb-4" style={{ width: `${filteredCertifications.length * 280}px` }}>
                     {filteredCertifications.map((cert, index) => (
                       <div
@@ -400,7 +413,20 @@ const Certifications = () => {
                 </div>
                 
                 {/* Scrollable container */}
-                <div className="overflow-x-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-orange-500 hover:scrollbar-thumb-orange-400">
+                <div
+                  className="overflow-x-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-orange-500 hover:scrollbar-thumb-orange-400 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg"
+                  tabIndex={0}
+                  aria-label="Certifications carousel. Use left and right arrow keys to navigate."
+                  onKeyDown={(e) => {
+                    if (e.key === 'ArrowLeft') {
+                      e.preventDefault();
+                      (e.currentTarget as HTMLDivElement).scrollBy({ left: -400, behavior: 'smooth' });
+                    } else if (e.key === 'ArrowRight') {
+                      e.preventDefault();
+                      (e.currentTarget as HTMLDivElement).scrollBy({ left: 400, behavior: 'smooth' });
+                    }
+                  }}
+                >
                   <div className="flex gap-4 pb-4" style={{ width: `${filteredCertifications.length * 280}px` }}>
                     {filteredCertifications.map((cert, index) => (
                       <div

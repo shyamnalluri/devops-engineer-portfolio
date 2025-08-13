@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaExternalLinkAlt, FaServer, FaCode, FaLightbulb, FaTimes } from 'react-icons/fa';
 import { ProjectItem as Project } from '../../data/projects';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -11,7 +11,10 @@ interface ProjectModalProps {
 }
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
-  // Handle keyboard events
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+
+  // Handle keyboard events and focus management
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -24,11 +27,67 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
       document.addEventListener('keydown', handleEscape);
       // Prevent body scroll when modal is open
       document.body.style.overflow = 'hidden';
+
+      // Save focus and trap inside the modal
+      previouslyFocusedElementRef.current = document.activeElement as HTMLElement | null;
+
+      const container = panelRef.current;
+      if (container) {
+        const getFocusable = () => {
+          const selectors = [
+            'a[href]',
+            'button:not([disabled])',
+            'textarea',
+            'input',
+            'select',
+            '[tabindex]:not([tabindex="-1"])'
+          ].join(',');
+          return Array.from(container.querySelectorAll<HTMLElement>(selectors)).filter(
+            el => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden')
+          );
+        };
+
+        const focusables = getFocusable();
+        if (focusables.length) {
+          focusables[0].focus();
+        } else {
+          container.focus();
+        }
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+          if (e.key !== 'Tab') return;
+          const els = getFocusable();
+          if (!els.length) return;
+          const first = els[0];
+          const last = els[els.length - 1];
+          const current = document.activeElement as HTMLElement | null;
+          if (e.shiftKey) {
+            if (current === first || !container.contains(current)) {
+              e.preventDefault();
+              last.focus();
+            }
+          } else {
+            if (current === last || !container.contains(current)) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
+      }
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
+      // Restore focus to the element that triggered the modal
+      if (previouslyFocusedElementRef.current) {
+        previouslyFocusedElementRef.current.focus();
+      }
     };
   }, [project, onClose]);
 
@@ -102,6 +161,11 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               transformStyle: 'preserve-3d',
               transformOrigin: 'center top'
             }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`project-modal-title-${project.id}`}
+            tabIndex={-1}
+            ref={panelRef}
           >
             <div className="bg-gray-900/95 backdrop-blur-md rounded-xl sm:rounded-2xl border border-orange-500/20 overflow-hidden">
               {/* Mobile-first Close Button */}
@@ -125,7 +189,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
                       <span className="text-orange-400 text-xs sm:text-sm font-medium">{project.category}</span>
                     </div>
-                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                    <h3 id={`project-modal-title-${project.id}`} className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
                       {project.title}
                     </h3>
                   </div>

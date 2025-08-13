@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { FaArrowRight, FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { personalInfo } from "../../data/portfolio";
 
 // Desktop-only dynamic import to avoid shipping terminal to mobile bundles
@@ -167,7 +166,18 @@ const Hero = () => {
                   type="button"
                 >
                   <span>Hire Me</span>
-                  <FaArrowRight className="ml-2 text-xs transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true" />
+                  <svg
+                    className="ml-2 w-3 h-3 transition-transform duration-150 group-hover:translate-x-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M9 5l7 7-7 7" />
+                  </svg>
                 </button>
 
                 {/* Secondary buttons - full width on mobile */}
@@ -221,26 +231,32 @@ const Hero = () => {
                   href={personalInfo.socialLinks.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-orange-400 hover:bg-gray-700 transition-all duration-300"
+                   className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-orange-400 hover:bg-gray-700 transition-all duration-300 will-change-transform"
                   aria-label="GitHub Profile"
                 >
-                  <FaGithub size={20} />
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.745.084-.729.084-.729 1.205.084 1.839 1.236 1.839 1.236 1.07 1.834 2.807 1.304 3.492.997.108-.776.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.93 0-1.31.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23 1.915-.532 3.965-.532 5.88 0 2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.874.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.804 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297 24 5.373 18.627.297 12 .297z" />
+                  </svg>
                 </a>
-                <a 
+                 <a 
                   href={personalInfo.socialLinks.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-gray-700 transition-all duration-300"
+                   className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-gray-700 transition-all duration-300 will-change-transform"
                   aria-label="LinkedIn Profile"
                 >
-                  <FaLinkedin size={20} />
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+                    <path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v12H0zM8 8h4.8v1.7h.07c.67-1.2 2.3-2.5 4.73-2.5 5.06 0 6 3.33 6 7.66V20H18v-6.2c0-1.48-.03-3.38-2.06-3.38-2.06 0-2.38 1.6-2.38 3.27V20H8z" />
+                  </svg>
                 </a>
-                <a 
+                 <a 
                   href={`mailto:${personalInfo.email}`}
-                  className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-gray-700 transition-all duration-300"
+                   className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-gray-700 transition-all duration-300 will-change-transform"
                   aria-label="Email Contact"
                 >
-                  <FaEnvelope size={20} />
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+                    <path d="M2 5.75A2.75 2.75 0 014.75 3h14.5A2.75 2.75 0 0122 5.75v12.5A2.75 2.75 0 0119.25 21H4.75A2.75 2.75 0 012 18.25V5.75zm2.3.75l7.2 5.4c.3.23.7.23 1 0l7.2-5.4H4.3z" />
+                  </svg>
                 </a>
               </motion.div>
             </div>

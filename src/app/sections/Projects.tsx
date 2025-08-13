@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import ProjectModal from '../components/ProjectModal';
 import { useScrollAnimation, useCardAnimation } from '../../hooks/useScrollAnimation';
 import { projectsData, ProjectItem as Project } from '../../data/projects';
@@ -12,7 +12,7 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
   return (
     <div
       ref={cardRef}
-      className="group relative mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-sm hover:border-red-500/30 min-h-[320px] sm:h-96 cursor-pointer flex flex-col card-hover touch-button focus-ring overflow-hidden"
+      className="group relative mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-sm hover:border-red-500/30 min-h-[320px] sm:h-96 cursor-pointer flex flex-col card-hover touch-button focus-ring focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black overflow-hidden"
       onClick={onClick}
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
       tabIndex={0}
@@ -67,10 +67,12 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
 
       {/* Footer - Mobile-optimized */}
       <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-700/50 group-hover:border-gray-600/50 transition-colors duration-200 ease-primary relative z-10">
-        <div className="flex items-center gap-1.5 sm:gap-2 text-white text-xs sm:text-sm">
-          <FaExternalLinkAlt className="w-3 h-3 text-red-400 transition-transform duration-200 group-hover:translate-x-1" />
-          <span className="transition-colors duration-200 group-hover:text-red-400">View Details</span>
-        </div>
+          <div className="flex items-center gap-1.5 sm:gap-2 text-white text-xs sm:text-sm" aria-hidden="true">
+            <svg className="w-3 h-3 text-red-400 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+            <span className="transition-colors duration-200 group-hover:text-red-400">View Details</span>
+          </div>
         {project.githubUrl && (
           <a 
             href={project.githubUrl}
@@ -205,9 +207,9 @@ const Projects = () => {
       role="region"
       aria-label="Recent projects and case studies"
     >
-      <div className="mobile-container sm:container mx-auto px-4 relative z-10">
+      <div className="mobile-container sm:container mx-auto px-4 relative z-10 will-change-transform">
         {/* Section Header */}
-        <div className="text-center mb-2 sm:mb-4 md:mb-6 opacity-100 animate-in">
+          <div className="text-center mb-2 sm:mb-4 md:mb-6 opacity-100 animate-in will-change-transform">
           <div className="w-full flex flex-col items-center">
             <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
               Recent Projects
@@ -246,7 +248,18 @@ const Projects = () => {
           <div
             ref={carouselRef}
             onScroll={handleScroll}
-            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory gap-4 lg:gap-6 pb-4"
+            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory gap-4 lg:gap-6 pb-4 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg"
+            tabIndex={0}
+            aria-label="Projects carousel. Use left and right arrow keys to navigate."
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                scrollLeft();
+              } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                scrollRight();
+              }
+            }}
             style={{ 
               scrollbarWidth: 'none', 
               msOverflowStyle: 'none'
@@ -263,18 +276,22 @@ const Projects = () => {
           {filteredProjects.length > 1 && (
             <div className="flex items-center justify-center mt-2 sm:mt-2 lg:mt-2 gap-6"><button
                 onClick={scrollLeft}
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-ring"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 aria-label="Previous project"
               >
-                <FaChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
               </button>
 
               <button
                 onClick={scrollRight}
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-ring"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 aria-label="Next project"
               >
-                <FaChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
               </button>
             </div>
           )}
