@@ -3,27 +3,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import MobileMenu from './MobileMenu';
+import { usePathname } from 'next/navigation';
 
-type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT';
+type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT' | 'NOTES';
 
 const navItems: Array<{ name: MenuIconKey; href: string }> = [
-  { name: 'HOME', href: '#home' },
-  { name: 'ABOUT ME', href: '#about' },
-  { name: 'PROJECTS', href: '#projects' },      // 🔥 Moved up in priority order
-  { name: 'SKILLS', href: '#skills' },          // Now after projects
-  { name: 'EXPERIENCE', href: '#experience' },
-  { name: 'CERTIFICATIONS', href: '#certifications' },
-  { name: 'CONTACT', href: '#contact' },
+  { name: 'HOME', href: '/#home' },
+  { name: 'ABOUT ME', href: '/#about' },
+  { name: 'PROJECTS', href: '/#projects' },      // 🔥 Moved up in priority order
+  { name: 'SKILLS', href: '/#skills' },          // Now after projects
+  { name: 'EXPERIENCE', href: '/#experience' },
+  { name: 'CERTIFICATIONS', href: '/#certifications' },
+  { name: 'CONTACT', href: '/#contact' },
+  { name: 'NOTES', href: '/notes' },
 ];
 
 const Navigation: React.FC = () => {
-  const [activeSection, setActiveSection] = useState('home');
+  const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState(pathname === '/' ? 'home' : '');
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const [targetSection, setTargetSection] = useState<string | null>(null);
   const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);  useEffect(() => {
     setIsLoaded(true);
+    // If we navigate away from home, clear section highlight
+    if (pathname !== '/' && activeSection !== '') {
+      setActiveSection('');
+    }
       // Enhanced scroll spy with better navigation state management
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       // If we're currently navigating, only update to target section
@@ -93,7 +100,7 @@ const Navigation: React.FC = () => {
         clearTimeout(navigationTimeoutRef.current);
       }
     };
-  }, [isNavigating, targetSection]);
+  }, [isNavigating, targetSection, pathname]);
   const handleNavClick = (href: string) => {
     if (href.startsWith('#')) {
       const targetId = href.replace('#', '');
@@ -190,7 +197,11 @@ const Navigation: React.FC = () => {
         <div className="flex-1 flex flex-col">
           <ul className="flex flex-col py-8">
             {navItems.map((item, index) => {
-              const isActive = activeSection === item.href.replace('#', '');
+              const isSectionLink = item.href.includes('#');
+              const hash = isSectionLink ? item.href.substring(item.href.indexOf('#')) : '';
+              const isSectionActive = isSectionLink && activeSection === hash.replace('#', '');
+              const isPathActive = !isSectionLink && pathname.startsWith(item.href);
+              const isActive = isSectionActive || isPathActive;
               const animationDelay = `${(index + 1) * 100}ms`;
               
               return (
@@ -202,8 +213,15 @@ const Navigation: React.FC = () => {
                   <Link
                     href={item.href}
                     onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(item.href);
+                      if (isSectionLink) {
+                        const targetHash = hash;
+                        const el = typeof document !== 'undefined' ? document.querySelector(targetHash) : null;
+                        if (el) {
+                          e.preventDefault();
+                          handleNavClick(targetHash);
+                        }
+                        // If element not on this page, allow normal navigation to '/#section'
+                      }
                     }}
                     className={`group block px-10 py-4 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus-ring ${
                       isActive

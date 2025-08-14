@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  navItems: Array<{ name: MenuIconKey; href: string }>;
+  navItems: Array<{ name: string; href: string }>;
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }
 
@@ -17,16 +18,19 @@ type Section = {
   height: number;
 };
 
-type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT';
+// Accept any string names for menu items to avoid cross-file type conflicts
 
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
-  const [activeSection, setActiveSection] = useState<string>('');
+  const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState<string>(pathname === '/' ? '' : '');
   const panelRef = useRef<HTMLDivElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const sections = navItems.reduce<Section[]>((acc, item) => {
+        // Only process in-page section anchors
+        if (!item.href.startsWith('#')) return acc;
         const element = document.querySelector(item.href);
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -69,8 +73,10 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
       }
     };
 
-    // Initial check
-    handleScroll();
+    // Initial check on home only
+    if (pathname === '/') {
+      handleScroll();
+    }
 
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -88,7 +94,7 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
         document.body.style.overflow = '';
       }
     };
-  }, [isOpen, navItems]);
+  }, [isOpen, navItems, pathname]);
 
   // Focus management: trap focus when open, handle Escape, and restore focus on close
   useEffect(() => {
@@ -192,7 +198,12 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                 </svg>
               </button>              {/* Navigation Items */}
               <div className="flex flex-col mt-12">
-                {navItems.map((item, index) => (
+                {navItems.map((item, index) => {
+                  const isSection = item.href.startsWith('#');
+                  const isActive = isSection
+                    ? activeSection === item.href.substring(1)
+                    : pathname.startsWith(item.href);
+                  return (
                   <div 
                     key={item.name}
                     className={`transition-all duration-300 ease-primary`}
@@ -201,27 +212,38 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                     <Link
                       href={item.href}
                       onClick={(e) => {
-                        scrollToSection(e, item.href);
+                        const isSection = item.href.includes('#');
+                        if (isSection) {
+                          const hash = item.href.substring(item.href.indexOf('#'));
+                          const el = typeof document !== 'undefined' ? document.querySelector(hash) : null;
+                          if (el) {
+                            scrollToSection(e, hash);
+                          }
+                          // else allow normal navigation to '/#section'
+                        }
                         onClose();
                       }}                      className={`group block px-6 py-4 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 focus:ring-offset-black min-h-[48px] flex items-center text-left ${
-                        activeSection === item.href.substring(1)
+                        isActive
                           ? 'border-l-2 border-orange-500 text-orange-500 font-medium'
                           : 'border-l-2 border-transparent hover:border-gray-700 hover:text-orange-500'
                       }`}
-                      aria-current={activeSection === item.href.substring(1) ? 'page' : undefined}
+                      aria-current={isActive ? 'page' : undefined}
                     >
                       <span className="relative z-10">{item.name}</span>                      {/* Active indicator animation */}
-                      <div className={`absolute right-0 top-0 w-0.5 h-full bg-orange-500 transition-all duration-300 ease-primary ${
-                        activeSection === item.href.substring(1) ? 'opacity-100' : 'opacity-0'
-                      }`}></div>
+                      {isSection && (
+                        <div className={`absolute right-0 top-0 w-0.5 h-full bg-orange-500 transition-all duration-300 ease-primary ${
+                          isActive ? 'opacity-100' : 'opacity-0'
+                        }`}></div>
+                      )}
                       {/* Hover background effect */}
                       <div className="absolute inset-0 bg-orange-500/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-primary origin-right"></div>
                       {/* Subtle glow effect on active */}
-                      {activeSection === item.href.substring(1) && (
+                      {isActive && (
                         <div className="absolute right-0 top-0 w-1 h-full bg-orange-500 shadow-lg shadow-orange-500/50 animate-glow"></div>
                       )}
                     </Link>
-                  </div>                ))}
+                  </div>
+                );})}
               </div>
             </div>
           </div>

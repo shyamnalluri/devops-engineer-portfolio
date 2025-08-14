@@ -264,10 +264,11 @@ const Projects = () => {
               scrollbarWidth: 'none', 
               msOverflowStyle: 'none'
             }}
-          >            {filteredProjects.map((project) => (
-              <div 
-                key={project.title} 
-                className="flex-shrink-0 w-[85vw] sm:w-[45vw] lg:w-80 xl:w-96 snap-start"
+          >            {filteredProjects.map((project, index) => (
+              <div
+                key={project.id}
+                className="flex-shrink-0 w-full sm:w-80 lg:w-96 snap-start stagger-animation"
+                style={{ '--stagger-delay': `${index * 100}ms` } as React.CSSProperties}
               >
                 <ProjectCard project={project} onClick={() => openProjectModal(project)} />
               </div>

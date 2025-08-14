@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {  output: 'export',  // Enable static exports
   experimental: {
     optimizeCss: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

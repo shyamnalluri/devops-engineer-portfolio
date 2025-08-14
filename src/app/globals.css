@@ -758,3 +758,15 @@ a, button {
 .skills-fade-out {
   animation: skillsFadeOut 0.6s ease-in forwards;
 }
+
+/* Staggered animations to reduce concurrent work */
+.stagger-animation {
+  animation-delay: var(--stagger-delay, 0ms);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .stagger-animation {
+    animation-delay: 0ms !important;
+  }
+}
