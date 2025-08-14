@@ -1,0 +1,90 @@
+'use client';
+
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+import Callout from './Callout';
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+export default function Markdown({ content }: { content: string }) {
+  return (
+    <article className="prose prose-invert max-w-none prose-headings:scroll-mt-24">
+      <ReactMarkdown
+        rehypePlugins={[rehypeHighlight]}
+        components={{
+          h2({ node, children, ...props }) {
+            const text = String(children);
+            const id = slugify(text);
+            return (
+              <h2 id={id} {...props}>
+                {children}
+              </h2>
+            );
+          },
+          h3({ node, children, ...props }) {
+            const text = String(children);
+            const id = slugify(text);
+            return (
+              <h3 id={id} {...props}>
+                {children}
+              </h3>
+            );
+          },
+          p({ children, ...props }) {
+            return (
+              <p {...props} className="leading-7">
+                {children}
+              </p>
+            );
+          },
+          blockquote({ children, ...props }) {
+            // Support callouts via blockquote syntax: > [!TIP] text
+            const rawChild = Array.isArray(children) ? children[0] : children;
+            const raw = typeof rawChild === 'string' ? rawChild : '';
+            const match = raw.match(/^\s*\[!(NOTE|TIP|WARNING|INFO)\]\s*(.*)/i);
+            if (match) {
+              const kind = match[1].toLowerCase() as 'note' | 'tip' | 'warning' | 'info';
+              const body = match[2] || '';
+              return <Callout kind={kind}>{body}</Callout>;
+            }
+            return (
+              <blockquote {...props} className="border-l-2 border-gray-700 pl-4 text-gray-300">{children}</blockquote>
+            );
+          },
+          code({ className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '');
+            const codeText = String(children);
+            const isInline = !(className && className.includes('language-'));
+            if (isInline) return <code className={className} {...(props as any)}>{children}</code>;
+            return (
+              <pre className="relative group overflow-auto">
+                <button
+                  type="button"
+                  onClick={() => navigator.clipboard.writeText(codeText)}
+                  className="absolute top-2 right-2 text-xs px-2 py-1 rounded-md border border-gray-700 bg-black/50 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Copy code"
+                >
+                  Copy
+                </button>
+                <code className={className || ''} {...(props as any)}>
+                  {children}
+                </code>
+              </pre>
+            );
+          },
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </article>
+  );
+}
+
+

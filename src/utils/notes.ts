@@ -17,6 +17,12 @@ export type Note = NoteMeta & {
 
 const NOTES_DIR = path.join(process.cwd(), 'src', 'content', 'notes');
 
+function calculateReadingTime(text: string): string {
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.round(words / 200));
+  return `${minutes} min`;
+}
+
 export function getAllNoteSlugs(): string[] {
   if (!fs.existsSync(NOTES_DIR)) {
     return [];
@@ -42,7 +48,7 @@ export function getNoteBySlug(slug: string): Note | null {
     date: (data.date as string) || new Date().toISOString(),
     summary: data.summary as string | undefined,
     tags: (data.tags as string[]) || [],
-    readingTime: data.readingTime as string | undefined,
+    readingTime: (data.readingTime as string | undefined) || calculateReadingTime(content),
   };
 
   return { ...meta, content };
@@ -55,6 +61,20 @@ export function getAllNotes(): Note[] {
     .filter((n): n is Note => Boolean(n))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   return notes;
+}
+
+export function getRelatedNotes(currentSlug: string, limit: number = 3): Note[] {
+  const all = getAllNotes().filter((n) => n.slug !== currentSlug);
+  const current = getNoteBySlug(currentSlug);
+  if (!current) return all.slice(0, limit);
+  const currentTags = new Set((current.tags || []).map((t) => t.toLowerCase()));
+  const scored = all
+    .map((n) => {
+      const overlap = (n.tags || []).reduce((acc, t) => acc + (currentTags.has(t.toLowerCase()) ? 1 : 0), 0);
+      return { note: n, score: overlap };
+    })
+    .sort((a, b) => b.score - a.score || +new Date(b.note.date) - +new Date(a.note.date));
+  return scored.slice(0, limit).map((s) => s.note);
 }
 
 
