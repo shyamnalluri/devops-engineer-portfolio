@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import MobileMenu from './MobileMenu';
 import { usePathname } from 'next/navigation';
+import { useSectionNavigation } from '@/hooks/useSectionNavigation';
 
 type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT' | 'NOTES';
 
@@ -20,129 +21,10 @@ const navItems: Array<{ name: MenuIconKey; href: string }> = [
 
 const Navigation: React.FC = () => {
   const pathname = usePathname();
-  const [activeSection, setActiveSection] = useState(pathname === '/' ? 'home' : '');
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
-  const [targetSection, setTargetSection] = useState<string | null>(null);
-  const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);  useEffect(() => {
-    setIsLoaded(true);
-    // If we navigate away from home, clear section highlight
-    if (pathname !== '/' && activeSection !== '') {
-      setActiveSection('');
-    }
-      // Enhanced scroll spy with better navigation state management
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      // If we're currently navigating, only update to target section
-      if (isNavigating && targetSection) {
-        const targetEntry = entries.find(entry => entry.target.id === targetSection);
-        if (targetEntry && targetEntry.isIntersecting && targetEntry.intersectionRatio > 0.3) {
-          setActiveSection(targetSection);
-          setIsNavigating(false);
-          setTargetSection(null);
-        }
-        return;
-      }      // Normal scroll detection when not navigating
-      if (!isNavigating) {
-        let bestSectionId: string | null = null;
-        let maxScore = 0;
-
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const rect = entry.boundingClientRect;
-            const viewportHeight = window.innerHeight;
-            
-            // Calculate how much of the section is visible
-            const visibleTop = Math.max(0, -rect.top);
-            const visibleBottom = Math.min(rect.height, viewportHeight - rect.top);
-            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-            const visibilityRatio = visibleHeight / Math.min(rect.height, viewportHeight);
-            
-            // Enhanced scoring: prefer sections at the top and give more weight to visibility
-            let score = visibilityRatio;
-            
-            // Strong preference for sections starting near the top
-            if (rect.top <= 150 && rect.top >= -100) {
-              score += 0.5;
-            }
-            
-            // Additional bonus for sections that are prominently visible
-            if (visibilityRatio > 0.6) {
-              score += 0.3;
-            }
-            
-            if (score > maxScore) {
-              maxScore = score;
-              bestSectionId = entry.target.id;
-            }
-          }
-        });
-
-        // Update active section if we have a clear winner and we're not in a navigation state
-        if (bestSectionId && maxScore > 0.4) {
-          setActiveSection(bestSectionId);
-        }
-      }
-    };    const observer = new IntersectionObserver(observerCallback, {
-      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-      rootMargin: '-80px 0px -20% 0px' // More aggressive top margin to trigger earlier
-    });
-
-    // Observe all sections with a slight delay to ensure DOM is ready
-    setTimeout(() => {
-      const sections = document.querySelectorAll('section[id]');
-      sections.forEach((section) => observer.observe(section));
-    }, 100);
-
-    return () => {
-      observer.disconnect();
-      if (navigationTimeoutRef.current) {
-        clearTimeout(navigationTimeoutRef.current);
-      }
-    };
-  }, [isNavigating, targetSection, pathname]);
-  const handleNavClick = (href: string) => {
-    if (href.startsWith('#')) {
-      const targetId = href.replace('#', '');
-      
-      // Set navigation state to prevent highlighting intermediate sections
-      setIsNavigating(true);
-      setTargetSection(targetId);
-      setActiveSection(targetId); // Immediately update to target section
-      
-      // Clear any existing timeout
-      if (navigationTimeoutRef.current) {
-        clearTimeout(navigationTimeoutRef.current);
-      }
-      
-      // Scroll to the section
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
-        });
-          // Reset navigation state after scroll completes with multiple fallbacks
-        navigationTimeoutRef.current = setTimeout(() => {
-          setIsNavigating(false);
-          setTargetSection(null);
-        }, 1200); // Reduced timeout for better responsiveness
-        
-        // Additional safety timeout
-        setTimeout(() => {
-          if (isNavigating) {
-            setIsNavigating(false);
-            setTargetSection(null);
-          }
-        }, 2000);
-      }
-    }
-  };
-
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    handleNavClick(href);
-  };
+  const { activeSection, handleSectionLinkClick } = useSectionNavigation();
+  React.useEffect(() => setIsLoaded(true), []);
 
   return (
     <>      {/* Mobile Header - Visible on mobile/tablet */}
@@ -214,13 +96,7 @@ const Navigation: React.FC = () => {
                     href={item.href}
                     onClick={(e) => {
                       if (isSectionLink) {
-                        const targetHash = hash;
-                        const el = typeof document !== 'undefined' ? document.querySelector(targetHash) : null;
-                        if (el) {
-                          e.preventDefault();
-                          handleNavClick(targetHash);
-                        }
-                        // If element not on this page, allow normal navigation to '/#section'
+                        handleSectionLinkClick(e, item.href);
                       }
                     }}
                     className={`group block px-10 py-4 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus-ring ${
@@ -257,7 +133,7 @@ const Navigation: React.FC = () => {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         navItems={navItems}
-        scrollToSection={scrollToSection}
+        scrollToSection={(e, href) => handleSectionLinkClick(e, href)}
       />
     </>
   );

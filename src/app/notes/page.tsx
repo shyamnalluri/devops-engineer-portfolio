@@ -27,9 +27,9 @@ export default function NotesIndexPage() {
   const lower = (arr?: string[]) => (arr || []).map((t) => t.toLowerCase());
 
   const notesByCategory = CATEGORIES.map((cat) => {
-    if (cat.key === 'other') {
+    if (cat.key === 'Other') {
       const used = new Set<string>();
-      CATEGORIES.filter((c) => c.key !== 'other').forEach((c) => {
+      CATEGORIES.filter((c) => c.key !== 'Other').forEach((c) => {
         notes.forEach((n) => {
           if (lower(n.tags).some((t) => c.tags.includes(t))) used.add(n.slug);
         });

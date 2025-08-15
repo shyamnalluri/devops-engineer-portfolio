@@ -1,4 +1,5 @@
 import { NextConfig } from "next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
 
 const nextConfig: NextConfig = {  output: 'export',  // Enable static exports
   basePath: process.env.NODE_ENV === "production" ? "/devops-engineer-portfolio" : "", // Repository name for GitHub Pages
@@ -29,4 +30,7 @@ const nextConfig: NextConfig = {  output: 'export',  // Enable static exports
   },
 };
 
-export default nextConfig;
+const analyze = process.env.ANALYZE === 'true';
+const withAnalyzer = withBundleAnalyzer({ enabled: analyze });
+
+export default withAnalyzer(nextConfig);

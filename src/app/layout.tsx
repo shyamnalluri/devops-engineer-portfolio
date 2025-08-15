@@ -5,6 +5,7 @@ import "./fonts.css";
 import Navigation from "./components/Navigation";
 import Script from "next/script";
 import ClientWrapper from "./components/ClientWrapper";
+import { siteUrl, ogImageUrl, gtagId, siteMeta } from "@/config/site";
 
 const inter = Inter({ subsets: ["latin"] });
 const dancingScript = Dancing_Script({ 
@@ -17,14 +18,7 @@ const oswald = Oswald({
   weight: ['400', '700']
 });
 
-// Environment-aware site URLs for dev vs prod (GitHub Pages)
-const isProd = process.env.NODE_ENV === 'production';
-const siteUrl = isProd
-  ? 'https://shyamnalluri.github.io/devops-engineer-portfolio'
-  : 'http://localhost:3000';
-const ogImageUrl = isProd
-  ? `${siteUrl}/images/profile.jpg`
-  : '/images/profile.jpg';
+// Centralized site configuration imported from src/config/site
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -36,18 +30,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Shyam Nalluri | DevOps Engineer",
-  description:
-    "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions. Expertise in AWS, Kubernetes, and CI/CD pipelines.",
-  keywords: [
-    "DevOps",
-    "Cloud Architecture",
-    "AWS",
-    "Kubernetes",
-    "CI/CD",
-    "Infrastructure as Code",
-    "Automation",
-  ],
+  title: siteMeta.title,
+  description: siteMeta.description,
+  keywords: siteMeta.keywords,
   authors: [{ name: "Shyam Nalluri" }],
   creator: "Shyam Nalluri",
   publisher: "Shyam Nalluri",
@@ -74,9 +59,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Shyam Nalluri - DevOps Engineer",
-    description:
-      "DevOps Engineer specializing in cloud infrastructure, automation, and scalable solutions.",
-    creator: "@shyamnalluri",
+    description: siteMeta.description,
+    creator: siteMeta.twitterCreator,
     images: [ogImageUrl],
   },
   verification: {
