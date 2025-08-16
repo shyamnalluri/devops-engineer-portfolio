@@ -19,7 +19,7 @@ export default function Markdown({ content }: { content: string }) {
       <ReactMarkdown
         rehypePlugins={[rehypeHighlight]}
         components={{
-          h2({ node, children, ...props }) {
+          h2({ children, ...props }) {
             const text = String(children);
             const id = slugify(text);
             return (
@@ -28,7 +28,7 @@ export default function Markdown({ content }: { content: string }) {
               </h2>
             );
           },
-          h3({ node, children, ...props }) {
+          h3({ children, ...props }) {
             const text = String(children);
             const id = slugify(text);
             return (
@@ -58,11 +58,11 @@ export default function Markdown({ content }: { content: string }) {
               <blockquote {...props} className="border-l-2 border-gray-700 pl-4 text-gray-300">{children}</blockquote>
             );
           },
-          code({ className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '');
+          code({ className, children, ...props }: { className?: string; children?: React.ReactNode }) {
+            // Keep regex for future use if needed
             const codeText = String(children);
             const isInline = !(className && className.includes('language-'));
-            if (isInline) return <code className={className} {...(props as any)}>{children}</code>;
+            if (isInline) return <code className={className} {...props}>{children}</code>;
             return (
               <pre className="relative group overflow-auto">
                 <button
@@ -73,7 +73,7 @@ export default function Markdown({ content }: { content: string }) {
                 >
                   Copy
                 </button>
-                <code className={className || ''} {...(props as any)}>
+                <code className={className || ''} {...props}>
                   {children}
                 </code>
               </pre>

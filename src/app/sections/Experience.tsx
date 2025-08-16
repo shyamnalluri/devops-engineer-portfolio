@@ -1,4 +1,5 @@
 'use client';
+ 
 
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
@@ -159,7 +160,7 @@ const InteractiveTimelineCard = ({ data, index, isActive, onClick }: {
 
 const Experience = () => {
   const [activeCard, setActiveCard] = useState<string | null>('senior-devops');
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: headerRef } = useScrollAnimation();
   const { ref: workRef, isVisible: workVisible } = useScrollAnimation();
   const { ref: educationRef, isVisible: educationVisible } = useScrollAnimation();
 
@@ -187,31 +188,20 @@ const Experience = () => {
   const allExperiences = experienceData;
 
   const workExperiences = allExperiences.filter(exp => exp.type === 'work');
-  const educationExperiences = allExperiences.filter(exp => exp.type === 'education');  return (
-    <section id="experience" className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden" role="region" aria-label="Experience and education timeline">
+  const educationExperiences = allExperiences.filter(exp => exp.type === 'education');
+  return (
+    <section id="experience" className="section-wrap" role="region" aria-label="Experience and education timeline">
 
-      <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Header - Mobile-first */}          <div 
-            ref={headerRef}
-            className={`text-center mb-2 sm:mb-4 md:mb-6 lg:mb-8 transition-all duration-800 ${
-              headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
-            }`}>            <div className="w-full flex flex-col items-center">
-              <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
-                headerVisible ? 'animate-hero-title' : ''
-              }`}>
-                Experience & Education
-              </h2>
-              {/* Full-width decorative underline */}
-              <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
-            </div>
-            <p className={`text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
-              headerVisible ? 'animate-hero-subtitle' : ''
-            }`}>
-              <span className="hidden sm:inline">A visual journey through my DevOps evolution</span>
-              <span className="block sm:inline text-amber-100 sm:text-orange-400 font-semibold mt-1 sm:mt-0"> Click timeline nodes to expand details</span>
-            </p>
-          </div>          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-20">
+      <div className="section-header" ref={headerRef}>
+        <h2 className="section-title">Experience & Education</h2>
+        <div className="section-divider"></div>
+        <p className="section-subtitle">
+          <span className="hidden sm:inline">A visual journey through my DevOps evolution.</span>
+          <span className="block sm:inline"> Click timeline nodes to expand details.</span>
+        </p>
+      </div>
+
+      <div className="mt-2 md:mt-4 grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 xl:gap-8">
             {/* Professional Experience - Mobile-first */}
             <div 
               ref={workRef}
@@ -220,7 +210,7 @@ const Experience = () => {
               }`}
               style={{ animationDelay: '200ms' }}
             >
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8 lg:mb-10 relative">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6 relative">
                 Professional Journey
                 <div className="absolute -bottom-3 sm:-bottom-4 left-0 w-20 sm:w-24 lg:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-scale-in" style={{ animationDelay: '400ms' }} />
                 <div className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-16 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-scale-in" style={{ animationDelay: '500ms' }} />
@@ -247,7 +237,7 @@ const Experience = () => {
               }`}
               style={{ animationDelay: '400ms' }}
             >
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8 lg:mb-10 relative">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6 relative">
                 Educational Foundation
                 <div className="absolute -bottom-3 sm:-bottom-4 left-0 w-20 sm:w-24 lg:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-scale-in" style={{ animationDelay: '600ms' }} />
                 <div className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-16 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-scale-in" style={{ animationDelay: '700ms' }} />
@@ -266,8 +256,6 @@ const Experience = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
     </section>
   );
 };

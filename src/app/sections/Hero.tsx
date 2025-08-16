@@ -27,18 +27,16 @@ const Hero = () => {
     const mql = window.matchMedia('(min-width: 1024px)');
     const update = () => setIsDesktop(mql.matches);
     update();
-    if (typeof mql.addEventListener === 'function') {
+    if (typeof (mql as MediaQueryList & { addEventListener?: (type: 'change', listener: (e: MediaQueryListEvent) => void) => void }).addEventListener === 'function') {
       mql.addEventListener('change', update);
     } else {
-      // @ts-ignore Safari fallback
-      mql.addListener(update);
+      (mql as MediaQueryList & { addListener: (listener: (e: MediaQueryListEvent) => void) => void }).addListener(update);
     }
     return () => {
-      if (typeof mql.removeEventListener === 'function') {
+      if (typeof (mql as MediaQueryList & { removeEventListener?: (type: 'change', listener: (e: MediaQueryListEvent) => void) => void }).removeEventListener === 'function') {
         mql.removeEventListener('change', update);
       } else {
-        // @ts-ignore Safari fallback
-        mql.removeListener(update);
+        (mql as MediaQueryList & { removeListener: (listener: (e: MediaQueryListEvent) => void) => void }).removeListener(update);
       }
     };
   }, []);
@@ -47,8 +45,7 @@ const Hero = () => {
   useEffect(() => {
     const idle = (cb: () => void) => {
       if ('requestIdleCallback' in window) {
-        // @ts-ignore
-        requestIdleCallback(cb, { timeout: 500 });
+        (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout?: number }) => void }).requestIdleCallback(cb, { timeout: 500 });
       } else {
         setTimeout(cb, 400);
       }
@@ -84,7 +81,7 @@ const Hero = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-7xl mx-auto">
             {/* Responsive layout with proper spacing to prevent overlap */}
-            <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-8 xl:gap-12 items-center justify-center min-h-screen py-12 sm:py-16 lg:py-8 xl:py-0">
+            <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-8 xl:gap-12 items-center justify-center min-h-screen py-6 sm:py-8 lg:py-4 xl:py-0">
               
               {/* Terminal component - dynamically loaded on desktop only */}
               {isDesktop && (
@@ -183,8 +180,8 @@ const Hero = () => {
                   {/* Primary CTA - full width on mobile */}
                   <button
                     onClick={() => {
-                      if (typeof window !== 'undefined' && (window as any).gtag) {
-                        (window as any).gtag('event', 'click_hire_me', { section: 'hero' });
+                      if (typeof window !== 'undefined' && window.gtag) {
+                        window.gtag('event', 'click_hire_me', { section: 'hero' });
                       }
                       const contactSection = document.getElementById('contact');
                       if (contactSection) {
@@ -217,8 +214,8 @@ const Hero = () => {
                   <div className="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">
                     <button
                       onClick={() => {
-                        if (typeof window !== 'undefined' && (window as any).gtag) {
-                          (window as any).gtag('event', 'click_resume', { section: 'hero' });
+                        if (typeof window !== 'undefined' && window.gtag) {
+                          window.gtag('event', 'click_resume', { section: 'hero' });
                         }
                         window.open('/Shyam_Nalluri_Resume.pdf', '_blank', 'noopener,noreferrer');
                       }}
@@ -234,8 +231,8 @@ const Hero = () => {
 
                     <button
                       onClick={() => {
-                        if (typeof window !== 'undefined' && (window as any).gtag) {
-                          (window as any).gtag('event', 'click_learn_more', { section: 'hero' });
+                        if (typeof window !== 'undefined' && window.gtag) {
+                          window.gtag('event', 'click_learn_more', { section: 'hero' });
                         }
                         const aboutSection = document.getElementById('about');
                         if (aboutSection) {

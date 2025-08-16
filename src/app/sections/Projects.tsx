@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FaGithub } from 'react-icons/fa';
-import ProjectModal from '../components/ProjectModal';
+import dynamic from 'next/dynamic';
 import { useScrollAnimation, useCardAnimation } from '../../hooks/useScrollAnimation';
 import { projectsData, ProjectItem as Project } from '../../data/projects';
+
+const ProjectModal = dynamic(() => import('../components/ProjectModal'), { ssr: false });
 
 const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
   const { cardRef } = useCardAnimation();
@@ -82,7 +83,9 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
             onClick={(e) => e.stopPropagation()}
             aria-label={`View ${project.title} on GitHub`}
           >
-            <FaGithub className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.73.5.98 5.24.98 11.52c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.52 0-.26-.01-1.12-.02-2.03-3.06.66-3.71-1.29-3.71-1.29-.5-1.27-1.22-1.61-1.22-1.61-.99-.68.08-.66.08-.66 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.55 1.18 3.18.9.1-.71.38-1.18.69-1.45-2.45-.28-5.02-1.22-5.02-5.44 0-1.2.43-2.17 1.13-2.94-.11-.28-.49-1.41.11-2.93 0 0 .93-.3 3.06 1.12.89-.25 1.84-.38 2.78-.38.94 0 1.89.13 2.78.38 2.13-1.42 3.06-1.12 3.06-1.12.6 1.52.22 2.65.11 2.93.7.77 1.13 1.74 1.13 2.94 0 4.23-2.58 5.15-5.04 5.43.39.34.74 1.01.74 2.04 0 1.47-.01 2.65-.01 3.01 0 .28.19.62.76.51 4.36-1.46 7.5-5.57 7.5-10.43C23.02 5.24 18.27.5 12 .5z"/>
+            </svg>
           </a>
         )}
       </div>
@@ -202,27 +205,20 @@ const Projects = () => {
   return (
     <section 
       id="projects" 
-      className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
+      className="relative overflow-hidden"
       ref={sectionRef}
       role="region"
       aria-label="Recent projects and case studies"
     >
-      <div className="mobile-container sm:container mx-auto px-4 relative z-10 will-change-transform">
+      <div className="section-wrap relative z-10 will-change-transform">
         {/* Section Header */}
-          <div className="text-center mb-2 sm:mb-4 md:mb-6 opacity-100 animate-in will-change-transform">
-          <div className="w-full flex flex-col items-center">
-            <h2 className="text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 animate-hero-title">
-              Recent Projects
-            </h2>
-            {/* Full-width decorative underline */}
-            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
-          </div>
-          <p className="hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 animate-hero-subtitle">
-            Infrastructure solutions, automation pipelines, and DevOps implementations
-          </p>
+          <div className="section-header opacity-100 animate-in will-change-transform">
+            <h2 className="section-title">Recent Projects</h2>
+            <div className="section-divider" />
+            <p className="section-subtitle">Infrastructure solutions, automation pipelines, and DevOps implementations</p>
           
           {/* Mobile-first category filters */}
-          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-2 sm:mb-4 md:mb-6 mt-4 sm:mt-6">
+          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-2 mt-2">
             <div className="flex gap-2 sm:gap-3 px-4 sm:px-0 sm:justify-center min-w-max sm:min-w-0">
               {categories.map((category, index) => (
                 <button

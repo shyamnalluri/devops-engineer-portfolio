@@ -1,5 +1,6 @@
 // Icon mapping utility for dynamic icon rendering
 import React from 'react';
+// NOTE: These imports remain for skills icon mapping.
 import { 
   FaDocker, 
   FaAws, 

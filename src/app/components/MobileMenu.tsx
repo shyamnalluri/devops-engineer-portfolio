@@ -215,10 +215,7 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                         const isSection = item.href.includes('#');
                         if (isSection) {
                           const hash = item.href.substring(item.href.indexOf('#'));
-                          const el = typeof document !== 'undefined' ? document.querySelector(hash) : null;
-                          if (el) {
-                            scrollToSection(e, hash);
-                          }
+                          scrollToSection(e, hash);
                           // else allow normal navigation to '/#section'
                         }
                         onClose();

@@ -90,7 +90,7 @@ body {
 
 /* Offset anchored sections so fixed headers don't cover titles */
 section[id] {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 32px;
 }
 
 /* Mobile-First Container System */
@@ -101,6 +101,27 @@ section[id] {
   /* Mobile-first: Start with minimal padding for 320px+ screens */
   padding-left: max(16px, var(--safe-area-inset-left));
   padding-right: max(16px, var(--safe-area-inset-right));
+}
+
+/* Section header utilities (unified hierarchy) */
+.section-wrap {
+  @apply max-w-[1200px] mx-auto px-4 sm:px-6 pt-3 md:pt-4 pb-9 md:pb-10;
+}
+
+.section-header {
+  @apply text-center mb-4 md:mb-5;
+}
+
+.section-title {
+  @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-white text-center;
+}
+
+.section-subtitle {
+  @apply text-gray-300 text-center max-w-3xl mx-auto leading-relaxed mt-3 md:mt-4;
+}
+
+.section-divider {
+  @apply mx-auto mt-1 md:mt-2 h-px w-24 md:w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded;
 }
 
 /* Mobile-first responsive breakpoints */

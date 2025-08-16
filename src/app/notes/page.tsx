@@ -42,9 +42,10 @@ export default function NotesIndexPage() {
 
   return (
     <main className="min-h-screen bg-black text-white px-6 py-24">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Technical Notes</h1>
-        <p className="text-gray-400 mb-10">Browse by topic. Expand a section to see related notes.</p>
+      <div className="section-wrap">
+        <h1 className="section-title">Technical Notes</h1>
+        <div className="section-divider" />
+        <p className="section-subtitle mt-4 mb-10">Browse by topic. Expand a section to see related notes.</p>
 
         <div className="space-y-4">
           {notesByCategory.map((cat) => (

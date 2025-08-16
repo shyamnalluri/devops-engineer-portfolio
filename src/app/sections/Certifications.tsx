@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { certificationsData } from '../../data/certifications';
-import { FaExternalLinkAlt, FaCertificate, FaShieldAlt } from 'react-icons/fa';
 
 const Certifications = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -79,34 +78,22 @@ const Certifications = () => {
 
   return (<section 
       id="certifications" 
-      className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden"
+      className="relative overflow-hidden"
       role="region"
       aria-label="Professional certifications"
     >
       
-      <div className="mobile-container sm:container mx-auto px-4 relative z-10">
+      <div className="section-wrap relative z-10">
         {/* Section Header */}        <div
           ref={headerRef}
-          className={`text-center mb-2 sm:mb-4 md:mb-6 transition-all duration-800 ${
+          className={`section-header transition-all duration-800 ${
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}
         >
-          <div className="w-full flex flex-col items-center">
-            <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
-              headerVisible ? 'animate-hero-title' : ''
-            }`}>
-              Professional Certifications
-            </h2>
-            {/* Full-width decorative underline */}
-            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
-          </div>
-          <p className={`hidden sm:block text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
-            headerVisible ? 'animate-hero-subtitle' : ''
-          }`}>
-            Industry-recognized credentials validating expertise in cloud architecture,
-            DevOps practices, and infrastructure management
-          </p>        </div>        {/* Category Navigation */}
-        <div className="mb-6 sm:mb-8">
+          <h2 className="section-title">Professional Certifications</h2>
+          <div className="section-divider" />
+          <p className="section-subtitle">Industry-recognized credentials validating expertise in cloud architecture, DevOps practices, and infrastructure management</p>        </div>        {/* Category Navigation */}
+        <div className="mb-3 sm:mb-4">
           <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
             {categories.map((category) => (
               <button
@@ -146,7 +133,9 @@ const Certifications = () => {
                       {/* Header with provider and level */}
                       <div className="flex items-center gap-2 mb-2">
                         <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium flex-shrink-0 ${getProviderStyling(cert.issuer).badge}`}>
-                          <FaShieldAlt className="mr-1 text-xs" />
+                          <svg className="mr-1 w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                          </svg>
                           {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
                            cert.issuer === 'Microsoft' ? 'Microsoft' :
                            cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
@@ -167,13 +156,17 @@ const Certifications = () => {
                           </div>
                         )}
                         {cert.issuer === 'Cloud Native Computing Foundation' && (
-                          <FaCertificate className="text-sm text-white" />
+                          <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                          </svg>
                         )}
                         {cert.issuer === 'HashiCorp' && (
                           <div className="text-sm font-bold text-white">HC</div>
                         )}
                         {cert.issuer === 'ISC2' && (
-                          <FaShieldAlt className="text-sm text-white" />
+                          <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                          </svg>
                         )}
                         {cert.issuer === 'Docker Inc' && (
                           <div className="text-sm font-bold text-white">🐳</div>
@@ -204,7 +197,10 @@ const Certifications = () => {
                         rel="noopener noreferrer"
                         className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
                       >
-                        <FaExternalLinkAlt className="text-xs" />
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/>
+                          <path d="M5 5h7v2H7v10h10v-5h2v7H5z"/>
+                        </svg>
                         Verify Credential
                       </a>
                     </div>
@@ -251,7 +247,9 @@ const Certifications = () => {
                           {/* Header with provider and level */}
                           <div className="flex items-center gap-2 mb-2">
                             <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium flex-shrink-0 ${getProviderStyling(cert.issuer).badge}`}>
-                              <FaShieldAlt className="mr-1 text-xs" />
+                              <svg className="mr-1 w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                                <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                              </svg>
                               {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
                                cert.issuer === 'Microsoft' ? 'Microsoft' :
                                cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
@@ -272,13 +270,17 @@ const Certifications = () => {
                               </div>
                             )}
                             {cert.issuer === 'Cloud Native Computing Foundation' && (
-                              <FaCertificate className="text-sm text-white" />
+                              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                              </svg>
                             )}
                             {cert.issuer === 'HashiCorp' && (
                               <div className="text-sm font-bold text-white">HC</div>
                             )}
                             {cert.issuer === 'ISC2' && (
-                              <FaShieldAlt className="text-sm text-white" />
+                              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                                <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                              </svg>
                             )}
                             {cert.issuer === 'Docker Inc' && (
                               <div className="text-sm font-bold text-white">🐳</div>
@@ -309,7 +311,10 @@ const Certifications = () => {
                             rel="noopener noreferrer"
                             className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
                           >
-                            <FaExternalLinkAlt className="text-xs" />
+                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/>
+                              <path d="M5 5h7v2H7v10h10v-5h2v7H5z"/>
+                            </svg>
                             Verify Credential
                           </a>
                         </div>
@@ -332,7 +337,9 @@ const Certifications = () => {
                       {/* Header with provider and level */}
                       <div className="flex items-center justify-between mb-2">
                         <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getProviderStyling(cert.issuer).badge}`}>
-                          <FaShieldAlt className="mr-1 text-xs" />
+                          <svg className="mr-1 w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                          </svg>
                           {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
                            cert.issuer === 'Microsoft' ? 'Microsoft' :
                            cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
@@ -353,13 +360,17 @@ const Certifications = () => {
                           </div>
                         )}
                         {cert.issuer === 'Cloud Native Computing Foundation' && (
-                          <FaCertificate className="text-sm sm:text-base text-white" />
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                          </svg>
                         )}
                         {cert.issuer === 'HashiCorp' && (
                           <div className="text-sm sm:text-base font-bold text-white">HC</div>
                         )}
                         {cert.issuer === 'ISC2' && (
-                          <FaShieldAlt className="text-sm sm:text-base text-white" />
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                          </svg>
                         )}
                         {cert.issuer === 'Docker Inc' && (
                           <div className="text-sm sm:text-base font-bold text-white">🐳</div>
@@ -390,7 +401,10 @@ const Certifications = () => {
                         rel="noopener noreferrer"
                         className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
                       >
-                        <FaExternalLinkAlt className="text-xs" />
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/>
+                          <path d="M5 5h7v2H7v10h10v-5h2v7H5z"/>
+                        </svg>
                         Verify Credential
                       </a>
                     </div>
@@ -437,7 +451,9 @@ const Certifications = () => {
                         <div className="p-4 h-full flex flex-col">
                           {/* Header with provider and level */}                          <div className="flex items-center justify-between mb-2">
                             <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getProviderStyling(cert.issuer).badge}`}>
-                              <FaShieldAlt className="mr-1 text-xs" />
+                              <svg className="mr-1 w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                                <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                              </svg>
                               {cert.issuer === 'Amazon Web Services' ? 'AWS' : 
                                cert.issuer === 'Microsoft' ? 'Microsoft' :
                                cert.issuer === 'Cloud Native Computing Foundation' ? 'CNCF' :
@@ -458,13 +474,17 @@ const Certifications = () => {
                               </div>
                             )}
                             {cert.issuer === 'Cloud Native Computing Foundation' && (
-                              <FaCertificate className="text-base text-white" />
+                              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                              </svg>
                             )}
                             {cert.issuer === 'HashiCorp' && (
                               <div className="text-base font-bold text-white">HC</div>
                             )}
                             {cert.issuer === 'ISC2' && (
-                              <FaShieldAlt className="text-base text-white" />
+                              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                                <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z" />
+                              </svg>
                             )}
                             {cert.issuer === 'Docker Inc' && (
                               <div className="text-base font-bold text-white">🐳</div>
@@ -495,7 +515,10 @@ const Certifications = () => {
                             rel="noopener noreferrer"
                             className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 w-full rounded text-xs font-medium transition-all duration-300 hover:scale-105 mt-auto ${getProviderStyling(cert.issuer).button}`}
                           >
-                            <FaExternalLinkAlt className="text-xs" />
+                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/>
+                              <path d="M5 5h7v2H7v10h10v-5h2v7H5z"/>
+                            </svg>
                             Verify Credential
                           </a>
                         </div>
@@ -511,7 +534,9 @@ const Certifications = () => {
         {/* Empty state */}
         {filteredCertifications.length === 0 && (
           <div className="text-center py-12">
-            <FaCertificate className="mx-auto text-4xl text-slate-600 mb-4" />
+            <svg className="mx-auto text-slate-600 mb-4" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
             <p className="text-slate-400">No certifications found in this category.</p>
           </div>
         )}

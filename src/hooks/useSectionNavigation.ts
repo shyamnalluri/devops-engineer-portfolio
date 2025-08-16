@@ -76,7 +76,7 @@ export function useSectionNavigation() {
 
     const observer = new IntersectionObserver(observerCallback, {
       threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-      rootMargin: '-80px 0px -20% 0px',
+      rootMargin: '-40px 0px -30% 0px',
     });
     observerRef.current = observer;
 
@@ -96,29 +96,69 @@ export function useSectionNavigation() {
 
   const handleSectionLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     const hash = extractHash(href);
-    if (!hash) return; // Not a section link
+    if (!hash) return;
 
+    e.preventDefault();
+    if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
     const targetId = hash.replace('#', '');
     setIsNavigating(true);
     setTargetSection(targetId);
     setActiveSection(targetId);
 
-    const element = typeof document !== 'undefined' ? document.querySelector(hash) : null;
-    if (element) {
-      e.preventDefault();
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      navigationTimeoutRef.current = setTimeout(() => {
-        setIsNavigating(false);
-        setTargetSection(null);
-      }, 1200);
-
-      setTimeout(() => {
-        if (isNavigating) {
-          setIsNavigating(false);
-          setTargetSection(null);
+    const pushHash = () => {
+      if (typeof window !== 'undefined') {
+        const url = href.startsWith('/') ? href : `/${href}`;
+        if (window.location.hash !== hash) {
+          window.location.hash = hash;
+        } else if (window.history?.replaceState) {
+          // ensure proper hash without adding history entries
+          window.history.replaceState({}, '', url);
         }
-      }, 2000);
-    }
+      }
+    };
+
+    let attempts = 0;
+    const maxAttempts = 10;
+    const tryScroll = () => {
+      attempts += 1;
+      const element = document.getElementById(targetId);
+      if (element) {
+        // If wrapped in a content-visibility container, temporarily reveal it
+        const wrapper = (element.closest?.('.cv-auto') || null) as HTMLElement | null;
+        if (wrapper) {
+          wrapper.style.contentVisibility = 'visible';
+          wrapper.style.containIntrinsicSize = 'auto';
+        }
+        const measureAndScroll = () => {
+          // Use native smooth scrolling with CSS scroll-margin-top to handle offset
+          try {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } catch {
+            // Fallback
+            const rect = element.getBoundingClientRect();
+            const currentY = window.scrollY || window.pageYOffset;
+            const offset = 32;
+            const targetY = Math.max(0, currentY + rect.top - offset);
+            window.scrollTo({ top: targetY, behavior: 'smooth' });
+          }
+          pushHash();
+          navigationTimeoutRef.current = setTimeout(() => {
+            setIsNavigating(false);
+            setTargetSection(null);
+          }, 700);
+        };
+        // Wait one frame to ensure wrapper style takes effect
+        requestAnimationFrame(measureAndScroll);
+      } else if (attempts < maxAttempts) {
+        // Wait for section to mount/layout, then retry
+        setTimeout(tryScroll, 40);
+      } else {
+        // Fallback: jump to hash
+        window.location.href = href;
+      }
+    };
+    // Defer slightly to allow layout/paint before measuring
+    setTimeout(tryScroll, 20);
   };
 
   return {

@@ -1,12 +1,14 @@
 import { notFound } from 'next/navigation';
 import { getAllNoteSlugs, getNoteBySlug } from '@/utils/notes';
 import Markdown from '../Markdown';
-import TOC from './TOC';
-import Related from './Related';
+import dynamic from 'next/dynamic';
 import { getRelatedNotes } from '@/utils/notes';
-import Share from './Share';
 import ReadingProgress from './ReadingProgress';
 import Link from 'next/link';
+
+const TOC = dynamic(() => import('./TOC'), { loading: () => null });
+const Related = dynamic(() => import('./Related'), { loading: () => null });
+const Share = dynamic(() => import('./Share'), { loading: () => null });
 
 export function generateStaticParams() {
   const slugs = getAllNoteSlugs();
@@ -31,6 +33,18 @@ export default async function NotePage({ params }: { params: Promise<{ slug: str
 
   return (
     <main className="min-h-screen bg-black text-white px-6 py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: note.title,
+            datePublished: new Date(note.date).toISOString(),
+            author: { '@type': 'Person', name: 'Shyam Nalluri' },
+          }),
+        }}
+      />
       <ReadingProgress />
       <div className="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px] gap-12">
         <div>

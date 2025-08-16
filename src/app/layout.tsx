@@ -5,7 +5,8 @@ import "./fonts.css";
 import Navigation from "./components/Navigation";
 import Script from "next/script";
 import ClientWrapper from "./components/ClientWrapper";
-import { siteUrl, ogImageUrl, gtagId, siteMeta } from "@/config/site";
+import WebVitals from "./components/WebVitals";
+import { siteUrl, ogImageUrl, siteMeta } from "@/config/site";
 
 const inter = Inter({ subsets: ["latin"] });
 const dancingScript = Dancing_Script({ 
@@ -76,7 +77,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gtagId = process.env.NEXT_PUBLIC_GTAG_ID;
+  const gtagId: string | undefined = process.env.NEXT_PUBLIC_GTAG_ID;
   return (
     <html lang="en" className="scroll-smooth overscroll-none">      
     <body
@@ -100,7 +101,7 @@ export default function RootLayout({
           className="fixed top-2 left-2 z-[100] -translate-y-16 focus:translate-y-0 transition transform bg-orange-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-white"
         >
           Skip to content
-        </a><ClientWrapper>
+        </a>{gtagId ? <WebVitals /> : null}<ClientWrapper>
           <div className="overflow-x-hidden w-full">
             <Navigation />              {/* Mobile-first main content with responsive margin */}
             <main id="main" tabIndex={-1} className="relative z-10 lg:ml-[214px] focus:outline-none">

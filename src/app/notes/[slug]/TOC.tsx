@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function TOC() {
   const [heads, setHeads] = useState<Array<{ id: string; text: string; level: number }>>([]);

@@ -45,6 +45,22 @@ const Footer = dynamic(() => import("./components/Footer"), {
 export default function Home() {
   return (
     <ClientWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Person',
+            name: 'Shyam Nalluri',
+            jobTitle: 'DevOps Engineer',
+            url: 'https://shyamnalluri.github.io/devops-engineer-portfolio',
+            sameAs: [
+              'https://www.linkedin.com/in/shyam-kumar',
+              'https://github.com/shyam-kumar',
+            ],
+          }),
+        }}
+      />
       <main className="bg-black text-white min-h-screen">        {/* All sections - Impact-First Order */}        
         <Hero />
         <div className="cv-auto"><About /></div>            

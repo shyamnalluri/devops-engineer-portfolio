@@ -1,9 +1,9 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaExternalLinkAlt, FaServer, FaCode, FaLightbulb, FaTimes } from 'react-icons/fa';
 import { ProjectItem as Project } from '../../data/projects';
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -18,7 +18,6 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        console.log('Escape key pressed, closing modal');
         onClose();
       }
     };
@@ -93,22 +92,34 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
   if (!project) return null;
 
-  const categoryIcons = {
-    Infrastructure: FaServer,
-    Automation: FaCode,
-    DevOps: FaLightbulb
+  const Icon = ({ name }: { name: 'Infrastructure' | 'Automation' | 'DevOps' }) => {
+    if (name === 'Infrastructure') {
+      return (
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+          <path d="M3 6h18v2H3V6zm2 4h14v2H5v-2zm-2 4h18v2H3v-2z" />
+        </svg>
+      );
+    }
+    if (name === 'Automation') {
+      return (
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+          <path d="M9.4 16.6L4 21l1.4-5.4L2 12l5.6-.6L9.4 6l1.8 5.4 5.6.6-3.4 3.6L14 21z" />
+        </svg>
+      );
+    }
+    return (
+      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+        <path d="M9 18l-6-6 6-6 2 2-4 4 4 4-2 2zm6 0l-2-2 4-4-4-4 2-2 6 6-6 6z" />
+      </svg>
+    );
   };
-
-  const Icon = categoryIcons[project.category];
   
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      console.log('Backdrop clicked, closing modal');
       onClose();
     }  
   };
-    const handleCloseClick = () => {
-    console.log('Close button clicked');
+  const handleCloseClick = () => {
     onClose();
   };
   return (
@@ -177,7 +188,9 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                   focus:outline-none focus:ring-2 focus:ring-orange-500/50 touch-button"
                 aria-label="Close modal"
               >
-                <FaTimes className="w-4 h-4 sm:w-5 sm:h-5" />
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" />
+                </svg>
               </button>
 
               {/* Mobile-first Header Section */}
@@ -186,7 +199,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
-                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
+                      <Icon name={project.category as 'Infrastructure' | 'Automation' | 'DevOps'} />
                       <span className="text-orange-400 text-xs sm:text-sm font-medium">{project.category}</span>
                     </div>
                     <h3 id={`project-modal-title-${project.id}`} className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
@@ -204,7 +217,10 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                           hover:bg-orange-500/10 rounded-full border border-orange-500/20
                           hover:border-orange-500/40 touch-button"
                       >
-                        <FaExternalLinkAlt className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/>
+                          <path d="M5 5h7v2H7v10h10v-5h2v7H5z"/>
+                        </svg>
                       </a>
                     )}
                   </div>
@@ -221,12 +237,16 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 {project.architectureImage && (
                   <div>
                     <h4 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">Architecture</h4>
-                    <img
-                      src={project.architectureImage}
-                      alt={`${project.title} architecture diagram`}
-                      className="w-full rounded-lg border border-gray-700/50 bg-gray-900"
-                      loading="lazy"
-                    />
+                    <div className="relative w-full h-64 sm:h-80 md:h-96">
+                      <Image
+                        src={project.architectureImage}
+                        alt={`${project.title} architecture diagram`}
+                        fill
+                        className="object-contain rounded-lg border border-gray-700/50 bg-gray-900"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 800px"
+                        priority={false}
+                      />
+                    </div>
                   </div>
                 )}
                 {/* Overview */}

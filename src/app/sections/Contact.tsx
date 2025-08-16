@@ -1,6 +1,6 @@
 'use client';
 
-import { FaQuoteLeft, FaPaperPlane, FaCheck } from 'react-icons/fa';
+ 
 import { useState, useEffect } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
@@ -19,7 +19,7 @@ const Contact = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
   
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: headerRef } = useScrollAnimation();
   const { ref: formRef, isVisible: formVisible } = useScrollAnimation();
   const { ref: testimonialsRef, isVisible: testimonialsVisible } = useScrollAnimation();
 
@@ -158,30 +158,16 @@ const Contact = () => {
   const isFormValid = formData.name.trim() && formData.email.trim() && formData.message.trim() && 
     Object.keys(fieldErrors).every(key => !fieldErrors[key]);
   return (
-    <section id="contact" className="py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden" role="region" aria-label="Contact and testimonials">
+    <section id="contact" className="section-wrap relative overflow-hidden" role="region" aria-label="Contact and testimonials">
 
-      <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Mobile-first Section Header */}        <div
-          ref={headerRef}
-          className={`text-center mb-2 sm:mb-4 md:mb-6 lg:mb-8 transition-all duration-800 ${
-            headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
-          }`}>          <div className="w-full flex flex-col items-center">
-            <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 ${
-              headerVisible ? 'animate-hero-title' : ''
-            }`}>
-              Let&apos;s Work Together
-            </h2>
-            {/* Full-width decorative underline */}
-            <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
-          </div>
-          <p className={`hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 ${
-            headerVisible ? 'animate-hero-subtitle' : ''
-          }`}>
-            Ready to bring your vision to life? Let&apos;s discuss how we can build something amazing together
-          </p>
+      <div className="relative z-10">
+        <div className="section-header" ref={headerRef}>
+          <h2 className="section-title">Let&apos;s Work Together</h2>
+          <div className="section-divider"></div>
+          <p className="section-subtitle hidden sm:block">Ready to bring your vision to life? Let&apos;s discuss how we can build something amazing together</p>
         </div>
           {/* Mobile-first Layout: Stack on mobile, side-by-side on larger screens */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 xl:gap-10 mb-6 sm:mb-8 lg:mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 xl:gap-8 mb-4 md:mb-6">
           {/* Contact Form - Mobile-first responsive width */}
           <div
             ref={formRef}
@@ -194,7 +180,9 @@ const Contact = () => {
               <div className={`flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 transition-all duration-600 ${
                 formVisible ? 'animate-fade-in' : 'opacity-0'
               }`} style={{ animationDelay: '400ms' }}>                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center transition-transform duration-300">
-                  <FaPaperPlane className="text-white text-xs sm:text-sm" />
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                  </svg>
                 </div><div>
                   <h3 className="text-lg sm:text-xl font-bold text-white">Send Message</h3>
                   <p className="text-xs sm:text-sm text-gray-400">Let&apos;s start the conversation</p>
@@ -205,7 +193,9 @@ const Contact = () => {
                   <div className="mb-2 p-2 bg-green-500/10 border border-green-500/30 rounded-lg animate-fade-in" role="status" aria-live="polite">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
-                        <FaCheck className="text-white text-xs" />
+                        <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.4-1.4z"/>
+                        </svg>
                       </div>
                       <div>
                         <p className="text-green-400 font-semibold text-xs">Message sent successfully!</p>
@@ -246,7 +236,9 @@ const Contact = () => {
                         />
                         {formData.name && !fieldErrors.name && (
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <FaCheck className="text-green-500 text-sm" />
+                            <svg className="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.4-1.4z"/>
+                            </svg>
                           </div>
                         )}
                       </div>
@@ -287,7 +279,9 @@ const Contact = () => {
                         />
                         {formData.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && !fieldErrors.email && (
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <FaCheck className="text-green-500 text-sm" />
+                            <svg className="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.4-1.4z"/>
+                            </svg>
                           </div>
                         )}
                       </div>
@@ -378,15 +372,19 @@ const Contact = () => {
                       ) : formStatus.submitted ? (
                         <>
                           <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
-                            <FaCheck className="text-white text-xs" />
+                            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.4-1.4z"/>
+                            </svg>
                           </div>
                           <span>Message Sent Successfully!</span>
                         </>
                       ) : (
                         <>
-                          <FaPaperPlane className={`text-sm transition-transform duration-300 ${
+                          <svg className={`w-3.5 h-3.5 transition-transform duration-300 ${
                             isFormValid ? 'group-hover:translate-x-1 group-hover:-translate-y-1' : ''
-                          }`} />
+                          }`} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                          </svg>
                           <span>Send Message</span>
                           {isFormValid && (
                             <div className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -425,7 +423,9 @@ const Contact = () => {
               <div className={`flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b border-gray-700/30 transition-all duration-600 ${
                 testimonialsVisible ? 'animate-fade-in' : 'opacity-0'
               }`} style={{ animationDelay: '600ms' }}>                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center transition-transform duration-300">
-                  <FaQuoteLeft className="text-white text-xs sm:text-sm" />
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d="M7 7h6v6H7zM3 3h6v6H3zM14 3h7v7h-7z" />
+                  </svg>
                 </div>
                 <div>
                   <h3 className="text-lg sm:text-xl font-bold text-white">Client Testimonials</h3>

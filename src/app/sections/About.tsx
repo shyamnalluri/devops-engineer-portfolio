@@ -1,38 +1,24 @@
 'use client';
+ 
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
 import { aboutData } from '../../data/about';
 
 const About = () => {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: headerRef } = useScrollAnimation();
   const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation();
-  const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });  return (
-    <section id="about" className="min-h-screen flex items-center py-2 sm:py-4 md:py-6 lg:py-8 relative overflow-hidden" role="region" aria-label="About me">
+  const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });
+  return (
+    <section id="about" className="section-wrap" role="region" aria-label="About me">
       
-      <div className="mobile-container sm:container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div 
-            ref={headerRef}
-            className={`transition-all duration-800 ${
-              headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
-            }`}          >            <div className="w-full flex flex-col items-center">
-              <h2 className={`text-mobile-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2 sm:mb-4 text-center ${
-                headerVisible ? 'animate-hero-title' : ''
-              }`}>
-                About Me
-              </h2>
-              {/* Full-width decorative underline */}
-              <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded-full mb-2 sm:mb-4"></div>
-            </div>
-            {/* Hide subtitle on mobile, show on sm and above */}
-            <p className={`hidden sm:block text-mobile-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-2 text-center ${
-              headerVisible ? 'animate-hero-subtitle' : ''
-            }`}>
-              Get to know the person behind the code
-            </p>
-          </div>          <div className="p-4 sm:p-6 lg:p-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">{/* Mobile Profile Image - Show on mobile first, hide on large screens */}
+      <div className="section-header" ref={headerRef}>
+        <h2 className="section-title">About Me</h2>
+        <div className="section-divider"></div>
+        <p className="section-subtitle hidden sm:block">Get to know the person behind the code</p>
+      </div>
+      <div className="mt-3 md:mt-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-7 items-center">{/* Mobile Profile Image - Show on mobile first, hide on large screens */}
               <div
                 ref={imageRef}
                 className={`relative lg:hidden mb-8 transition-all duration-1000 ${
@@ -110,7 +96,7 @@ const About = () => {
               </div>              {/* About Text Column - Mobile-first responsive */}
               <div
                 ref={textRef}
-                className={`space-y-4 sm:space-y-6 transition-all duration-800 ${
+                className={`space-y-4 sm:space-y-6 md:space-y-6 transition-all duration-800 ${
                   textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ animationDelay: '400ms' }}
@@ -126,7 +112,7 @@ const About = () => {
                     {aboutData.description[1]}
                   </p>
                 </div>{/* Dynamic stats from data - Mobile-first grid */}
-                <div className={`grid grid-cols-2 gap-3 sm:gap-4 mt-6 sm:mt-8 transition-all duration-800 ${
+                <div className={`grid grid-cols-2 gap-4 md:gap-6 mt-6 md:mt-8 transition-all duration-800 ${
                   textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`} style={{ animationDelay: '1000ms' }}>
                   {aboutData.stats.map((stat, index) => (
@@ -145,8 +131,6 @@ const About = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
     </section>
   );
 };
