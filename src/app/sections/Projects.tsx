@@ -72,7 +72,7 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
             <svg className="w-3 h-3 text-red-400 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 5l7 7-7 7" />
             </svg>
-            <span className="transition-colors duration-200 group-hover:text-red-400">View Details</span>
+            <span className="transition-colors duration-150 group-hover:text-red-400">View Details</span>
           </div>
         {project.githubUrl && (
           <a 
@@ -182,6 +182,10 @@ const Projects = () => {
 
   const openProjectModal = (project: Project) => {
     setSelectedProject(project);
+    setTimeout(() => {
+      const dialog = document.querySelector('[role="dialog"]') as HTMLElement | null;
+      dialog?.focus?.();
+    }, 50);
   };
   // Handle manual scroll to update current index
   const handleScroll = () => {

@@ -67,9 +67,9 @@ const Navigation: React.FC = () => {
       </header>
 
       {/* Desktop Sidebar - Hidden on mobile/tablet */}
-      <nav aria-label="Primary" className={`fixed inset-y-0 left-0 w-[214px] bg-black text-white flex-col z-50 hidden lg:flex transition-transform duration-500 ease-primary ${isLoaded ? 'translate-x-0' : '-translate-x-full'}`}>
+      <nav aria-label="Primary" className={`fixed inset-y-0 left-0 w-[180px] bg-black text-white flex-col z-50 hidden lg:flex ${isLoaded ? '' : ''}`}>
         {/* Logo Section with professional animation */}
-        <div className="px-6 py-8">
+        <div className="px-5 py-6">
           <div className={`text-3xl font-bold text-white transition-all duration-800 ease-spring ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} aria-label="Site logo">
             SN
           </div>
@@ -77,7 +77,7 @@ const Navigation: React.FC = () => {
 
         {/* Menu Links with staggered animations */}
         <div className="flex-1 flex flex-col">
-          <ul className="flex flex-col py-8">
+          <ul className="flex flex-col py-6">
             {navItems.map((item, index) => {
               const isSectionLink = item.href.includes('#');
               const hash = isSectionLink ? item.href.substring(item.href.indexOf('#')) : '';
@@ -99,21 +99,21 @@ const Navigation: React.FC = () => {
                         handleSectionLinkClick(e, hash);
                       }
                     }}
-                    className={`group block px-10 py-4 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus-ring ${
+                    className={`group block px-8 py-3.5 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus-ring ${
                       isActive
-                        ? 'border-l-2 border-orange-500 text-orange-500 font-medium'
-                        : 'border-l-2 border-transparent hover:border-gray-700 hover:text-orange-500'
+                        ? 'border-l border-orange-500/80 text-orange-400 font-medium'
+                        : 'border-l border-transparent hover:border-gray-700 hover:text-orange-400'
                     }`}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     <span className="relative z-10">{item.name}</span>
                     {/* Active indicator animation */}
-                    <div className={`absolute left-0 top-0 w-0.5 h-full bg-orange-500 transition-all duration-300 ease-primary ${isActive ? 'opacity-100' : 'opacity-0'}`}></div>
+                    <div className={`absolute left-0 top-0 w-0.5 h-full bg-orange-500/80 transition-all duration-300 ease-primary ${isActive ? 'opacity-100' : 'opacity-0'}`}></div>
                     {/* Hover background effect */}
                     <div className="absolute inset-0 bg-orange-500/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-primary origin-left"></div>
                     {/* Subtle glow effect on active */}
                     {isActive && (
-                      <div className="absolute left-0 top-0 w-1 h-full bg-orange-500 shadow-lg shadow-orange-500/50 animate-glow"></div>
+                      <div className="absolute left-0 top-0 w-0.5 h-full bg-orange-500/60 shadow-[0_0_8px_rgba(249,115,22,0.35)]"></div>
                     )}
                   </Link>
                 </li>
@@ -122,7 +122,7 @@ const Navigation: React.FC = () => {
         </div>
 
         {/* Footer with fade-in animation */}
-        <div className={`px-6 pb-4 text-xs text-gray-500 mt-auto transition-all duration-800 ease-primary ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '600ms' }}>
+        <div className={`px-5 pb-4 text-xs text-gray-500 mt-auto`}>
           <p>Copyright ©2025 Shyam</p>
           <p className="mt-1">Nalluri. All right reserved.</p>
         </div>

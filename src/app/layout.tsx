@@ -104,7 +104,7 @@ export default function RootLayout({
         </a>{gtagId ? <WebVitals /> : null}<ClientWrapper>
           <div className="overflow-x-hidden w-full">
             <Navigation />              {/* Mobile-first main content with responsive margin */}
-            <main id="main" tabIndex={-1} className="relative z-10 lg:ml-[214px] focus:outline-none">
+            <main id="main" tabIndex={-1} className="relative z-10 lg:ml-[180px] focus:outline-none">
               {children}
             </main>
           </div>
