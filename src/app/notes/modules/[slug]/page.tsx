@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getAllModuleSlugs, getModuleBySlug } from '@/utils/notes';
+import CopyButton from '../CopyButton';
 
 export function generateStaticParams() {
   const slugs = getAllModuleSlugs();
@@ -41,18 +42,10 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
             <h2>Usage</h2>
             <p className="text-sm text-gray-400 -mt-2">Copy the minimal usage block below.</p>
             <pre className="relative group overflow-auto border border-gray-700/60 rounded-md bg-black/40">
-              <button
-                type="button"
-                onClick={() =>
-                  navigator.clipboard.writeText(
-                    `module \"${mod.slug}\" {\n  source = \"./modules/${mod.slug}\"\n}`
-                  )
-                }
+              <CopyButton
+                text={`module \"${mod.slug}\" {\n  source = \"./modules/${mod.slug}\"\n}`}
                 className="absolute top-2 right-2 text-xs px-2 py-1 rounded-md border border-gray-700 bg-black/50 text-gray-300"
-                aria-label="Copy code"
-              >
-                Copy
-              </button>
+              />
               <code style={{ fontSize: '14px', lineHeight: 1.5 }}>{`module "${mod.slug}" {
   source = "./modules/${mod.slug}"
 }`}</code>

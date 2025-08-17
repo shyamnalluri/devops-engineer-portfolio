@@ -40,18 +40,18 @@ export default function ModulesIndexPage() {
 
         {/* Tabs: Notes / Modules */}
         <div className="mt-5 mb-2 flex items-center justify-center gap-2">
-          <a
+          <Link
             href="/notes"
             className="px-4 py-2 rounded-full text-sm font-medium bg-gray-800/60 text-gray-300 hover:bg-gray-700/60 hover:text-white border border-gray-700/50"
           >
             Notes
-          </a>
-          <a
+          </Link>
+          <Link
             href="/notes/modules"
             className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-red-600/20"
           >
             Modules
-          </a>
+          </Link>
         </div>
 
         {/* Filters */}
@@ -75,9 +75,9 @@ export default function ModulesIndexPage() {
             ))}
           </select>
           {(q || cloud !== 'all') && (
-            <a href="/notes/modules" className="text-xs text-gray-400 hover:text-gray-200">
+            <Link href="/notes/modules" className="text-xs text-gray-400 hover:text-gray-200">
               Reset
-            </a>
+            </Link>
           )}
         </form>
 

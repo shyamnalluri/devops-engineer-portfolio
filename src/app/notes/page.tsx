@@ -75,18 +75,18 @@ export default function NotesIndexPage() {
 
         {/* Tabs: Notes / Modules */}
         <div className="mt-5 mb-2 flex items-center justify-center gap-2">
-          <a
+          <Link
             href="/notes"
             className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-red-600/20"
           >
             Notes
-          </a>
-          <a
+          </Link>
+          <Link
             href="/notes/modules"
             className="px-4 py-2 rounded-full text-sm font-medium bg-gray-800/60 text-gray-300 hover:bg-gray-700/60 hover:text-white border border-gray-700/50"
           >
             Modules
-          </a>
+          </Link>
         </div>
 
         {/* Search bar */}
@@ -100,9 +100,9 @@ export default function NotesIndexPage() {
               className="w-full max-w-md bg-gray-900/70 border border-gray-700/60 rounded-full px-4 py-2 text-sm text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
             />
             {q && (
-              <a href="/notes" className="text-xs text-gray-400 hover:text-gray-200">
+              <Link href="/notes" className="text-xs text-gray-400 hover:text-gray-200">
                 Clear
-              </a>
+              </Link>
             )}
           </div>
         </form>
