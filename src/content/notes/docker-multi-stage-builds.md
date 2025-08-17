@@ -29,5 +29,3 @@ Tips:
 - Pin base images by digest
 - Use `npm ci` for reproducibility
 - Switch to non-root user
-
-

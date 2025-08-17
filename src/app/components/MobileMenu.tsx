@@ -38,7 +38,7 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
             id: item.href.substring(1),
             top: rect.top,
             bottom: rect.bottom,
-            height: rect.height
+            height: rect.height,
           });
         }
         return acc;
@@ -122,8 +122,9 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
         'select',
         '[tabindex]:not([tabindex="-1"])',
       ].join(',');
-      return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors))
-        .filter(el => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden'));
+      return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors)).filter(
+        (el) => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden')
+      );
     };
 
     // Focus the first focusable element inside the panel
@@ -198,7 +199,12 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                 aria-label="Close menu"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
               {/* Navigation Items */}

@@ -6,11 +6,7 @@ type WebVitalPayload = Pick<Metric, 'name' | 'value' | 'id'>;
 
 declare global {
   interface Window {
-    gtag?: (
-      type: 'event',
-      eventName: string,
-      params?: Record<string, unknown>
-    ) => void;
+    gtag?: (type: 'event', eventName: string, params?: Record<string, unknown>) => void;
   }
 }
 
@@ -38,5 +34,3 @@ export default function WebVitals() {
   }
   return null;
 }
-
-

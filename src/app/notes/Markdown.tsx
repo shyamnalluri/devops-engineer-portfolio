@@ -55,14 +55,28 @@ export default function Markdown({ content }: { content: string }) {
               return <Callout kind={kind}>{body}</Callout>;
             }
             return (
-              <blockquote {...props} className="border-l-2 border-gray-700 pl-4 text-gray-300">{children}</blockquote>
+              <blockquote {...props} className="border-l-2 border-gray-700 pl-4 text-gray-300">
+                {children}
+              </blockquote>
             );
           },
-          code({ className, children, ...props }: { className?: string; children?: React.ReactNode }) {
+          code({
+            className,
+            children,
+            ...props
+          }: {
+            className?: string;
+            children?: React.ReactNode;
+          }) {
             // Keep regex for future use if needed
             const codeText = String(children);
             const isInline = !(className && className.includes('language-'));
-            if (isInline) return <code className={className} {...props}>{children}</code>;
+            if (isInline)
+              return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
             return (
               <pre className="relative group overflow-auto border border-gray-700/60 rounded-md bg-black/40">
                 <button
@@ -73,7 +87,11 @@ export default function Markdown({ content }: { content: string }) {
                 >
                   Copy
                 </button>
-                <code className={className || ''} {...props} style={{ fontSize: '14px', lineHeight: 1.5 }}>
+                <code
+                  className={className || ''}
+                  {...props}
+                  style={{ fontSize: '14px', lineHeight: 1.5 }}
+                >
                   {children}
                 </code>
               </pre>
@@ -86,5 +104,3 @@ export default function Markdown({ content }: { content: string }) {
     </article>
   );
 }
-
-

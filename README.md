@@ -40,10 +40,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 This project integrates Google Analytics (gtag.js) conditionally in `src/app/layout.tsx`. It only loads when the environment variable `NEXT_PUBLIC_GTAG_ID` is set.
 
 ### 1) Create a GA4 property and get your Measurement ID
+
 - In Google Analytics, create a GA4 property and a Web data stream.
 - Copy the Measurement ID (format: `G-XXXXXXXXXX`).
 
 ### 2) Set the environment variable at build/deploy time
+
 Set `NEXT_PUBLIC_GTAG_ID` in your production environment. Examples:
 
 ```bash
@@ -60,12 +62,15 @@ echo "NEXT_PUBLIC_GTAG_ID=G-XXXXXXXXXX" > .env.local
 The app reads this variable at runtime and injects the GA script with Next.js `next/script` in `layout.tsx`.
 
 ### 3) Verify it works
+
 - Deploy with the env var set.
 - Open your site and check GA Realtime.
 - In DevTools → Network, you should see `https://www.googletagmanager.com/gtag/js?id=G-...` requested.
 
 ### 4) Custom events included
+
 We already track key CTA clicks from the Hero section. Events fire only when GA is present:
+
 - `click_hire_me`
 - `click_resume`
 - `click_learn_more`
@@ -79,4 +84,5 @@ if (typeof window !== 'undefined' && (window as any).gtag) {
 ```
 
 ### 5) Privacy and consent
+
 If you need consent management (GDPR/CCPA), gate the GA initialization behind your consent logic before calling `gtag('config', ...)`.

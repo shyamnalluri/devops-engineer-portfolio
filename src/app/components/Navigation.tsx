@@ -6,13 +6,21 @@ import MobileMenu from './MobileMenu';
 import { usePathname } from 'next/navigation';
 import { useSectionNavigation } from '@/hooks/useSectionNavigation';
 
-type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT' | 'NOTES';
+type MenuIconKey =
+  | 'HOME'
+  | 'ABOUT ME'
+  | 'SKILLS'
+  | 'PROJECTS'
+  | 'CERTIFICATIONS'
+  | 'EXPERIENCE'
+  | 'CONTACT'
+  | 'NOTES';
 
 const navItems: Array<{ name: MenuIconKey; href: string }> = [
   { name: 'HOME', href: '/#home' },
   { name: 'ABOUT ME', href: '/#about' },
-  { name: 'PROJECTS', href: '/#projects' },      // 🔥 Moved up in priority order
-  { name: 'SKILLS', href: '/#skills' },          // Now after projects
+  { name: 'PROJECTS', href: '/#projects' }, // 🔥 Moved up in priority order
+  { name: 'SKILLS', href: '/#skills' }, // Now after projects
   { name: 'EXPERIENCE', href: '/#experience' },
   { name: 'CERTIFICATIONS', href: '/#certifications' },
   { name: 'CONTACT', href: '/#contact' },
@@ -27,8 +35,12 @@ const Navigation: React.FC = () => {
   React.useEffect(() => setIsLoaded(true), []);
 
   return (
-    <>      {/* Mobile Header - Visible on mobile/tablet */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden transition-all duration-300 ease-primary bg-black/60 backdrop-blur-md will-change-transform">        <div className="container mx-auto">
+    <>
+      {' '}
+      {/* Mobile Header - Visible on mobile/tablet */}
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden transition-all duration-300 ease-primary bg-black/60 backdrop-blur-md will-change-transform">
+        {' '}
+        <div className="container mx-auto">
           <div className="flex items-center justify-start py-2 pl-2 pr-4 sm:pl-3 sm:pr-6">
             {/* Mobile menu toggle - moved further left */}
             <button
@@ -39,25 +51,19 @@ const Navigation: React.FC = () => {
             >
               {/* Hamburger lines with smooth animation */}
               <div className="w-5 h-5 flex flex-col justify-center items-center">
-                <span 
+                <span
                   className={`block h-0.5 w-5 bg-white transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen 
-                      ? 'rotate-45 translate-y-1' 
-                      : 'rotate-0 translate-y-0'
+                    isMobileMenuOpen ? 'rotate-45 translate-y-1' : 'rotate-0 translate-y-0'
                   }`}
                 />
-                <span 
+                <span
                   className={`block h-0.5 w-5 bg-white transition-all duration-300 ease-in-out mt-1 ${
-                    isMobileMenuOpen 
-                      ? 'opacity-0 scale-0' 
-                      : 'opacity-100 scale-100'
+                    isMobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
                   }`}
                 />
-                <span 
+                <span
                   className={`block h-0.5 w-5 bg-white transition-all duration-300 ease-in-out mt-1 ${
-                    isMobileMenuOpen 
-                      ? '-rotate-45 -translate-y-2' 
-                      : 'rotate-0 translate-y-0'
+                    isMobileMenuOpen ? '-rotate-45 -translate-y-2' : 'rotate-0 translate-y-0'
                   }`}
                 />
               </div>
@@ -65,12 +71,17 @@ const Navigation: React.FC = () => {
           </div>
         </div>
       </header>
-
       {/* Desktop Sidebar - Hidden on mobile/tablet */}
-      <nav aria-label="Primary" className={`fixed inset-y-0 left-0 w-[180px] bg-black text-white flex-col z-50 hidden lg:flex ${isLoaded ? '' : ''}`}>
+      <nav
+        aria-label="Primary"
+        className={`fixed inset-y-0 left-0 w-[180px] bg-black text-white flex-col z-50 hidden lg:flex ${isLoaded ? '' : ''}`}
+      >
         {/* Logo Section with professional animation */}
         <div className="px-5 py-6">
-          <div className={`text-3xl font-bold text-white transition-all duration-800 ease-spring ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} aria-label="Site logo">
+          <div
+            className={`text-3xl font-bold text-white transition-all duration-800 ease-spring ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            aria-label="Site logo"
+          >
             SN
           </div>
         </div>
@@ -85,10 +96,10 @@ const Navigation: React.FC = () => {
               const isPathActive = !isSectionLink && pathname.startsWith(item.href);
               const isActive = isSectionActive || isPathActive;
               const animationDelay = `${(index + 1) * 100}ms`;
-              
+
               return (
-                <li 
-                  key={item.name} 
+                <li
+                  key={item.name}
                   className={`block transition-all duration-300 ease-primary ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
                   style={{ transitionDelay: animationDelay }}
                 >
@@ -108,7 +119,9 @@ const Navigation: React.FC = () => {
                   >
                     <span className="relative z-10">{item.name}</span>
                     {/* Active indicator animation */}
-                    <div className={`absolute left-0 top-0 w-0.5 h-full bg-orange-500/80 transition-all duration-300 ease-primary ${isActive ? 'opacity-100' : 'opacity-0'}`}></div>
+                    <div
+                      className={`absolute left-0 top-0 w-0.5 h-full bg-orange-500/80 transition-all duration-300 ease-primary ${isActive ? 'opacity-100' : 'opacity-0'}`}
+                    ></div>
                     {/* Hover background effect */}
                     <div className="absolute inset-0 bg-orange-500/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-primary origin-left"></div>
                     {/* Subtle glow effect on active */}
@@ -118,7 +131,8 @@ const Navigation: React.FC = () => {
                   </Link>
                 </li>
               );
-            })}          </ul>
+            })}{' '}
+          </ul>
         </div>
 
         {/* Footer with fade-in animation */}
@@ -127,9 +141,8 @@ const Navigation: React.FC = () => {
           <p className="mt-1">Nalluri. All right reserved.</p>
         </div>
       </nav>
-
       {/* Mobile Menu Component */}
-      <MobileMenu 
+      <MobileMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         navItems={navItems}
@@ -138,4 +151,4 @@ const Navigation: React.FC = () => {
     </>
   );
 };
-                        export default Navigation;
+export default Navigation;

@@ -34,5 +34,3 @@ Route a small percentage to the new version first. Increase if healthy.
 - Use readiness/liveness probes
 - Automate rollback with SLO-based alerts
 - Record releases with annotations
-
-

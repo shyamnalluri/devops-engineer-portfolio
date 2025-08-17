@@ -4,9 +4,7 @@ export const siteUrl = isProd
   ? 'https://shyamnalluri.github.io/devops-engineer-portfolio'
   : 'http://localhost:3000';
 
-export const ogImageUrl = isProd
-  ? `${siteUrl}/images/profile.jpg`
-  : '/images/profile.jpg';
+export const ogImageUrl = isProd ? `${siteUrl}/images/profile.jpg` : '/images/profile.jpg';
 
 export const gtagId = process.env.NEXT_PUBLIC_GTAG_ID;
 
@@ -25,5 +23,3 @@ export const siteMeta = {
   ],
   twitterCreator: '@shyamnalluri',
 };
-
-

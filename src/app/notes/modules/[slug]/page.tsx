@@ -25,7 +25,9 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
   return (
     <main className="min-h-screen bg-black text-white px-6 py-24">
       <div className="section-wrap">
-        <Link href="/notes/modules" className="text-sm text-orange-400 hover:text-orange-300">← Back to modules</Link>
+        <Link href="/notes/modules" className="text-sm text-orange-400 hover:text-orange-300">
+          ← Back to modules
+        </Link>
         <h1 className="section-title mt-2">{mod.name}</h1>
         <div className="section-divider" />
         {mod.summary && <p className="section-subtitle mt-3 max-w-[75ch]">{mod.summary}</p>}
@@ -41,7 +43,11 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
             <pre className="relative group overflow-auto border border-gray-700/60 rounded-md bg-black/40">
               <button
                 type="button"
-                onClick={() => navigator.clipboard.writeText(`module \"${mod.slug}\" {\n  source = \"./modules/${mod.slug}\"\n}`)}
+                onClick={() =>
+                  navigator.clipboard.writeText(
+                    `module \"${mod.slug}\" {\n  source = \"./modules/${mod.slug}\"\n}`
+                  )
+                }
                 className="absolute top-2 right-2 text-xs px-2 py-1 rounded-md border border-gray-700 bg-black/50 text-gray-300"
                 aria-label="Copy code"
               >
@@ -57,7 +63,9 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
           <aside className="sticky top-24 h-fit space-y-4 text-sm">
             <div className="p-4 rounded-lg bg-gray-900/40 border border-gray-800">
               <div className="font-semibold text-gray-300 mb-2">Install</div>
-              <pre className="overflow-auto border border-gray-700/60 rounded-md bg-black/40 p-2 text-[12px]">terraform init</pre>
+              <pre className="overflow-auto border border-gray-700/60 rounded-md bg-black/40 p-2 text-[12px]">
+                terraform init
+              </pre>
             </div>
             <div className="p-4 rounded-lg bg-gray-900/40 border border-gray-800">
               <div className="font-semibold text-gray-300 mb-2">Details</div>
@@ -74,5 +82,3 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
     </main>
   );
 }
-
-

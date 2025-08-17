@@ -8,7 +8,11 @@ export default function TOC() {
 
   useEffect(() => {
     const hs = Array.from(document.querySelectorAll('h2, h3')) as HTMLHeadingElement[];
-    const mapped = hs.map((el) => ({ id: el.id, text: el.textContent || '', level: el.tagName === 'H2' ? 2 : 3 }));
+    const mapped = hs.map((el) => ({
+      id: el.id,
+      text: el.textContent || '',
+      level: el.tagName === 'H2' ? 2 : 3,
+    }));
     setHeads(mapped);
 
     const onScroll = () => {
@@ -27,7 +31,10 @@ export default function TOC() {
   if (heads.length === 0) return null;
 
   return (
-    <nav aria-label="Table of contents" className="hidden xl:block sticky top-24 h-[calc(100vh-6rem)] overflow-auto text-sm text-gray-400">
+    <nav
+      aria-label="Table of contents"
+      className="hidden xl:block sticky top-24 h-[calc(100vh-6rem)] overflow-auto text-sm text-gray-400"
+    >
       <div className="mb-2 text-xs font-semibold text-gray-300">On this page</div>
       <ul className="space-y-1">
         {heads.map((h) => (
@@ -44,5 +51,3 @@ export default function TOC() {
     </nav>
   );
 }
-
-

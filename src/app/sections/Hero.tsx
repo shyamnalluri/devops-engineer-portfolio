@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { LazyMotion, domAnimation, m as motion } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { personalInfo } from "../../data/portfolio";
+import { LazyMotion, domAnimation, m as motion } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { personalInfo } from '../../data/portfolio';
 
 // Desktop-only dynamic import to avoid shipping terminal to mobile bundles
-const LiveTerminalDesktop = dynamic(() => import("../components/LiveTerminal"), { ssr: false });
+const LiveTerminalDesktop = dynamic(() => import('../components/LiveTerminal'), { ssr: false });
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,7 +20,7 @@ const Hero = () => {
     if (prefersReducedMotion && containerRef.current) {
       // Apply alternative styles for users who prefer reduced motion
       const elements = containerRef.current.querySelectorAll('.animate-bounce, .animate-pulse');
-      elements.forEach(el => {
+      elements.forEach((el) => {
         (el as HTMLElement).style.animation = 'none';
       });
     }
@@ -28,16 +28,39 @@ const Hero = () => {
     const mql = window.matchMedia('(min-width: 1024px)');
     const update = () => setIsDesktop(mql.matches);
     update();
-    if (typeof (mql as MediaQueryList & { addEventListener?: (type: 'change', listener: (e: MediaQueryListEvent) => void) => void }).addEventListener === 'function') {
+    if (
+      typeof (
+        mql as MediaQueryList & {
+          addEventListener?: (type: 'change', listener: (e: MediaQueryListEvent) => void) => void;
+        }
+      ).addEventListener === 'function'
+    ) {
       mql.addEventListener('change', update);
     } else {
-      (mql as MediaQueryList & { addListener: (listener: (e: MediaQueryListEvent) => void) => void }).addListener(update);
+      (
+        mql as MediaQueryList & {
+          addListener: (listener: (e: MediaQueryListEvent) => void) => void;
+        }
+      ).addListener(update);
     }
     return () => {
-      if (typeof (mql as MediaQueryList & { removeEventListener?: (type: 'change', listener: (e: MediaQueryListEvent) => void) => void }).removeEventListener === 'function') {
+      if (
+        typeof (
+          mql as MediaQueryList & {
+            removeEventListener?: (
+              type: 'change',
+              listener: (e: MediaQueryListEvent) => void
+            ) => void;
+          }
+        ).removeEventListener === 'function'
+      ) {
         mql.removeEventListener('change', update);
       } else {
-        (mql as MediaQueryList & { removeListener: (listener: (e: MediaQueryListEvent) => void) => void }).removeListener(update);
+        (
+          mql as MediaQueryList & {
+            removeListener: (listener: (e: MediaQueryListEvent) => void) => void;
+          }
+        ).removeListener(update);
       }
     };
   }, []);
@@ -76,7 +99,6 @@ const Hero = () => {
           <div className="max-w-7xl mx-auto">
             {/* Responsive layout with proper spacing to prevent overlap */}
             <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-8 xl:gap-12 items-center justify-center min-h-[92vh] lg:min-h-[88vh] xl:min-h-[86vh] 2xl:min-h-[84vh] py-8 sm:py-8 lg:py-6 xl:py-6 pb-16">
-              
               {/* Terminal component - dynamically loaded on desktop only */}
               {isDesktop && (
                 <div className="hidden lg:flex justify-center lg:justify-start order-1 lg:order-1 w-full pt-6 xl:pt-10">
@@ -106,7 +128,7 @@ const Hero = () => {
                 </motion.p>
 
                 {/* Main name - responsive sizing for all screen sizes */}
-                <motion.h1 
+                <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.7 }}
@@ -116,7 +138,7 @@ const Hero = () => {
                 </motion.h1>
 
                 {/* Subtitle - responsive sizing */}
-                <motion.h2 
+                <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.9 }}
@@ -126,7 +148,7 @@ const Hero = () => {
                 </motion.h2>
 
                 {/* Description - responsive sizing */}
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 1.1 }}
@@ -137,7 +159,7 @@ const Hero = () => {
                 </motion.p>
 
                 {/* Action buttons - mobile-optimized sizing */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 1.3 }}
@@ -151,9 +173,9 @@ const Hero = () => {
                       }
                       const contactSection = document.getElementById('contact');
                       if (contactSection) {
-                        contactSection.scrollIntoView({ 
+                        contactSection.scrollIntoView({
                           behavior: 'smooth',
-                          block: 'start'
+                          block: 'start',
                         });
                       }
                     }}
@@ -191,7 +213,11 @@ const Hero = () => {
                     >
                       <span>Resume</span>
                       <svg className="ml-2 w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                        <path
+                          fillRule="evenodd"
+                          d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </button>
 
@@ -202,9 +228,9 @@ const Hero = () => {
                         }
                         const aboutSection = document.getElementById('about');
                         if (aboutSection) {
-                          aboutSection.scrollIntoView({ 
+                          aboutSection.scrollIntoView({
                             behavior: 'smooth',
-                            block: 'start'
+                            block: 'start',
                           });
                         }
                       }}
@@ -218,46 +244,60 @@ const Hero = () => {
                 </motion.div>
 
                 {/* Social icons - visible on mobile, hidden on large screens where terminal is shown */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 1.5 }}
                   className="flex justify-center lg:hidden gap-6 pt-6"
                 >
-                  <a 
+                  <a
                     href={personalInfo.socialLinks.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-orange-400 hover:bg-gray-700 transition-all duration-300 will-change-transform"
                     aria-label="GitHub Profile"
                   >
-                    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
                       <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.745.084-.729.084-.729 1.205.084 1.839 1.236 1.839 1.236 1.07 1.834 2.807 1.304 3.492.997.108-.776.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.93 0-1.31.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23 1.915-.532 3.965-.532 5.88 0 2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.874.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.804 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297 24 5.373 18.627.297 12 .297z" />
                     </svg>
                   </a>
-                  <a 
+                  <a
                     href={personalInfo.socialLinks.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-gray-700 transition-all duration-300 will-change-transform"
                     aria-label="LinkedIn Profile"
                   >
-                    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
                       <path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v12H0zM8 8h4.8v1.7h.07c.67-1.2 2.3-2.5 4.73-2.5 5.06 0 6 3.33 6 7.66V20H18v-6.2c0-1.48-.03-3.38-2.06-3.38-2.06 0-2.38 1.6-2.38 3.27V20H8z" />
                     </svg>
                   </a>
-                  <a 
+                  <a
                     href={`mailto:${personalInfo.email}`}
                     className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-gray-700 transition-all duration-300 will-change-transform"
                     aria-label="Email Contact"
                   >
-                    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
                       <path d="M2 5.75A2.75 2.75 0 014.75 3h14.5A2.75 2.75 0 0122 5.75v12.5A2.75 2.75 0 0119.25 21H4.75A2.75 2.75 0 012 18.25V5.75zm2.3.75l7.2 5.4c.3.23.7.23 1 0l7.2-5.4H4.3z" />
                     </svg>
                   </a>
                 </motion.div>
               </div>
-
             </div>
           </div>
         </div>

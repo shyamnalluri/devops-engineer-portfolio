@@ -30,7 +30,7 @@ export function useSectionNavigation() {
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       if (isNavigating && targetSection) {
-        const targetEntry = entries.find(entry => entry.target.id === targetSection);
+        const targetEntry = entries.find((entry) => entry.target.id === targetSection);
         if (targetEntry && targetEntry.isIntersecting && targetEntry.intersectionRatio > 0.3) {
           setActiveSection(targetSection);
           setIsNavigating(false);
@@ -43,7 +43,7 @@ export function useSectionNavigation() {
         let bestSectionId: string | null = null;
         let maxScore = 0;
 
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const rect = entry.boundingClientRect;
             const viewportHeight = window.innerHeight;
@@ -82,7 +82,7 @@ export function useSectionNavigation() {
 
     const timeoutId = setTimeout(() => {
       const sections = document.querySelectorAll('section[id]');
-      sections.forEach(section => observer.observe(section));
+      sections.forEach((section) => observer.observe(section));
     }, 100);
 
     return () => {
@@ -171,5 +171,3 @@ export function useSectionNavigation() {
     handleSectionLinkClick,
   };
 }
-
-

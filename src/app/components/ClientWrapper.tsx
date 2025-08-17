@@ -7,18 +7,26 @@ import MobileMenu from './MobileMenu';
 import BackToTop from './BackToTop';
 
 // Import MenuIconKey type from MobileMenu
-type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT';
+type MenuIconKey =
+  | 'HOME'
+  | 'ABOUT ME'
+  | 'SKILLS'
+  | 'PROJECTS'
+  | 'CERTIFICATIONS'
+  | 'EXPERIENCE'
+  | 'CONTACT';
 
 export default function ClientWrapper({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showBackToTop, setShowBackToTop] = useState(false);  const navItems: Array<{ name: MenuIconKey; href: string }> = [
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const navItems: Array<{ name: MenuIconKey; href: string }> = [
     { name: 'HOME', href: '#home' },
     { name: 'ABOUT ME', href: '#about' },
     { name: 'SKILLS', href: '#skills' },
     { name: 'EXPERIENCE', href: '#experience' },
     { name: 'PROJECTS', href: '#projects' },
     { name: 'CERTIFICATIONS', href: '#certifications' },
-    { name: 'CONTACT', href: '#contact' }
+    { name: 'CONTACT', href: '#contact' },
   ];
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -48,24 +56,42 @@ export default function ClientWrapper({ children }: { children: ReactNode }) {
         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
       >
         {isMenuOpen ? (
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         ) : (
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <path d="M3 6h18M3 12h18M3 18h18" />
           </svg>
         )}
       </button>
-      
+
       {/* Mobile menu */}
-      <MobileMenu 
-        isOpen={isMenuOpen} 
-        onClose={() => setIsMenuOpen(false)} 
-        navItems={navItems} 
+      <MobileMenu
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        navItems={navItems}
         scrollToSection={scrollToSection}
       />
-      
+
       {showBackToTop && <BackToTop />}
       {children}
     </>

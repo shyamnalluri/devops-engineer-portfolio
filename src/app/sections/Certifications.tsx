@@ -6,7 +6,10 @@ import { useEffect, useRef, useState } from 'react';
 
 const Certifications = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: gridAnimRef, isVisible: gridVisible } = useScrollAnimation({ stagger: true, staggerDelay: 80 });
+  const { ref: gridAnimRef, isVisible: gridVisible } = useScrollAnimation({
+    stagger: true,
+    staggerDelay: 80,
+  });
   const titleRef = useRef<HTMLSpanElement>(null);
   const [underlineW, setUnderlineW] = useState<number | null>(null);
   useEffect(() => {
@@ -17,7 +20,10 @@ const Certifications = () => {
     const ro = new ResizeObserver(() => compute());
     ro.observe(el);
     window.addEventListener('resize', compute);
-    return () => { ro.disconnect(); window.removeEventListener('resize', compute); };
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', compute);
+    };
   }, []);
 
   const getStatus = (validUntil?: string): { label: string; color: string } => {
@@ -41,7 +47,9 @@ const Certifications = () => {
     if (issuer === 'ISC2') return 'ISC2';
     if (issuer === 'Docker Inc') return '🐳';
     const parts = issuer.split(' ');
-    return parts.length === 1 ? parts[0].slice(0, 3).toUpperCase() : (parts[0][0] + parts[1][0]).toUpperCase();
+    return parts.length === 1
+      ? parts[0].slice(0, 3).toUpperCase()
+      : (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
   // Internal scroll container sizing
@@ -82,7 +90,7 @@ const Certifications = () => {
 
       const firstHeight = first.getBoundingClientRect().height;
       const verticalGapEstimate = 16; // ~gap-4
-      const effectiveRow = rowOffset ?? (firstHeight + verticalGapEstimate);
+      const effectiveRow = rowOffset ?? firstHeight + verticalGapEstimate;
 
       // Show ~2.5 rows for affordance (like Projects)
       const visibleRows = 2.5;
@@ -105,8 +113,8 @@ const Certifications = () => {
   }, [columns]);
 
   return (
-    <section 
-      id="certifications" 
+    <section
+      id="certifications"
       className="relative overflow-hidden"
       role="region"
       aria-label="Professional certifications"
@@ -119,9 +127,18 @@ const Certifications = () => {
             headerVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'
           }`}
         >
-          <h2 className="section-title"><span ref={titleRef} className="inline-block">Professional Certifications</span></h2>
-          <div className="mx-auto mt-1 md:mt-2 h-0.5 w-56 sm:w-64 md:w-72 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded" style={underlineW ? { width: `${underlineW}px` } : undefined} />
-          <p className="section-subtitle">An overview of my professional certifications and training</p>
+          <h2 className="section-title">
+            <span ref={titleRef} className="inline-block">
+              Professional Certifications
+            </span>
+          </h2>
+          <div
+            className="mx-auto mt-1 md:mt-2 h-0.5 w-56 sm:w-64 md:w-72 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded"
+            style={underlineW ? { width: `${underlineW}px` } : undefined}
+          />
+          <p className="section-subtitle">
+            An overview of my professional certifications and training
+          </p>
         </div>
 
         {/* Certifications grid within scrollable container */}
@@ -150,7 +167,10 @@ const Certifications = () => {
                   aria-label={`${cert.name}`}
                 >
                   {/* Left accent stripe */}
-                  <span className="absolute left-0 top-0 h-full w-[3px] sm:w-1 bg-gradient-to-b from-orange-500 to-red-500 rounded-l-[inherit] opacity-90" aria-hidden />
+                  <span
+                    className="absolute left-0 top-0 h-full w-[3px] sm:w-1 bg-gradient-to-b from-orange-500 to-red-500 rounded-l-[inherit] opacity-90"
+                    aria-hidden
+                  />
 
                   {/* Title row with tiny provider icon */}
                   <div className="flex items-center gap-2 pr-2">
@@ -166,7 +186,11 @@ const Certifications = () => {
                   <div className="mt-auto pt-2 border-t border-gray-700/60 text-[12px] sm:text-[12px] text-slate-300 flex items-center gap-2">
                     <span>{cert.issueDate}</span>
                     <span className="w-1 h-1 rounded-full bg-gray-500" />
-                    <span>{cert.validUntil && cert.validUntil !== 'Never expires' ? `Valid ${cert.validUntil}` : 'No Expiry'}</span>
+                    <span>
+                      {cert.validUntil && cert.validUntil !== 'Never expires'
+                        ? `Valid ${cert.validUntil}`
+                        : 'No Expiry'}
+                    </span>
                     <span className="w-1 h-1 rounded-full bg-gray-500" />
                     <span className={`${status.color}`}>{status.label}</span>
                   </div>

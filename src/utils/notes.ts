@@ -70,7 +70,10 @@ export function getRelatedNotes(currentSlug: string, limit: number = 3): Note[] 
   const currentTags = new Set((current.tags || []).map((t) => t.toLowerCase()));
   const scored = all
     .map((n) => {
-      const overlap = (n.tags || []).reduce((acc, t) => acc + (currentTags.has(t.toLowerCase()) ? 1 : 0), 0);
+      const overlap = (n.tags || []).reduce(
+        (acc, t) => acc + (currentTags.has(t.toLowerCase()) ? 1 : 0),
+        0
+      );
       return { note: n, score: overlap };
     })
     .sort((a, b) => b.score - a.score || +new Date(b.note.date) - +new Date(a.note.date));
@@ -129,8 +132,6 @@ export function getAllModules(): Module[] {
   const modules = slugs
     .map((slug) => getModuleBySlug(slug))
     .filter((m): m is Module => Boolean(m))
-    .sort((a, b) => (a.name.localeCompare(b.name)));
+    .sort((a, b) => a.name.localeCompare(b.name));
   return modules;
 }
-
-

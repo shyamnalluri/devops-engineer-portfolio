@@ -31,5 +31,3 @@ Quality:
 - `terraform validate` in CI
 - `tflint` and `checkov`
 - Document examples in `README.md`
-
-
