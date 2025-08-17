@@ -11,7 +11,8 @@ const LiveTerminalDesktop = dynamic(() => import("../components/LiveTerminal"), 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [isAnimReady, setIsAnimReady] = useState(false);
+  // kept for future lightweight effects; currently unused after ornament trim
+  // const [isAnimReady, setIsAnimReady] = useState(false);
 
   // Handle reduced motion preference
   useEffect(() => {
@@ -43,14 +44,7 @@ const Hero = () => {
 
   // Defer non-critical animations until idle/short delay to reduce concurrent work at first paint
   useEffect(() => {
-    const idle = (cb: () => void) => {
-      if ('requestIdleCallback' in window) {
-        (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout?: number }) => void }).requestIdleCallback(cb, { timeout: 500 });
-      } else {
-        setTimeout(cb, 400);
-      }
-    };
-    idle(() => setIsAnimReady(true));
+    // reserved for future hero idle effects
   }, []);
 
   return (
@@ -81,54 +75,26 @@ const Hero = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-7xl mx-auto">
             {/* Responsive layout with proper spacing to prevent overlap */}
-            <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-8 xl:gap-12 items-center justify-center min-h-screen py-6 sm:py-8 lg:py-4 xl:py-0">
+            <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-8 xl:gap-12 items-center justify-center min-h-[92vh] lg:min-h-[88vh] xl:min-h-[86vh] 2xl:min-h-[84vh] py-8 sm:py-8 lg:py-6 xl:py-6 pb-16">
               
               {/* Terminal component - dynamically loaded on desktop only */}
               {isDesktop && (
-                <div className="hidden lg:flex justify-center lg:justify-start order-1 lg:order-1 w-full">
+                <div className="hidden lg:flex justify-center lg:justify-start order-1 lg:order-1 w-full pt-6 xl:pt-10">
                   <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 1, delay: 0.3 }}
-                    className="relative flex justify-center lg:justify-start max-w-full"
+                    className="relative flex justify-center lg:justify-start max-w-full h-[520px] xl:h-[560px] 2xl:h-[600px] items-stretch"
                   >
-                    <LiveTerminalDesktop />
-                    
-                    {/* Floating tech icons around terminal (deferred) */}
-                    {isAnimReady && (
-                      <>
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.5, delay: 0.1 }}
-                          className="absolute -top-4 -right-4 w-8 h-8 bg-orange-500/20 rounded-full flex items-center justify-center"
-                        >
-                          <span className="text-orange-400 text-sm">🚀</span>
-                        </motion.div>
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.5, delay: 0.2 }}
-                          className="absolute -bottom-6 -left-6 w-10 h-10 bg-orange-500/20 rounded-full flex items-center justify-center"
-                        >
-                          <span className="text-orange-400 text-lg">⚙️</span>
-                        </motion.div>
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.5, delay: 0.3 }}
-                          className="absolute top-1/2 -right-8 w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center"
-                        >
-                          <span className="text-green-400 text-xs">☁️</span>
-                        </motion.div>
-                      </>
-                    )}
+                    <div className="h-full w-full">
+                      <LiveTerminalDesktop />
+                    </div>
                   </motion.div>
                 </div>
               )}
 
               {/* Main content - Properly contained with responsive spacing */}
-              <div className="text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-5 xl:space-y-6 order-1 lg:order-2 w-full max-w-2xl lg:max-w-full mx-auto relative px-0 lg:px-2 xl:px-4 lg:min-w-0">
+              <div className="text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-5 xl:space-y-6 order-1 lg:order-2 w-full max-w-2xl lg:max-w-full mx-auto relative px-0 lg:px-2 xl:px-4 lg:min-w-0 min-h-[520px] xl:min-h-[560px] 2xl:min-h-[600px] flex flex-col justify-center">
                 {/* Small intro text - larger on desktop */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -144,7 +110,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.7 }}
-                  className="text-3xl xs:text-4xl sm:text-5xl lg:text-4xl xl:text-6xl 2xl:text-7xl font-bold tracking-tight text-white leading-tight -mt-2 sm:-mt-3"
+                  className="text-3xl xs:text-4xl sm:text-5xl lg:text-4xl xl:text-6xl 2xl:text-7xl font-bold tracking-tight text-white leading-[1.05] -mt-2 sm:-mt-3"
                 >
                   {personalInfo.name}
                 </motion.h1>
@@ -191,7 +157,7 @@ const Hero = () => {
                         });
                       }
                     }}
-                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full hover:from-orange-600 hover:to-red-600 hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 cursor-pointer"
+                    className="group inline-flex items-center justify-center px-6 py-3 text-sm font-semibold w-full sm:w-auto max-w-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full hover:from-orange-600 hover:to-red-600 shadow-md hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-200 cursor-pointer"
                     aria-label="Hire me for opportunities"
                     type="button"
                   >
@@ -219,7 +185,7 @@ const Hero = () => {
                         }
                         window.open('/Shyam_Nalluri_Resume.pdf', '_blank', 'noopener,noreferrer');
                       }}
-                      className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-transparent border border-gray-700 text-gray-400 rounded-full hover:border-gray-500 hover:text-gray-200 transition-colors duration-200 cursor-pointer"
                       aria-label="View resume"
                       type="button"
                     >
@@ -242,7 +208,7 @@ const Hero = () => {
                           });
                         }
                       }}
-                      className="group inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-transparent border-2 border-gray-600 text-gray-300 rounded-full hover:border-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium w-full sm:w-auto max-w-xs bg-transparent border border-gray-700 text-gray-400 rounded-full hover:border-gray-500 hover:text-gray-200 transition-colors duration-200 cursor-pointer"
                       aria-label="Learn more about me"
                       type="button"
                     >

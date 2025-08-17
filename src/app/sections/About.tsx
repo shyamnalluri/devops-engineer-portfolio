@@ -4,127 +4,119 @@
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
 import { aboutData } from '../../data/about';
-
+import { useEffect, useRef, useState } from 'react';
+ 
 const About = () => {
   const { ref: headerRef } = useScrollAnimation();
   const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation();
   const { ref: textRef, isVisible: textVisible } = useScrollAnimation({ stagger: true });
+
+  const titleTextRef = useRef<HTMLSpanElement>(null);
+  const [underlineWidth, setUnderlineWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const el = titleTextRef.current;
+    if (!el) return;
+    const compute = () => {
+      const w = el.getBoundingClientRect().width;
+      setUnderlineWidth(Math.max(0, Math.floor(w * 0.8)));
+    };
+    compute();
+    const ro = new ResizeObserver(() => compute());
+    ro.observe(el);
+    window.addEventListener('resize', compute);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', compute);
+    };
+  }, []);
   return (
-    <section id="about" className="section-wrap" role="region" aria-label="About me">
+    <section id="about" className="section-wrap" role="region" aria-label="About me" aria-labelledby="about-title">
       
       <div className="section-header" ref={headerRef}>
-        <h2 className="section-title">About Me</h2>
-        <div className="section-divider"></div>
+        <h2 id="about-title" className="section-title"><span ref={titleTextRef} className="inline-block">About Me</span></h2>
+        <div className="mx-auto mt-1 md:mt-2 h-0.5 w-56 sm:w-64 md:w-72 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded" style={underlineWidth ? { width: `${underlineWidth}px` } : undefined}></div>
         <p className="section-subtitle hidden sm:block">Get to know the person behind the code</p>
       </div>
       <div className="mt-3 md:mt-5">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-7 items-center">{/* Mobile Profile Image - Show on mobile first, hide on large screens */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-7 items-center">
+              {/* Simplified photo */}
               <div
                 ref={imageRef}
-                className={`relative lg:hidden mb-8 transition-all duration-1000 ${
-                  imageVisible ? 'animate-slide-up' : 'opacity-0 translate-y-12'
+                className={`relative order-2 lg:order-1 transition-all duration-700 ${
+                  imageVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ animationDelay: '200ms' }}
               >
-                <div className="flex justify-center">
-                  <div className="relative w-48 h-48 sm:w-56 sm:h-56">
-                    {/* Mobile background effects */}
-                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-orange-500/20 to-red-500/20 transition-all duration-1000 ${
-                      imageVisible ? 'animate-pulse-slow' : 'opacity-0 scale-75'
-                    }`} style={{ animationDelay: '600ms' }} />
-                    
-                    <div className={`absolute inset-2 transition-all duration-800 ${
-                      imageVisible ? 'animate-scale-in' : 'opacity-0 scale-90'
-                    }`} style={{ animationDelay: '400ms' }}>
-                      <div className="relative w-full h-full overflow-hidden rounded-full border-4 border-gray-800 bg-gray-900 shadow-xl mobile-card">
-                        <Image
-                          src="/images/profile.jpg"
-                          alt="Shyam Nalluri"
-                          fill
-                          className="object-cover"
-                          style={{ objectFit: 'cover', objectPosition: 'center' }}
-                          sizes="(max-width: 640px) 192px, 224px"
-                          priority
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Desktop decorative image - hidden on mobile */}
-              <div
-                ref={imageRef}
-                className={`relative hidden lg:block transition-all duration-1000 ${
-                  imageVisible ? 'animate-slide-up' : 'opacity-0 translate-y-12'
-                }`}
-                style={{ animationDelay: '200ms' }}
-              >
-                <div className="relative w-full h-[500px]">
-                  <div className={`absolute top-10 left-10 w-[280px] h-[280px] rounded-full bg-orange-500/20 transition-all duration-1000 ${
-                    imageVisible ? 'animate-pulse-slow' : 'opacity-0 scale-75'
-                  }`} style={{ animationDelay: '600ms' }} />
-                  <div className={`absolute bottom-10 right-10 w-[220px] h-[220px] rounded-full bg-purple-500/20 transition-all duration-1000 ${
-                    imageVisible ? 'animate-pulse-slow' : 'opacity-0 scale-75'
-                  }`} style={{ animationDelay: '800ms' }} />
-                  
-                  <div className={`absolute inset-0 flex items-center justify-center transition-all duration-800 ${
-                    imageVisible ? 'animate-scale-in' : 'opacity-0 scale-90'
-                  }`} style={{ animationDelay: '400ms' }}>
-                    <div className="relative w-[320px] h-[400px] overflow-hidden border-[8px] border-gray-800 bg-gray-900 shadow-xl transform rotate-3 hover:rotate-0 transition-transform duration-700 hover:scale-105 group">
+                <div className="relative w-full max-w-[240px] sm:max-w-[260px] mx-auto">
+                  {/* Offset accent corners */}
+                  <span className="absolute -top-3 -left-3 w-[88%] h-[88%] rounded-[26px] bg-gradient-to-br from-orange-500 to-red-500 opacity-80 blur-[2px]" aria-hidden></span>
+                  <span className="absolute -bottom-3 -right-3 w-[88%] h-[88%] rounded-[26px] bg-gradient-to-br from-cyan-500 to-blue-600 opacity-80 blur-[2px]" aria-hidden></span>
+                  {/* Main card with image */}
+                  <div className="relative rounded-[26px] p-[3px] bg-gradient-to-br from-white/10 to-white/5">
+                    <div className="relative rounded-[22px] overflow-hidden bg-gray-900" style={{ aspectRatio: '4 / 5' }}>
                       <Image
                         src="/images/profile.jpg"
-                        alt="Shyam Nalluri"
+                        alt="Portrait of Shyam Nalluri"
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        style={{ objectFit: 'cover', objectPosition: 'center' }}
-                        sizes="(min-width: 1024px) 320px, 100vw"
+                        className="object-cover"
+                        sizes="(min-width:1024px) 240px, 60vw"
+                        priority={false}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      {/* Stronger vignette to blend edges */}
+                      <div className="absolute inset-0 rounded-[22px] pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_55%,rgba(0,0,0,0.44)_100%)] mix-blend-multiply" />
+                      {/* Inset inner shadow for feathering */}
+                      <div className="absolute inset-0 rounded-[22px] pointer-events-none" style={{ boxShadow: 'inset 0 0 48px rgba(0,0,0,0.35)' }} />
+                      {/* Subtle inner ring for depth */}
+                      <div className="absolute inset-0 rounded-[22px] pointer-events-none ring-1 ring-white/10" />
                     </div>
-
-                    {/* Decorative elements */}
-                    <div className={`absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-red-500 transition-all duration-600 ${
-                      imageVisible ? 'animate-scale-in' : 'opacity-0 scale-50'
-                    }`} style={{ animationDelay: '1000ms' }}></div>
-                    <div className={`absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-red-500 transition-all duration-600 ${
-                      imageVisible ? 'animate-scale-in' : 'opacity-0 scale-50'
-                    }`} style={{ animationDelay: '1200ms' }}></div>
                   </div>
                 </div>
-              </div>              {/* About Text Column - Mobile-first responsive */}
+                {/* Personal quote */}
+                <blockquote className="mt-3 sm:mt-4 text-center text-sm sm:text-base text-gray-400 italic">
+                  “I love cooking during free time.”
+                </blockquote>
+              </div>
+
+              {/* About Text Column */}
               <div
                 ref={textRef}
                 className={`space-y-4 sm:space-y-6 md:space-y-6 transition-all duration-800 ${
                   textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ animationDelay: '400ms' }}
-              >                <div className="prose prose-base sm:prose-lg max-w-none prose-invert">
-                  <p className={`text-gray-300 text-mobile-base sm:text-lg leading-relaxed text-left sm:text-justify first-letter:text-2xl sm:first-letter:text-3xl first-letter:font-bold first-letter:text-red-500 first-letter:mr-1 transition-all duration-800 ${
+              >
+                <div className="prose prose-base sm:prose-lg max-w-[66ch] mx-auto prose-invert">
+                  <p className={`text-gray-300 text-mobile-base sm:text-lg leading-[1.7] text-left lg:hyphens-auto transition-all duration-800 ${
                     textVisible ? 'animate-fade-in' : 'opacity-0'
                   }`} style={{ animationDelay: '600ms' }}>
                     {aboutData.description[0]}
                   </p>
-                  <p className={`text-gray-400 text-mobile-base sm:text-lg leading-relaxed text-left sm:text-justify mt-4 sm:mt-6 transition-all duration-800 ${
+                  <p className={`text-gray-400 text-mobile-base sm:text-lg leading-[1.7] text-left lg:hyphens-auto mt-4 sm:mt-6 transition-all duration-800 ${
                     textVisible ? 'animate-fade-in' : 'opacity-0'
                   }`} style={{ animationDelay: '800ms' }}>
                     {aboutData.description[1]}
                   </p>
-                </div>{/* Dynamic stats from data - Mobile-first grid */}
-                <div className={`grid grid-cols-2 gap-4 md:gap-6 mt-6 md:mt-8 transition-all duration-800 ${
+                </div>
+                {/* Metrics chips */}
+                <div className={`grid grid-cols-2 gap-4 md:gap-5 mt-4 sm:mt-6 md:mt-8 transition-all duration-800 ${
                   textVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
                 }`} style={{ animationDelay: '1000ms' }}>
                   {aboutData.stats.map((stat, index) => (
                     <div 
-                      key={stat.label} 
-                      className={`mobile-card p-3 sm:p-4 rounded-xl bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 group hover:scale-105 ${
-                        textVisible ? 'animate-scale-in' : 'opacity-0 scale-90'
+                      key={stat.label}
+                      className={`flex items-center gap-3 h-12 px-3 sm:px-4 rounded-lg border border-gray-700/40 bg-gray-800/40 transition-colors duration-200 ${
+                        textVisible ? 'animate-scale-in' : 'opacity-0 scale-95'
                       }`}
                       style={{ animationDelay: `${1200 + (index * 100)}ms` }}
+                      aria-label={`${stat.value} ${stat.label}`}
                     >
-                      <div className="text-lg sm:text-2xl font-bold text-red-400 group-hover:text-red-300 transition-colors duration-300">{stat.value}</div>
-                      <div className="text-xs sm:text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300 leading-tight">{stat.label}</div>
+                      <svg className="w-4 h-4 text-orange-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                        <circle cx="12" cy="12" r="10" opacity="0.15" />
+                        <circle cx="12" cy="12" r="4" />
+                      </svg>
+                      <div className="text-base sm:text-lg font-semibold text-white">{stat.value}</div>
+                      <div className="text-xs sm:text-sm text-gray-400 leading-tight">{stat.label}</div>
                     </div>
                   ))}
                 </div>
@@ -134,5 +126,5 @@ const About = () => {
     </section>
   );
 };
-
+ 
 export default About;

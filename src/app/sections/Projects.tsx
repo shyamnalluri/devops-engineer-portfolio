@@ -1,11 +1,26 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useScrollAnimation, useCardAnimation } from '../../hooks/useScrollAnimation';
 import { projectsData, ProjectItem as Project } from '../../data/projects';
 
 const ProjectModal = dynamic(() => import('../components/ProjectModal'), { ssr: false });
+const useUnderline = () => {
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [w, setW] = useState<number | null>(null);
+  useEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    const compute = () => setW(Math.floor(el.getBoundingClientRect().width * 0.8));
+    compute();
+    const ro = new ResizeObserver(() => compute());
+    ro.observe(el);
+    window.addEventListener('resize', compute);
+    return () => { ro.disconnect(); window.removeEventListener('resize', compute); };
+  }, []);
+  return { textRef, w } as const;
+};
 
 const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
   const { cardRef } = useCardAnimation();
@@ -13,7 +28,7 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
   return (
     <div
       ref={cardRef}
-      className="group relative mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-sm hover:border-red-500/30 min-h-[320px] sm:h-96 cursor-pointer flex flex-col card-hover touch-button focus-ring focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black overflow-hidden"
+      className="group relative mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-sm hover:border-red-500/30 h-[320px] sm:h-[340px] cursor-pointer flex flex-col card-hover touch-button focus-ring focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black overflow-hidden"
       onClick={onClick}
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
       tabIndex={0}
@@ -34,22 +49,22 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
       <div className="flex-grow flex flex-col mb-3 sm:mb-4 relative z-10">
         {/* Project Title - Mobile-responsive */}
         <div className="mb-2 sm:mb-3">
-          <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-red-400 transition-colors duration-200 ease-primary leading-5 sm:leading-6">
+          <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-red-400 transition-colors duration-200 ease-primary leading-5 sm:leading-6 line-clamp-2">
             {project.title}
           </h3>
         </div>
         
         {/* Project Description - Mobile-optimized */}
         <div className="flex-grow mb-3 sm:mb-4">
-          <p className="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-200 ease-primary line-clamp-3 sm:line-clamp-none">
+          <p className="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-200 ease-primary line-clamp-2">
             {project.description}
           </p>
         </div>
         
-        {/* Technologies - Mobile-first grid */}
+        {/* Technologies - Mobile-first grid (strict 2-line clamp) */}
         <div className="flex items-center">
-          <div className="flex flex-wrap gap-1 sm:gap-1.5">
-            {project.technologies.slice(0, 6).map((tech, i) => (
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 w-full min-h-11 max-h-11 sm:min-h-14 sm:max-h-14 overflow-hidden">
+            {project.technologies.slice(0, 4).map((tech, i) => (
               <span
                 key={i}
                 className="px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs rounded-md bg-gray-800/60 text-gray-300 border border-gray-700/50 whitespace-nowrap transition-all duration-200 ease-primary group-hover:bg-gray-700/60 group-hover:text-gray-200 group-hover:border-gray-600/50"
@@ -57,9 +72,9 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
                 {tech}
               </span>
             ))}
-            {project.technologies.length > 6 && (
+            {project.technologies.length > 4 && (
               <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs rounded-md bg-gray-700/60 text-gray-400 border border-gray-600/50">
-                +{project.technologies.length - 6}
+                +{project.technologies.length - 4}
               </span>
             )}
           </div>
@@ -67,40 +82,24 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
       </div>
 
       {/* Footer - Mobile-optimized */}
-      <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-700/50 group-hover:border-gray-600/50 transition-colors duration-200 ease-primary relative z-10">
+      <div className="mt-auto flex items-center justify-start pt-3 sm:pt-4 border-t border-gray-700/50 group-hover:border-gray-600/50 transition-colors duration-200 ease-primary relative z-10">
           <div className="flex items-center gap-1.5 sm:gap-2 text-white text-xs sm:text-sm" aria-hidden="true">
             <svg className="w-3 h-3 text-red-400 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 5l7 7-7 7" />
             </svg>
             <span className="transition-colors duration-150 group-hover:text-red-400">View Details</span>
           </div>
-        {project.githubUrl && (
-          <a 
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-1.5 sm:p-2 rounded-full bg-gray-800/60 hover:bg-gray-700 text-gray-200 transition-all duration-200 ease-primary border border-gray-700/50 touch-button hover:scale-110 focus-ring"
-            onClick={(e) => e.stopPropagation()}
-            aria-label={`View ${project.title} on GitHub`}
-          >
-            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" aria-hidden="true">
-              <path d="M12 .5C5.73.5.98 5.24.98 11.52c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.52 0-.26-.01-1.12-.02-2.03-3.06.66-3.71-1.29-3.71-1.29-.5-1.27-1.22-1.61-1.22-1.61-.99-.68.08-.66.08-.66 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.55 1.18 3.18.9.1-.71.38-1.18.69-1.45-2.45-.28-5.02-1.22-5.02-5.44 0-1.2.43-2.17 1.13-2.94-.11-.28-.49-1.41.11-2.93 0 0 .93-.3 3.06 1.12.89-.25 1.84-.38 2.78-.38.94 0 1.89.13 2.78.38 2.13-1.42 3.06-1.12 3.06-1.12.6 1.52.22 2.65.11 2.93.7.77 1.13 1.74 1.13 2.94 0 4.23-2.58 5.15-5.04 5.43.39.34.74 1.01.74 2.04 0 1.47-.01 2.65-.01 3.01 0 .28.19.62.76.51 4.36-1.46 7.5-5.57 7.5-10.43C23.02 5.24 18.27.5 12 .5z"/>
-            </svg>
-          </a>
-        )}
-      </div>
-      
-      {/* Subtle border glow on hover */}
-      <div className="absolute inset-0 rounded-xl sm:rounded-2xl border border-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary pointer-events-none" />
-    </div>
+       </div>
+ 
+       {/* Subtle border glow on hover */}
+       <div className="absolute inset-0 rounded-xl sm:rounded-2xl border border-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-primary pointer-events-none" />
+     </div>
   );
 };
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
   
   const { ref: sectionRef } = useScrollAnimation({
     threshold: 0.1,
@@ -115,70 +114,30 @@ const Projects = () => {
     ? projectsData
     : projectsData.filter((project) => project.category === selectedCategory);
 
-  // Reset index when category changes
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [selectedCategory]);
+  // Scroll container sizing refs/state
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState<number | null>(null);
 
-  // Calculate projects per view - mobile-first
-  const getProjectsPerView = () => {
+  // Determine columns based on viewport width
+  const getColumns = () => {
     if (typeof window !== 'undefined') {
-      if (window.innerWidth < 640) return 1; // Mobile: 1 project
-      if (window.innerWidth < 1024) return 2; // Tablet: 2 projects
-      return 3; // Desktop: 3 projects
+      if (window.innerWidth >= 1280) return 4; // xl
+      if (window.innerWidth >= 1024) return 3; // lg
+      if (window.innerWidth >= 640) return 2; // sm/md
+      return 1; // xs
     }
     return 1;
   };
 
-  const [projectsPerView, setProjectsPerView] = useState(getProjectsPerView());
-  
+  const [columns, setColumns] = useState<number>(getColumns());
+  const underline = useUnderline();
+
   useEffect(() => {
-    const handleResize = () => {
-      setProjectsPerView(getProjectsPerView());
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const onResize = () => setColumns(getColumns());
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
-  // Simple scroll functions - updated for proper page navigation
-  const scrollToProject = (index: number) => {
-    if (!carouselRef.current) return;
-    
-    const container = carouselRef.current;
-    const cardWidth = container.scrollWidth / filteredProjects.length;
-    const scrollPosition = index * cardWidth;
-    
-    container.scrollTo({
-      left: scrollPosition,
-      behavior: 'smooth'
-    });
-  };
-
-  const scrollLeft = () => {
-    let newIndex;
-    if (projectsPerView === 1) {
-      // Mobile: move one project at a time
-      newIndex = currentIndex > 0 ? currentIndex - 1 : filteredProjects.length - 1;
-    } else {
-      // Desktop: move by page (projectsPerView)
-      newIndex = Math.max(0, currentIndex - projectsPerView);
-    }
-    setCurrentIndex(newIndex);
-    scrollToProject(newIndex);
-  };
-
-  const scrollRight = () => {
-    let newIndex;
-    if (projectsPerView === 1) {
-      // Mobile: move one project at a time
-      newIndex = currentIndex < filteredProjects.length - 1 ? currentIndex + 1 : 0;
-    } else {
-      // Desktop: move by page (projectsPerView)
-      const maxIndex = filteredProjects.length - projectsPerView;
-      newIndex = Math.min(maxIndex, currentIndex + projectsPerView);
-    }
-    setCurrentIndex(newIndex);
-    scrollToProject(newIndex);
-  };
 
   const openProjectModal = (project: Project) => {
     setSelectedProject(project);
@@ -187,24 +146,50 @@ const Projects = () => {
       dialog?.focus?.();
     }, 50);
   };
-  // Handle manual scroll to update current index
-  const handleScroll = () => {
-    if (!carouselRef.current) return;
-    
-    const container = carouselRef.current;
-    const cardWidth = container.scrollWidth / filteredProjects.length;
-    const scrollLeft = container.scrollLeft;
-    let newIndex = Math.round(scrollLeft / cardWidth);
-    
-    // For desktop, snap to page boundaries
-    if (projectsPerView > 1) {
-      newIndex = Math.floor(newIndex / projectsPerView) * projectsPerView;
-    }
-    
-    if (newIndex !== currentIndex && newIndex >= 0 && newIndex < filteredProjects.length) {
-      setCurrentIndex(newIndex);
-    }
-  };
+
+  // Compute container height so first 4 tiles are fully visible and next 4 are half visible
+  useEffect(() => {
+    const computeHeight = () => {
+      const gridEl = gridRef.current;
+      if (!gridEl) return;
+      const items = Array.from(gridEl.querySelectorAll('[data-card]')) as HTMLElement[];
+      if (items.length === 0) return;
+
+      const first = items[0];
+      const firstTop = first.offsetTop;
+
+      // Distance between start of first row and second row
+      let rowOffset: number | null = null;
+      if (items.length > columns) {
+        const secondRowFirst = items[columns];
+        rowOffset = secondRowFirst.offsetTop - firstTop;
+      }
+
+      const firstHeight = first.getBoundingClientRect().height;
+      const verticalGapEstimate = 20; // matches gap-5 ~ 20px
+      const effectiveRow = rowOffset ?? (firstHeight + verticalGapEstimate);
+
+      // Visible rows = 4 fully visible items + 1/2 row for the next 4 items
+      const visibleRows = 4 / columns + 0.5;
+      const desiredHeight = Math.max(firstHeight, Math.floor(effectiveRow * visibleRows));
+
+      setContainerHeight(desiredHeight);
+    };
+
+    // Compute after layout settles
+    const rId = window.requestAnimationFrame(() => {
+      computeHeight();
+      // Safety recompute after fonts/images settle
+      setTimeout(computeHeight, 100);
+      setTimeout(computeHeight, 300);
+    });
+
+    window.addEventListener('resize', computeHeight);
+    return () => {
+      window.cancelAnimationFrame(rId);
+      window.removeEventListener('resize', computeHeight);
+    };
+  }, [columns, selectedCategory, filteredProjects.length]);
 
   return (
     <section 
@@ -217,8 +202,8 @@ const Projects = () => {
       <div className="section-wrap relative z-10 will-change-transform">
         {/* Section Header */}
           <div className="section-header opacity-100 animate-in will-change-transform">
-            <h2 className="section-title">Recent Projects</h2>
-            <div className="section-divider" />
+            <h2 className="section-title"><span ref={underline.textRef} className="inline-block">Recent Projects</span></h2>
+            <div className="mx-auto mt-1 md:mt-2 h-0.5 w-56 sm:w-64 md:w-72 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded" style={underline.w ? { width: `${underline.w}px` } : undefined} />
             <p className="section-subtitle">Infrastructure solutions, automation pipelines, and DevOps implementations</p>
           
           {/* Mobile-first category filters */}
@@ -242,60 +227,21 @@ const Projects = () => {
           </div>
         </div>
 
-        {/* Projects Carousel */}
+        {/* Projects Tall Container with internal vertical scroll */}
         <div className="relative max-w-7xl mx-auto">
-          {/* Carousel Container */}
           <div
-            ref={carouselRef}
-            onScroll={handleScroll}
-            className="flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory gap-4 lg:gap-6 pb-4 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg"
-            tabIndex={0}
-            aria-label="Projects carousel. Use left and right arrow keys to navigate."
-            onKeyDown={(e) => {
-              if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                scrollLeft();
-              } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                scrollRight();
-              }
-            }}
-            style={{ 
-              scrollbarWidth: 'none', 
-              msOverflowStyle: 'none'
-            }}
-          >            {filteredProjects.map((project, index) => (
-              <div
-                key={project.id}
-                className="flex-shrink-0 w-full sm:w-80 lg:w-96 snap-start stagger-animation"
-                style={{ '--stagger-delay': `${index * 100}ms` } as React.CSSProperties}
-              >
+            ref={gridRef}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 overflow-y-auto scrollbar-hide"
+            style={{ maxHeight: containerHeight ? `${containerHeight}px` : undefined }}
+            role="region"
+            aria-label="Scrollable projects list"
+          >
+            {filteredProjects.map((project, index) => (
+              <div key={project.id} data-card className="stagger-animation" style={{ '--stagger-delay': `${index * 80}ms` } as React.CSSProperties}>
                 <ProjectCard project={project} onClick={() => openProjectModal(project)} />
               </div>
             ))}
-          </div>          {/* Navigation Controls */}
-          {filteredProjects.length > 1 && (
-            <div className="flex items-center justify-center mt-2 sm:mt-2 lg:mt-2 gap-6"><button
-                onClick={scrollLeft}
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                aria-label="Previous project"
-              >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M15 18l-6-6 6-6" />
-                </svg>
-              </button>
-
-              <button
-                onClick={scrollRight}
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center transition-all duration-200 touch-button hover:bg-red-500/20 hover:border-red-500/50 hover:scale-105 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                aria-label="Next project"
-              >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
-            </div>
-          )}
+          </div>
         </div>
       </div>
 

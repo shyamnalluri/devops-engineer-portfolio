@@ -77,4 +77,60 @@ export function getRelatedNotes(currentSlug: string, limit: number = 3): Note[] 
   return scored.slice(0, limit).map((s) => s.note);
 }
 
+// ----- Terraform Modules support -----
+export type ModuleMeta = {
+  slug: string;
+  name: string;
+  summary?: string;
+  cloud?: 'aws' | 'azure' | 'gcp' | 'multi';
+  category?: string; // networking, compute, security, observability
+  maturity?: 'stable' | 'preview';
+  version?: string;
+  tags?: string[];
+};
+
+export type Module = ModuleMeta & {
+  content: string; // markdown content for overview; code examples will live in mdx blocks
+};
+
+const MODULES_DIR = path.join(process.cwd(), 'src', 'content', 'modules');
+
+export function getAllModuleSlugs(): string[] {
+  if (!fs.existsSync(MODULES_DIR)) return [];
+  return fs
+    .readdirSync(MODULES_DIR)
+    .filter((file) => file.endsWith('.md') || file.endsWith('.mdx'))
+    .map((file) => file.replace(/\.(md|mdx)$/i, ''));
+}
+
+export function getModuleBySlug(slug: string): Module | null {
+  const mdxPath = path.join(MODULES_DIR, `${slug}.mdx`);
+  const mdPath = path.join(MODULES_DIR, `${slug}.md`);
+  const filePath = fs.existsSync(mdxPath) ? mdxPath : fs.existsSync(mdPath) ? mdPath : null;
+  if (!filePath) return null;
+
+  const file = fs.readFileSync(filePath, 'utf8');
+  const { data, content } = matter(file);
+  const meta: ModuleMeta = {
+    slug,
+    name: (data.name as string) || slug,
+    summary: (data.summary as string) || undefined,
+    cloud: (data.cloud as ModuleMeta['cloud']) || 'multi',
+    category: (data.category as string) || undefined,
+    maturity: (data.maturity as ModuleMeta['maturity']) || 'stable',
+    version: (data.version as string) || undefined,
+    tags: (data.tags as string[]) || [],
+  };
+  return { ...meta, content };
+}
+
+export function getAllModules(): Module[] {
+  const slugs = getAllModuleSlugs();
+  const modules = slugs
+    .map((slug) => getModuleBySlug(slug))
+    .filter((m): m is Module => Boolean(m))
+    .sort((a, b) => (a.name.localeCompare(b.name)));
+  return modules;
+}
+
 

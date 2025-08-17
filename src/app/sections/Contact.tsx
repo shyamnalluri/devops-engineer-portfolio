@@ -1,7 +1,7 @@
 'use client';
 
  
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
 import { testimonialsData } from '../../data/testimonials';
@@ -20,6 +20,18 @@ const Contact = () => {
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
   
   const { ref: headerRef } = useScrollAnimation();
+  const titleRef = useRef<HTMLSpanElement>(null);
+  const [underlineW, setUnderlineW] = useState<number | null>(null);
+  useEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+    const compute = () => setUnderlineW(Math.floor(el.getBoundingClientRect().width * 0.8));
+    compute();
+    const ro = new ResizeObserver(() => compute());
+    ro.observe(el);
+    window.addEventListener('resize', compute);
+    return () => { ro.disconnect(); window.removeEventListener('resize', compute); };
+  }, []);
   const { ref: formRef, isVisible: formVisible } = useScrollAnimation();
   const { ref: testimonialsRef, isVisible: testimonialsVisible } = useScrollAnimation();
 
@@ -57,7 +69,7 @@ const Contact = () => {
         setCurrentTestimonial((prev) => (prev + 1) % testimonialsData.length);
         setTestimonialTransition(true);
       }, 150); // Brief pause for smooth transition
-    }, 4000); // Reduced to 4 seconds for better engagement
+    }, 5000); // 5s interval with pause on hover/touch
       return () => clearInterval(interval);
   }, [isTestimonialsPaused]);
 
@@ -162,8 +174,8 @@ const Contact = () => {
 
       <div className="relative z-10">
         <div className="section-header" ref={headerRef}>
-          <h2 className="section-title">Let&apos;s Work Together</h2>
-          <div className="section-divider"></div>
+          <h2 className="section-title"><span ref={titleRef} className="inline-block">Let&apos;s Work Together</span></h2>
+          <div className="mx-auto mt-1 md:mt-2 h-0.5 w-56 sm:w-64 md:w-72 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded" style={underlineW ? { width: `${underlineW}px` } : undefined}></div>
           <p className="section-subtitle hidden sm:block">Ready to bring your vision to life? Let&apos;s discuss how we can build something amazing together</p>
         </div>
           {/* Mobile-first Layout: Stack on mobile, side-by-side on larger screens */}
@@ -418,9 +430,9 @@ const Contact = () => {
               testimonialsVisible ? 'animate-slide-up' : 'opacity-0 translate-y-8'
             }`}
             style={{ animationDelay: '400ms' }}
-          >            <div className="mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg sm:rounded-xl overflow-hidden hover:border-orange-500/30 transition-all duration-500 group">
+          >            <div className="mobile-card bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg sm:rounded-xl overflow-hidden hover:border-orange-500/30 transition-all duration-500 group" style={{ height: '470px' }}>
               {/* Testimonials Header */}
-              <div className={`flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b border-gray-700/30 transition-all duration-600 ${
+              <div className={`flex items-center gap-2 sm:gap-3 p-3 sm:p-4 transition-all duration-600 ${
                 testimonialsVisible ? 'animate-fade-in' : 'opacity-0'
               }`} style={{ animationDelay: '600ms' }}>                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center transition-transform duration-300">
                   <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -428,8 +440,8 @@ const Contact = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white">Client Testimonials</h3>
-                  <p className="text-xs sm:text-sm text-gray-400">What others say about my work</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-white">Endorsements  </h3>
+                  <p className="text-xs sm:text-sm text-gray-400">What People Say About Me</p>
                 </div>
               </div>              {/* Fixed height testimonials content with hover pause */}              <div 
                 className={`bg-gradient-to-br from-gray-900/30 to-gray-800/30 backdrop-blur-sm transition-all duration-600 flex flex-col justify-center items-center cursor-pointer ${
@@ -444,6 +456,13 @@ const Contact = () => {
                 onTouchEnd={onTouchEnd}
                 onMouseEnter={() => setIsTestimonialsPaused(true)}
                 onMouseLeave={() => setIsTestimonialsPaused(false)}
+                tabIndex={0}
+                role="region"
+                aria-label="Testimonials carousel"
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowLeft') navigateTestimonial('prev');
+                  if (e.key === 'ArrowRight') navigateTestimonial('next');
+                }}
               >
                 <div
                   className={`h-full w-full flex flex-col justify-center px-3 sm:px-4 transition-all duration-300 transform ${
@@ -463,7 +482,7 @@ const Contact = () => {
                         scrollbarWidth: 'thin',
                         scrollbarColor: 'rgba(249, 115, 22, 0.5) rgba(31, 41, 55, 0.5)'
                       }}
-                    ><blockquote className="text-xs sm:text-sm text-gray-200 leading-relaxed italic text-center px-2">
+                    ><blockquote className="text-xs sm:text-sm text-gray-200 leading-relaxed italic text-center px-2" aria-live="polite" id="testimonial-quote">
                         &ldquo;{testimonialsData[currentTestimonial].content}&rdquo;
                       </blockquote>
                     </div>                    {/* Client Info - Always visible at bottom */}
@@ -487,6 +506,19 @@ const Contact = () => {
                           {testimonialsData[currentTestimonial].company}
                         </p>
                       </div>
+                    </div>
+                    {/* Progress dots */}
+                    <div className="mt-3 flex items-center justify-center gap-1.5" aria-label="Select testimonial">
+                      {testimonialsData.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setCurrentTestimonial(i)}
+                          aria-label={`Go to testimonial ${i + 1}`}
+                          className={`w-2.5 h-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 focus:ring-offset-black ${
+                            i === currentTestimonial ? 'bg-orange-500' : 'bg-gray-600 hover:bg-gray-500'
+                          }`}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>

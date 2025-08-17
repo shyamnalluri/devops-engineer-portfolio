@@ -98,6 +98,11 @@ export function useSectionNavigation() {
     const hash = extractHash(href);
     if (!hash) return;
 
+    // If we are not on the home route, let Next.js <Link> handle client-side navigation (prefetched)
+    if (pathname !== '/') {
+      return;
+    }
+
     e.preventDefault();
     if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
     const targetId = hash.replace('#', '');

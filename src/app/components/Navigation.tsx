@@ -96,7 +96,7 @@ const Navigation: React.FC = () => {
                     href={item.href}
                     onClick={(e) => {
                       if (isSectionLink) {
-                        handleSectionLinkClick(e, hash);
+                        handleSectionLinkClick(e, item.href);
                       }
                     }}
                     className={`group block px-8 py-3.5 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus-ring ${

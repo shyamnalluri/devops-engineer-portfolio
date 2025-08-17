@@ -28,13 +28,13 @@ export default function TOC() {
 
   return (
     <nav aria-label="Table of contents" className="hidden xl:block sticky top-24 h-[calc(100vh-6rem)] overflow-auto text-sm text-gray-400">
-      <div className="mb-2 font-semibold text-gray-300">On this page</div>
+      <div className="mb-2 text-xs font-semibold text-gray-300">On this page</div>
       <ul className="space-y-1">
         {heads.map((h) => (
           <li key={h.id} className={h.level === 3 ? 'pl-4' : ''}>
             <a
               href={`#${h.id}`}
-              className={`block py-1 hover:text-white ${active === h.id ? 'text-orange-400' : ''}`}
+              className={`block py-1 hover:text-white border-l ${active === h.id ? 'text-orange-400 border-orange-500' : 'border-transparent'}`}
             >
               {h.text}
             </a>

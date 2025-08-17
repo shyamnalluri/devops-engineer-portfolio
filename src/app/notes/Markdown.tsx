@@ -23,7 +23,7 @@ export default function Markdown({ content }: { content: string }) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h2 id={id} {...props}>
+              <h2 id={id} {...props} className="mt-10 mb-4">
                 {children}
               </h2>
             );
@@ -32,14 +32,14 @@ export default function Markdown({ content }: { content: string }) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h3 id={id} {...props}>
+              <h3 id={id} {...props} className="mt-8 mb-3">
                 {children}
               </h3>
             );
           },
           p({ children, ...props }) {
             return (
-              <p {...props} className="leading-7">
+              <p {...props} className="leading-8">
                 {children}
               </p>
             );
@@ -64,16 +64,16 @@ export default function Markdown({ content }: { content: string }) {
             const isInline = !(className && className.includes('language-'));
             if (isInline) return <code className={className} {...props}>{children}</code>;
             return (
-              <pre className="relative group overflow-auto">
+              <pre className="relative group overflow-auto border border-gray-700/60 rounded-md bg-black/40">
                 <button
                   type="button"
                   onClick={() => navigator.clipboard.writeText(codeText)}
-                  className="absolute top-2 right-2 text-xs px-2 py-1 rounded-md border border-gray-700 bg-black/50 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 text-xs px-2 py-1 rounded-md border border-gray-700 bg-black/50 text-gray-300"
                   aria-label="Copy code"
                 >
                   Copy
                 </button>
-                <code className={className || ''} {...props}>
+                <code className={className || ''} {...props} style={{ fontSize: '14px', lineHeight: 1.5 }}>
                   {children}
                 </code>
               </pre>

@@ -47,12 +47,14 @@ export default async function NotePage({ params }: { params: Promise<{ slug: str
       />
       <ReadingProgress />
       <div className="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px] gap-12">
-        <div>
+        <div className="max-w-[75ch]">
           <Link href="/notes" className="text-sm text-orange-400 hover:text-orange-300">← Back to notes</Link>
           <h1 className="text-3xl font-bold mt-4 mb-2">{note.title}</h1>
           <div className="text-xs text-gray-500 mb-8">{new Date(note.date).toLocaleDateString()} • {note.readingTime}</div>
           <Markdown content={note.content} />
+          <div className="h-px bg-gray-800 my-10" />
           <Share title={note.title} />
+          <div className="h-px bg-gray-800 my-10" />
           <Related notes={related} />
         </div>
         <TOC />

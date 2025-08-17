@@ -17,7 +17,7 @@ export const aboutData: AboutData = {
   stats: [
     { label: "Years Experience", value: "5+" },
     { label: "Projects Delivered", value: "10+" },
-    { label: "Cloud Platforms", value: "AWS, Azure" },
-    { label: "Certifications", value: "4+" }
+    { label: "Cloud Platforms", value: "Multiple" },
+    { label: "Certifications", value: "6+" }
   ]
 };
