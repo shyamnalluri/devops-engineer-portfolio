@@ -353,12 +353,17 @@ const GamePage = () => {
             if (sprite.x < -100) {
               sprite.destroy();
             }
-          }); // Collision with power-ups
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          });
+          // Collision with power-ups
           this.physics.overlap(
             this.player,
             this.powerUps,
-            this.collectPowerUp as any,
+            ((object1, object2) => {
+              this.collectPowerUp(
+                object1 as Phaser.Types.Physics.Arcade.GameObjectWithBody,
+                object2 as Phaser.Types.Physics.Arcade.GameObjectWithBody
+              );
+            }) as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
             undefined,
             this
           );
