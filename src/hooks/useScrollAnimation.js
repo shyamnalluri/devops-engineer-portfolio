@@ -11,7 +11,7 @@ export const useScrollAnimation = (options = {}) => {
     triggerOnce = true,
     stagger = false,
     staggerDelay = 100,
-    animationClass = 'animate-slide-up'
+    animationClass = 'animate-slide-up',
   } = options;
 
   const elementsRef = useRef([]);
@@ -27,11 +27,11 @@ export const useScrollAnimation = (options = {}) => {
           if (entry.isIntersecting) {
             // Add stagger delay if enabled
             const delay = stagger ? index * staggerDelay : 0;
-            
+
             setTimeout(() => {
               entry.target.classList.add('animate-in');
               entry.target.classList.add(animationClass);
-              
+
               // Apply stagger animation classes
               if (stagger && index < 5) {
                 entry.target.classList.add(`animate-stagger-${index + 1}`);
@@ -39,7 +39,7 @@ export const useScrollAnimation = (options = {}) => {
             }, delay);
 
             setIsVisible(true);
-            
+
             if (triggerOnce) {
               observer.unobserve(entry.target);
             }
@@ -90,7 +90,7 @@ export const useHeroAnimation = () => {
     // Trigger animations after component mounts
     const timer = setTimeout(() => {
       setIsLoaded(true);
-      
+
       if (titleRef.current) {
         titleRef.current.classList.add('animate-hero-title');
       }
@@ -109,7 +109,7 @@ export const useHeroAnimation = () => {
     titleRef,
     subtitleRef,
     descriptionRef,
-    isLoaded
+    isLoaded,
   };
 };
 
@@ -154,8 +154,8 @@ export const useButtonAnimation = () => {
       onMouseEnter: handleMouseEnter,
       onMouseLeave: handleMouseLeave,
       onClick: handleClick,
-      className: 'transition-all duration-150 ease-primary transform focus-ring'
-    }
+      className: 'transition-all duration-150 ease-primary transform focus-ring',
+    },
   };
 };
 
@@ -167,7 +167,8 @@ export const useCardAnimation = () => {
 
   const cardProps = {
     ref: cardRef,
-    className: 'card-hover transition-all duration-300 ease-secondary transform will-change-transform',
+    className:
+      'card-hover transition-all duration-300 ease-secondary transform will-change-transform',
     onMouseEnter: () => {
       if (cardRef.current) {
         cardRef.current.style.willChange = 'transform, box-shadow';
@@ -177,7 +178,7 @@ export const useCardAnimation = () => {
       if (cardRef.current) {
         cardRef.current.style.willChange = 'auto';
       }
-    }
+    },
   };
 
   return { cardRef, cardProps };
@@ -202,7 +203,7 @@ export const usePageTransition = () => {
   return {
     isTransitioning,
     startTransition,
-    transitionClass: isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+    transitionClass: isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0',
   };
 };
 

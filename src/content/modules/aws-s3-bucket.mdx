@@ -1,0 +1,44 @@
+---
+name: AWS S3 Bucket
+slug: aws-s3-bucket
+summary: Secure S3 bucket with versioning, AES-256 encryption, and lifecycle policies.
+cloud: aws
+category: storage
+maturity: stable
+version: 1.0.0
+tags: [s3, storage, encryption]
+---
+
+Provision an S3 bucket with best practices:
+
+- Private ACL, block public access
+- Server-side encryption (SSE-S3)
+- Versioning and lifecycle policies (optional)
+
+## Usage
+
+### Minimal
+
+```hcl
+module "bucket" {
+  source = "./modules/aws-s3-bucket"
+  name   = "my-app-artifacts"
+}
+```
+
+### Production
+
+```hcl
+module "bucket" {
+  source = "./modules/aws-s3-bucket"
+  name   = "my-app-artifacts"
+
+  versioning = true
+
+  lifecycle_rules = [{
+    id      = "cleanup-old-versions"
+    enabled = true
+    noncurrent_version_expiration_days = 30
+  }]
+}
+```

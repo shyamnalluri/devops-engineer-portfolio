@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  navItems: Array<{ name: MenuIconKey; href: string }>;
+  navItems: Array<{ name: string; href: string }>;
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }
 
@@ -17,14 +18,19 @@ type Section = {
   height: number;
 };
 
-type MenuIconKey = 'HOME' | 'ABOUT ME' | 'SKILLS' | 'PROJECTS' | 'CERTIFICATIONS' | 'EXPERIENCE' | 'CONTACT';
+// Accept any string names for menu items to avoid cross-file type conflicts
 
 const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuProps) => {
-  const [activeSection, setActiveSection] = useState<string>('');
+  const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState<string>(pathname === '/' ? '' : '');
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const sections = navItems.reduce<Section[]>((acc, item) => {
+        // Only process in-page section anchors
+        if (!item.href.startsWith('#')) return acc;
         const element = document.querySelector(item.href);
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -32,7 +38,7 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
             id: item.href.substring(1),
             top: rect.top,
             bottom: rect.bottom,
-            height: rect.height
+            height: rect.height,
           });
         }
         return acc;
@@ -67,8 +73,10 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
       }
     };
 
-    // Initial check
-    handleScroll();
+    // Initial check on home only
+    if (pathname === '/') {
+      handleScroll();
+    }
 
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -86,21 +94,104 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
         document.body.style.overflow = '';
       }
     };
-  }, [isOpen, navItems]);  return (
+  }, [isOpen, navItems, pathname]);
+
+  // Focus management: trap focus when open, handle Escape, and restore focus on close
+  useEffect(() => {
+    if (!isOpen) {
+      // restore focus to the element that was focused before opening
+      if (previouslyFocusedElementRef.current) {
+        previouslyFocusedElementRef.current.focus();
+      }
+      return;
+    }
+
+    previouslyFocusedElementRef.current = document.activeElement as HTMLElement | null;
+
+    const container = panelRef.current;
+    if (!container) return;
+
+    const getFocusable = () => {
+      const focusableSelectors = [
+        'a[href]',
+        'button:not([disabled])',
+        'textarea',
+        'input[type="text"]',
+        'input[type="radio"]',
+        'input[type="checkbox"]',
+        'select',
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(',');
+      return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors)).filter(
+        (el) => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden')
+      );
+    };
+
+    // Focus the first focusable element inside the panel
+    const focusables = getFocusable();
+    if (focusables.length) {
+      focusables[0].focus();
+    } else {
+      container.focus();
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const elements = getFocusable();
+        if (!elements.length) return;
+        const first = elements[0];
+        const last = elements[elements.length - 1];
+        const current = document.activeElement as HTMLElement | null;
+        if (e.shiftKey) {
+          if (current === first || !container.contains(current)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (current === last || !container.contains(current)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  return (
     <>
       {isOpen && (
-        <>          {/* Backdrop with close functionality */}
+        <>
+          {/* Backdrop with close functionality */}
           <div
             className={`fixed inset-0 bg-black/70 backdrop-blur-md z-40 transition-opacity duration-300 ease-primary cursor-pointer ${
               isOpen ? 'opacity-100' : 'opacity-0'
             }`}
             onClick={onClose}
             aria-label="Close menu"
-          />          {/* Mobile Menu Panel - slides from right */}          <div
+          />
+          {/* Mobile Menu Panel - slides from right */}
+          <div
             className={`fixed top-0 right-0 h-full w-[300px] bg-black shadow-xl z-50 flex flex-col transform transition-transform duration-300 ease-primary ${
               isOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
-          >            <div className="relative p-6">
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+            tabIndex={-1}
+            ref={panelRef}
+          >
+            <div className="relative p-6">
               {/* Close button in top-right for easier thumb reach */}
               <button
                 onClick={onClose}
@@ -108,39 +199,61 @@ const MobileMenu = ({ isOpen, onClose, navItems, scrollToSection }: MobileMenuPr
                 aria-label="Close menu"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
-              </button>              {/* Navigation Items */}
+              </button>
+              {/* Navigation Items */}
               <div className="flex flex-col mt-12">
-                {navItems.map((item, index) => (
-                  <div 
-                    key={item.name}
-                    className={`transition-all duration-300 ease-primary`}
-                    style={{ transitionDelay: `${(index + 1) * 100}ms` }}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={(e) => {
-                        scrollToSection(e, item.href);
-                        onClose();
-                      }}                      className={`group block px-6 py-4 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 focus:ring-offset-black min-h-[48px] flex items-center text-left ${
-                        activeSection === item.href.substring(1)
-                          ? 'border-l-2 border-orange-500 text-orange-500 font-medium'
-                          : 'border-l-2 border-transparent hover:border-gray-700 hover:text-orange-500'
-                      }`}
+                {navItems.map((item, index) => {
+                  const isSection = item.href.startsWith('#');
+                  const isActive = isSection
+                    ? activeSection === item.href.substring(1)
+                    : pathname.startsWith(item.href);
+                  return (
+                    <div
+                      key={item.name}
+                      className={`transition-all duration-300 ease-primary`}
+                      style={{ transitionDelay: `${(index + 1) * 100}ms` }}
                     >
-                      <span className="relative z-10">{item.name}</span>                      {/* Active indicator animation */}
-                      <div className={`absolute right-0 top-0 w-0.5 h-full bg-orange-500 transition-all duration-300 ease-primary ${
-                        activeSection === item.href.substring(1) ? 'opacity-100' : 'opacity-0'
-                      }`}></div>
-                      {/* Hover background effect */}
-                      <div className="absolute inset-0 bg-orange-500/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-primary origin-right"></div>
-                      {/* Subtle glow effect on active */}
-                      {activeSection === item.href.substring(1) && (
-                        <div className="absolute right-0 top-0 w-1 h-full bg-orange-500 shadow-lg shadow-orange-500/50 animate-glow"></div>
-                      )}
-                    </Link>
-                  </div>                ))}
+                      <Link
+                        href={item.href}
+                        onClick={(e) => {
+                          const isSectionLink = item.href.includes('#');
+                          if (isSectionLink) {
+                            scrollToSection(e, item.href);
+                          }
+                          onClose();
+                        }}
+                        className={`group block px-6 py-4 text-base font-normal transition-all duration-200 ease-primary relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 focus:ring-offset-black min-h-[48px] flex items-center text-left ${
+                          isActive
+                            ? 'border-l-2 border-orange-500 text-orange-500 font-medium'
+                            : 'border-l-2 border-transparent hover:border-gray-700 hover:text-orange-500'
+                        }`}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        <span className="relative z-10">{item.name}</span>
+                        {isSection && (
+                          <div
+                            className={`absolute right-0 top-0 w-0.5 h-full bg-orange-500 transition-all duration-300 ease-primary ${
+                              isActive ? 'opacity-100' : 'opacity-0'
+                            }`}
+                          ></div>
+                        )}
+                        {/* Hover background effect */}
+                        <div className="absolute inset-0 bg-orange-500/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-primary origin-right"></div>
+                        {/* Subtle glow effect on active */}
+                        {isActive && (
+                          <div className="absolute right-0 top-0 w-1 h-full bg-orange-500 shadow-lg shadow-orange-500/50"></div>
+                        )}
+                      </Link>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

@@ -1,10 +1,11 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Widia Font Face Declaration */
 @font-face {
   font-family: 'Widia';
-  src: url('/fonts/widia.woff') format('woff'),
-       url('/fonts/widia.ttf') format('truetype');
+  src:
+    url('/fonts/widia.woff') format('woff'),
+    url('/fonts/widia.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -12,8 +13,9 @@
 
 @font-face {
   font-family: 'Widia';
-  src: url('/fonts/widia.woff') format('woff'),
-       url('/fonts/widia.ttf') format('truetype');
+  src:
+    url('/fonts/widia.woff') format('woff'),
+    url('/fonts/widia.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -31,25 +33,25 @@
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   --safe-area-inset-left: env(safe-area-inset-left);
   --safe-area-inset-right: env(safe-area-inset-right);
-  
+
   /* Professional Motion System - Apple/Stripe Inspired */
   /* Durations */
   --motion-duration-fast: 150ms;
   --motion-duration-medium: 300ms;
   --motion-duration-slow: 500ms;
   --motion-duration-slowest: 800ms;
-  
+
   /* Professional Easing Curves */
-  --ease-primary: cubic-bezier(0.4, 0.0, 0.2, 1); /* Material ease */
+  --ease-primary: cubic-bezier(0.4, 0, 0.2, 1); /* Material ease */
   --ease-secondary: cubic-bezier(0.25, 0.1, 0.25, 1); /* Apple smooth */
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Subtle bounce */
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Spring effect */
-  
+
   /* Motion Scale */
   --scale-hover: 1.03;
   --scale-press: 0.97;
   --scale-pop: 1.05;
-  
+
   /* Shadows for elevation */
   --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
@@ -68,13 +70,9 @@ html {
 }
 
 /* Hide scrollbar but keep functionality */
+/* Keep scrollbars visible for accessibility; customize only where needed via utilities */
 html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar {
-  display: none;
+  /* default scrollbar appearance retained */
 }
 
 body {
@@ -92,6 +90,11 @@ body {
   width: 100%;
 }
 
+/* Offset anchored sections so fixed headers don't cover titles */
+section[id] {
+  scroll-margin-top: 32px;
+}
+
 /* Mobile-First Container System */
 .container {
   width: 100%;
@@ -100,6 +103,27 @@ body {
   /* Mobile-first: Start with minimal padding for 320px+ screens */
   padding-left: max(16px, var(--safe-area-inset-left));
   padding-right: max(16px, var(--safe-area-inset-right));
+}
+
+/* Section header utilities (unified hierarchy) */
+.section-wrap {
+  @apply max-w-[1200px] mx-auto px-4 sm:px-6 pt-3 md:pt-4 pb-9 md:pb-10;
+}
+
+.section-header {
+  @apply text-center mb-4 md:mb-5;
+}
+
+.section-title {
+  @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-white text-center;
+}
+
+.section-subtitle {
+  @apply text-gray-300 text-center max-w-3xl mx-auto leading-relaxed mt-3 md:mt-4;
+}
+
+.section-divider {
+  @apply mx-auto mt-1 md:mt-2 h-px w-24 md:w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent rounded;
 }
 
 /* Mobile-first responsive breakpoints */
@@ -153,7 +177,9 @@ body {
 
 /* Fix for input zoom on iOS */
 @supports (-webkit-touch-callout: none) {
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     font-size: 16px !important;
   }
 }
@@ -165,7 +191,8 @@ body {
 }
 
 /* Smooth transitions */
-a, button {
+a,
+button {
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -193,7 +220,8 @@ a, button {
 }
 
 @keyframes gradient-x {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%);
   }
   50% {
@@ -232,7 +260,7 @@ a, button {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   /* Disable scroll-based animations */
   .animate-slide-up,
   .animate-fade-in,
@@ -242,14 +270,14 @@ a, button {
     opacity: 1 !important;
     transform: none !important;
   }
-  
+
   /* Simplify hover effects to opacity changes only */
   .hover\:scale-105:hover,
   .hover\:scale-110:hover,
   .hover\:scale-125:hover {
     transform: none !important;
   }
-  
+
   /* Keep essential opacity transitions but make them instant */
   .group:hover .group-hover\:opacity-100 {
     transition: opacity 0.01ms !important;
@@ -447,7 +475,7 @@ a, button {
 
 @layer utilities {
   /* Professional Motion Utilities */
-  
+
   /* Respect user's motion preferences */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -459,80 +487,91 @@ a, button {
       scroll-behavior: auto !important;
     }
   }
-  
+
   /* Professional Button Animations */
   .btn-professional {
     transition: all var(--motion-duration-fast) var(--ease-primary);
     will-change: transform, box-shadow;
   }
-  
+
   .btn-professional:hover {
     transform: scale(var(--scale-hover)) translateZ(0);
     box-shadow: var(--shadow-medium);
   }
-  
+
   .btn-professional:active {
     transform: scale(var(--scale-press)) translateZ(0);
     transition-duration: calc(var(--motion-duration-fast) * 0.5);
   }
-  
+
   /* Card Hover Effects */
   .card-hover {
     transition: all var(--motion-duration-medium) var(--ease-secondary);
     will-change: transform, box-shadow;
   }
-  
+
   .card-hover:hover {
     transform: translateY(-4px) translateZ(0);
     box-shadow: var(--shadow-strong);
   }
-  
+
   /* Icon Animations */
   .icon-spin {
     transition: transform var(--motion-duration-slow) var(--ease-secondary);
   }
-  
+
   .icon-spin:hover {
     transform: rotateY(360deg);
   }
-  
+
   /* Smooth Focus Rings */
   .focus-ring {
     transition: all var(--motion-duration-fast) var(--ease-primary);
   }
-  
+
   .focus-ring:focus-visible {
     outline: 2px solid #f97316;
     outline-offset: 2px;
   }
-  
+
   /* Professional Page Transitions */
   .page-transition {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity var(--motion-duration-medium) var(--ease-primary),
-                transform var(--motion-duration-medium) var(--ease-primary);
+    transition:
+      opacity var(--motion-duration-medium) var(--ease-primary),
+      transform var(--motion-duration-medium) var(--ease-primary);
   }
-  
+
   .page-transition.animate-in {
     opacity: 1;
     transform: translateY(0);
   }
-  
+
   /* Stagger Animation Support */
-  .stagger-1 { animation-delay: 50ms; }
-  .stagger-2 { animation-delay: 100ms; }
-  .stagger-3 { animation-delay: 150ms; }
-  .stagger-4 { animation-delay: 200ms; }
-  .stagger-5 { animation-delay: 250ms; }
-  
+  .stagger-1 {
+    animation-delay: 50ms;
+  }
+  .stagger-2 {
+    animation-delay: 100ms;
+  }
+  .stagger-3 {
+    animation-delay: 150ms;
+  }
+  .stagger-4 {
+    animation-delay: 200ms;
+  }
+  .stagger-5 {
+    animation-delay: 250ms;
+  }
+
   /* Hide scrollbar utilities */
   .hide-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;     /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
   .hide-scrollbar::-webkit-scrollbar {
-    display: none;            /* Chrome, Safari and Opera */
+    display: none; /* Chrome, Safari and Opera */
   }
 
   /* Utility for hiding scrollbars while maintaining scroll functionality */
@@ -559,20 +598,51 @@ a, button {
   }
 
   /* Mobile-First Typography Scale */
-  .text-mobile-sm { font-size: 0.875rem; line-height: 1.25rem; }
-  .text-mobile-base { font-size: 1rem; line-height: 1.5rem; }
-  .text-mobile-lg { font-size: 1.125rem; line-height: 1.75rem; }
-  .text-mobile-xl { font-size: 1.25rem; line-height: 1.75rem; }
-  .text-mobile-2xl { font-size: 1.5rem; line-height: 2rem; }
-  .text-mobile-3xl { font-size: 1.875rem; line-height: 2.25rem; }
-  .text-mobile-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+  .text-mobile-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  .text-mobile-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  .text-mobile-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  .text-mobile-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  .text-mobile-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  .text-mobile-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  .text-mobile-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
 
   /* Mobile-First Spacing */
-  .space-mobile-xs { gap: 0.5rem; }
-  .space-mobile-sm { gap: 0.75rem; }
-  .space-mobile-md { gap: 1rem; }
-  .space-mobile-lg { gap: 1.5rem; }
-  .space-mobile-xl { gap: 2rem; }
+  .space-mobile-xs {
+    gap: 0.5rem;
+  }
+  .space-mobile-sm {
+    gap: 0.75rem;
+  }
+  .space-mobile-md {
+    gap: 1rem;
+  }
+  .space-mobile-lg {
+    gap: 1.5rem;
+  }
+  .space-mobile-xl {
+    gap: 2rem;
+  }
 
   /* Touch-Optimized Interactive Elements */
   .touch-target {
@@ -580,7 +650,8 @@ a, button {
     min-width: 44px;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-  }  .touch-button {
+  }
+  .touch-button {
     min-height: 44px;
     min-width: 44px;
     -webkit-tap-highlight-color: transparent;
@@ -592,7 +663,7 @@ a, button {
   /* Page counter stabilization to prevent number flickering */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
+    font-feature-settings: 'tnum';
     width: 1.2em;
     display: inline-block;
     text-align: center;
@@ -605,14 +676,26 @@ a, button {
   }
 
   /* Safe Area Utilities */
-  .pt-safe { padding-top: max(1rem, var(--safe-area-inset-top)); }
-  .pb-safe { padding-bottom: max(1rem, var(--safe-area-inset-bottom)); }
-  .pl-safe { padding-left: max(1rem, var(--safe-area-inset-left)); }
-  .pr-safe { padding-right: max(1rem, var(--safe-area-inset-right)); }
+  .pt-safe {
+    padding-top: max(1rem, var(--safe-area-inset-top));
+  }
+  .pb-safe {
+    padding-bottom: max(1rem, var(--safe-area-inset-bottom));
+  }
+  .pl-safe {
+    padding-left: max(1rem, var(--safe-area-inset-left));
+  }
+  .pr-safe {
+    padding-right: max(1rem, var(--safe-area-inset-right));
+  }
 
   /* Mobile-First Navigation */
-  .mobile-nav-height { height: 60px; }
-  .mobile-nav-padding { padding-top: 60px; }
+  .mobile-nav-height {
+    height: 60px;
+  }
+  .mobile-nav-padding {
+    padding-top: 60px;
+  }
 
   /* Responsive Text Truncation */
   .mobile-text-ellipsis {
@@ -676,6 +759,12 @@ a, button {
       transform: translateY(0);
     }
   }
+}
+
+/* Content-visibility utility to defer rendering of off-screen sections */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
 }
 
 /* Custom Scrollbar Styles for Skills Masonry */
@@ -750,4 +839,16 @@ a, button {
 
 .skills-fade-out {
   animation: skillsFadeOut 0.6s ease-in forwards;
+}
+
+/* Staggered animations to reduce concurrent work */
+.stagger-animation {
+  animation-delay: var(--stagger-delay, 0ms);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .stagger-animation {
+    animation-delay: 0ms !important;
+  }
 }

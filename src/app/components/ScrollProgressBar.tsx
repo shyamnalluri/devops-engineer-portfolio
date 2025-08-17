@@ -7,19 +7,19 @@ const ScrollProgressBar = () => {
   const containerRef = useRef<HTMLElement | null>(
     typeof document !== 'undefined' ? document.documentElement : null
   );
-  
+
   const { scrollYProgress } = useScroll({
     container: containerRef,
-    offset: ["start start", "end end"]
+    offset: ['start start', 'end end'],
   });
-  
+
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   useEffect(() => {

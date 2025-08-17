@@ -1,0 +1,44 @@
+---
+name: AWS VPC
+slug: aws-vpc
+summary: Opinionated VPC with public/private subnets, NAT gateways, and route tables.
+cloud: aws
+category: networking
+maturity: stable
+version: 1.0.0
+tags: [vpc, networking, nat, subnets]
+---
+
+This module creates a production-ready VPC with the following:
+
+- Public and private subnets across multiple AZs
+- Internet and NAT gateways
+- Route tables and associations
+
+## Usage
+
+### Minimal
+
+```hcl
+module "aws_vpc" {
+  source = "./modules/aws-vpc"
+
+  name       = "prod-vpc"
+  cidr_block = "10.0.0.0/16"
+}
+```
+
+### Production
+
+```hcl
+module "aws_vpc" {
+  source = "./modules/aws-vpc"
+
+  name              = "prod-vpc"
+  cidr_block        = "10.0.0.0/16"
+  az_count          = 3
+  public_subnets    = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
+  private_subnets   = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
+  enable_nat_gateway = true
+}
+```

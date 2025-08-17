@@ -1,11 +1,12 @@
 // Icon mapping utility for dynamic icon rendering
 import React from 'react';
-import { 
-  FaDocker, 
-  FaAws, 
-  FaJenkins, 
-  FaGitAlt, 
-  FaPython, 
+// NOTE: These imports remain for skills icon mapping.
+import {
+  FaDocker,
+  FaAws,
+  FaJenkins,
+  FaGitAlt,
+  FaPython,
   FaMicrosoft,
   FaGoogle,
   FaGithub,
@@ -15,12 +16,12 @@ import {
   FaTerminal,
   FaServer,
   FaLinux,
-  FaWindows
+  FaWindows,
 } from 'react-icons/fa';
 
-import { 
-  SiKubernetes, 
-  SiTerraform, 
+import {
+  SiKubernetes,
+  SiTerraform,
   SiAnsible,
   SiPulumi,
   SiGnubash,
@@ -49,7 +50,7 @@ import {
   SiFalco,
   SiSnyk,
   SiSonarqube,
-  SiGo
+  SiGo,
 } from 'react-icons/si';
 
 // Icon mapping object
@@ -102,17 +103,20 @@ export const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGEl
   SiSnyk,
   SiSonarqube,
   SiGo,
-  
+
   // Icon aliases for skills that don't have exact matches
   SiMicrosoftazure: FaMicrosoft, // Use Microsoft icon for Azure
   SiAmazonaws: SiAmazon, // Use Amazon icon for AWS
   SiAzuredevops: FaMicrosoft, // Use Microsoft icon for Azure DevOps
   SiOpenpolicyagent: FaShieldAlt, // Use shield icon for OPA
-  SiPowershell: FaTerminal // Use terminal icon for PowerShell
+  SiPowershell: FaTerminal, // Use terminal icon for PowerShell
 };
 
 // Helper function to get icon component by name
-export const getIcon = (iconName: string, className: string = "w-5 h-5"): React.ReactElement | null => {
+export const getIcon = (
+  iconName: string,
+  className: string = 'w-5 h-5'
+): React.ReactElement | null => {
   const IconComponent = iconMap[iconName];
   if (!IconComponent) {
     console.warn(`Icon "${iconName}" not found in iconMap`);
